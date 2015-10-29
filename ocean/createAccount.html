@@ -3,14 +3,14 @@
   <body>
     <form action="createAccount.jsp" method="post">
       <b>Create new user:</b><br>
-	  <!-- using placeholder assumes HTML5 support. Just use emtpy value or nothing if we cant use html5.-->
+      <!-- using placeholder assumes HTML5 support. Just use emtpy value or nothing if we cant use html5.-->
       <input type="text" name="uid" maxlength="32" required placeholder="Username"><br>
-	  <input type="text" name="pass" maxlength="32" required placeholder="Password"><br>
-	  User's role is:<br>
-	  <input type="radio" name="role" required value="s" checked> Scientist <br>
-	  <input type="radio" name="role" required value="d"> Data curator <br>
-	  <input type="radio" name="role" required value="a"> Administrator <br>
-	  <input type="number" name="pid" min="0" required placeholder="Person ID"><br>
+      <input type="text" name="pass" maxlength="32" required placeholder="Password"><br>
+      User's role is:<br>
+      <input type="radio" name="role" required value="s" checked> Scientist <br>
+      <input type="radio" name="role" required value="d"> Data curator <br>
+      <input type="radio" name="role" required value="a"> Administrator <br>
+      <input type="number" name="pid" min="0" required placeholder="Person ID"><br>
       <input type="submit" name="submit" value="Create!">
     </form>
   </body>

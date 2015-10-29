@@ -27,8 +27,8 @@
       s.initialize();
       
       String user = request.getParameter("uid");
-	  String pw = request.getParameter("pass");
-	  Boolean validRow = Boolean.FALSE;
+      String pw = request.getParameter("pass");
+      Boolean validRow = Boolean.FALSE;
       String hashed = new String();
       String salt = new String();
       
@@ -50,7 +50,7 @@
       String mPass = "adasfa42";
       
       Connection mCon;
-	  PreparedStatement pstmt;
+      PreparedStatement pstmt;
       
       // instantiate the driver.
       try {
@@ -66,16 +66,16 @@
       // actually log in and perform statements
       try {
           mCon = DriverManager.getConnection(mUrl, mUser, mPass);
-		  pstmt = mCon.prepareStatement("select U.USER_NAME, U.PASSWORD, S.SALT from USERS U, SALTS S where U.USER_NAME=? and U.USER_NAME=S.USER_NAME");
+          pstmt = mCon.prepareStatement("select U.USER_NAME, U.PASSWORD, S.SALT from USERS U, SALTS S where U.USER_NAME=? and U.USER_NAME=S.USER_NAME");
 
-		  pstmt.setString(1,user);
+          pstmt.setString(1,user);
 
           ResultSet rset = pstmt.executeQuery();
-		  validRow = rset.next();
-		 
-		  hashed = rset.getString("PASSWORD");
-		  salt = rset.getString("SALT");
-		 
+          validRow = rset.next();
+         
+          hashed = rset.getString("PASSWORD");
+          salt = rset.getString("SALT");
+         
           pstmt.close();
           mCon.close();
           
@@ -85,16 +85,16 @@
           System.err.println("SQLException: " + ex.getMessage());
       }
       
-		  
-		  Boolean goodPassword = Boolean.FALSE;
-		  if(validRow)
-    		goodPassword = Boolean.valueOf(s.matches(pw, salt+hashed));
-		  
+          
+          Boolean goodPassword = Boolean.FALSE;
+          if(validRow)
+            goodPassword = Boolean.valueOf(s.matches(pw, salt+hashed));
+          
           if(validRow && goodPassword) {
-			  out.println("Welcome " + user + "!");
-		  } else {
-			  out.println("<br>Failed to log in: Wrong username or password.<br><button onclick='goBack()'>Try again</button><script>function goBack() {window.history.back();}</script>");
-		  }
+              out.println("Welcome " + user + "!");
+          } else {
+              out.println("<br>Failed to log in: Wrong username or password.<br><button onclick='goBack()'>Try again</button><script>function goBack() {window.history.back();}</script>");
+          }
       
     %>
   
