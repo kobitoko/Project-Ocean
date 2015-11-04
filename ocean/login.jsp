@@ -92,6 +92,9 @@
           
           if(validRow && goodPassword) {
               out.println("Welcome " + user + "!");
+              // taken from http://www.pa.msu.edu/services/computing/faq/auto-redirect.html
+              String redirectCode = "<script language=\"javascript\" type=\"text/javascript\">window.setTimeout(\'window.location=\"landing.html\"; \',1500);</script>";
+              out.println(redirectCode);
           } else {
               out.println("<br>Failed to log in: Wrong username or password.<br><button onclick='goBack()'>Try again</button><script>function goBack() {window.history.back();}</script>");
           }

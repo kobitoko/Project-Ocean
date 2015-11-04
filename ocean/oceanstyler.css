@@ -1,0 +1,53 @@
+@charset "utf-8";
+/* CSS Document */
+
+button.navi {
+   height: 50px;
+   background-color:green;
+   float:right;
+}
+
+button.home {
+	height:50px;
+
+}
+
+button.sysadmin {
+	height:50px;
+	background-color:orange;
+	float:right;
+}
+
+button.curator {
+	height:50px;
+	background-color:yellow;
+	float:right;
+}
+
+button.logout {
+	height:50px;
+
+	float:right;
+}
+
+button.test {
+	height:50px;
+	background-color:pink;
+	
+}
+
+
+
+div.inline { float:left; }
+.clearBoth { clear:both; }
+
+table{
+border-collapse:collapse;
+border:1px solid #000000;
+background-color: grey; 
+}
+
+table td{
+border:1px solid #000000;
+background-color: white; 
+}/* CSS Document */
