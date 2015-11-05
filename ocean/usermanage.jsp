@@ -82,7 +82,15 @@
             
             String open = "<td>";
             String close = "</td>";
-            out.println( "<tr>" + open + usr + close + open + pid.toString() + close + open + role + close + "</tr>");
+            
+            // Prints username, pid, and role
+            out.print( "<tr>" + open + usr + close + open + pid.toString() + close + open + role + close);
+            
+            // prints modify user section and delete user section
+            //String delButton = "<form  action=\"removeThatAccount.jsp\" method=\"post\"> <center> <button type=\"submit\" name=\"userToDelete\" value=\"" + usr + "\">Delete</button> </center> </form>";
+            String delButton = "<form onsubmit=\"if(!confirm(\'Are you sure you want to delete the user " + usr + "?\')){ return false;}\" action=\"removeThatAccount.jsp\" method=\"post\"> <center> <button onclick=\"confirmation()\" name=\"userToDelete\" value=\"" + usr + "\">Delete</button> </center>";
+            String confirmJS = "<script>function confirmation() {if(confirm(\"Are you sure you want to delete the user \"" + usr + "\"?\")){form.submit()}  }</script>";
+            out.println(open + close + open + delButton + close + "</form> </tr>");
             
           }
           
@@ -92,7 +100,7 @@
       } catch(SQLException ex) {
           if (debug)
             out.println("<BR>-debugLog:Received a SQLException: " + ex.getMessage());
-          System.err.println("SQLException: " + ex.getMessage());
+          System.err.println("SQLException: " + ex.getMessage());          
       }      
       %>
     </tr>
