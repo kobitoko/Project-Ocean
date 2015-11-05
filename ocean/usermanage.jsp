@@ -1,3 +1,4 @@
+<%@ page import="java.util.*, java.sql.*"%>
 <html>
   <head></head>
 <link rel="stylesheet" type="text/css" href="oceanstyler.css">
@@ -31,11 +32,69 @@
     <th>Delete User</th>
     </tr>
     <tr>
-    <td>jcadek</td>
-    <td>00001</td>
-    <td>Administrator</td>
-    
-    
+       <%
+      
+      Boolean debug = Boolean.TRUE;
+      String queryUsers = "select USER_NAME, ROLE, PERSON_ID, DATE_REGISTERED from USERS";
+      
+      String mUrl = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
+      String mDriverName = "oracle.jdbc.driver.OracleDriver";
+      
+      String mUser = "satyabra";
+      String mPass = "adasfa42";
+      
+      Connection mCon;
+      Statement stmnt;
+      PreparedStatement pstmnt;
+      
+      // instantiate the driver.
+      try {
+          Class drvClass = Class.forName(mDriverName);
+          DriverManager.registerDriver((Driver) drvClass.newInstance());
+      } catch(Exception e) {
+          System.err.print("ClassNotFoundException: ");
+          System.err.print(e.getMessage());
+          if(debug)
+            out.println("<BR>-debugLog: Received a ClassNotFoundException: " + e.getMessage());
+      }
+      
+      // actually log in and perform statements
+      try {
+          mCon = DriverManager.getConnection(mUrl, mUser, mPass);
+          stmnt = mCon.createStatement();
+          
+          ResultSet rset = stmnt.executeQuery(queryUsers);
+          
+          while(rset.next()) {
+            String usr = rset.getString(1);
+            String role = rset.getString(2);
+            Integer pid = new Integer(rset.getInt(3));
+            // not yet used is date.
+            java.sql.Date dateReg = rset.getDate(4);
+            
+            if(role.equals("a")) {
+              role = "Administrator";
+            } else if (role.equals("s")) {
+              role = "Scientist";
+            } else if (role.equals("d")) {
+              role = "Data Curator";
+            }
+            
+            String open = "<td>";
+            String close = "</td>";
+            out.println( "<tr>" + open + usr + close + open + pid.toString() + close + open + role + close + "</tr>");
+            
+          }
+          
+          stmnt.close();
+          mCon.close();
+          
+      } catch(SQLException ex) {
+          if (debug)
+            out.println("<BR>-debugLog:Received a SQLException: " + ex.getMessage());
+          System.err.println("SQLException: " + ex.getMessage());
+      }      
+      %>
     </tr>
   	 </table>
 	</div>
