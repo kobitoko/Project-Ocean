@@ -33,7 +33,7 @@
       }
       
       // actually log in and perform statements
-        try{            
+        try{
             mCon = DriverManager.getConnection(mUrl, mUser, mPass);
             stmnt = mCon.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             
