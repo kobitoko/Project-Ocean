@@ -28,8 +28,11 @@
       s.initialize();
       
       // Get this user with the old userID to find the user in the first place. 
-      String oldUser = request.getParameter("OLD_USERID");
-      String oldPID = request.getParameter("pid");
+      String oldUser = request.getParameter("ouid");
+      
+      // for some reason opod is NULL, but foudn other way to get it.
+      //Integer oldPID = Integer.parseInt(request.getParameter("opid"));
+      Integer oldPID = -1;
       
       String uid = request.getParameter("uid");
       String role = request.getParameter("role");
@@ -39,7 +42,7 @@
       String email = request.getParameter("email");
       // phone is char(10) in persons table.
       String phone = request.getParameter("phone");
-      String personId = new String(oldPID);
+      Integer personId = Integer.parseInt(request.getParameter("pid"));
       String newPass = request.getParameter("pass");
       
       // default password is "admin"
@@ -73,6 +76,7 @@
       Connection mCon;
       
       PreparedStatement checkUserIdExists;
+      PreparedStatement getOldPid;
       PreparedStatement updatePersons;
       PreparedStatement updateUserId;
       PreparedStatement updateSaltsUid;
@@ -82,9 +86,11 @@
       // actually log in and perform statements
       try{              
         mCon = DriverManager.getConnection(mUrl, mUser, mPass);
+        Boolean oldAutoCommitVal = mCon.getAutoCommit();
+        mCon.setAutoCommit(Boolean.FALSE);
         
         // if this returns a table with 1 row, that new username is invalid!
-        checkUserIdExists = mCon.prepareStatment("select USER_NAME from USERS where USER_NAME=?");
+        checkUserIdExists = mCon.prepareStatement("select USER_NAME from USERS where USER_NAME=?");
         checkUserIdExists.setString(1, uid);
         
         ResultSet rset = checkUserIdExists.executeQuery();
@@ -93,7 +99,16 @@
           
         } else if (!rset.next()) {
               
-          updatePersons = mCon.prepareStatment("update PERSONS set PERSON_ID=?, FIRST_NAME=?, LAST_NAME=?, ADDRESS=?, EMAIL=?, PHONE=? where PERSON_ID=?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+          getOldPid = mCon.prepareStatement("select PERSON_ID from USERS where USER_NAME=?");
+          getOldPid.setString(1,oldUser);
+          ResultSet rset2 = getOldPid.executeQuery();
+          if(rset.next()) {
+            oldPID = rset.getInt("PERSON_ID"); 
+          } else {
+            //something went wrong!
+          }
+              
+          updatePersons = mCon.prepareStatement("UPDATE PERSONS set PERSON_ID=?, FIRST_NAME=?, LAST_NAME=?, ADDRESS=?, EMAIL=?, PHONE=? where PERSON_ID=?");
           updatePersons.setInt(1,personId);
           updatePersons.setString(2, fname);
           updatePersons.setString(3, lname);
@@ -104,7 +119,7 @@
           updatePersons.executeUpdate();
           updatePersons.close();
         
-          updateUserId = mCon.prepareStatment("update USERS set USER_NAME=?, ROLE=?, PERSON_ID=? where USER_NAME=?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+          updateUserId = mCon.prepareStatement("UPDATE USERS set USER_NAME=?, ROLE=?, PERSON_ID=? where USER_NAME=?");
           updateUserId.setString(1, uid);
           updateUserId.setString(2, role);
           updateUserId.setInt(3, personId);
@@ -112,21 +127,21 @@
           updateUserId.executeUpdate();
           updateUserId.close();
           
-          updateSaltsUid = mCon.prepareStatment("update SALTS set USER_NAME=? where USER_NAME=?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+          updateSaltsUid = mCon.prepareStatement("UPDATE SALTS set USER_NAME=? where USER_NAME=?");
           updateSaltsUid.setString(1, uid);
           updateSaltsUid.setString(2, oldUser);
           updateSaltsUid.executeUpdate();
           updateSaltsUid.close();
         
           if(!newPass.isEmpty()) {
-              updatePassword = mCon.prepareStatment("update USERS set PASSWORD=? where USER_NAME=?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+              updatePassword = mCon.prepareStatement("UPDATE USERS set PASSWORD=? where USER_NAME=?");
               updatePassword.setString(1, hashed);
               updatePassword.setString(2, uid);
               updatePassword.executeUpdate();
               updatePassword.close();
               
-              updateSaltsSalt = mCon.prepareStatment("update SALTS set SALT=? where USER_NAME=?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-              updateSaltsSalt.setString(1, salt)
+              updateSaltsSalt = mCon.prepareStatement("UPDATE SALTS set SALT=? where USER_NAME=?");
+              updateSaltsSalt.setString(1, salt);
               updateSaltsSalt.setString(2, uid);
               updateSaltsSalt.executeUpdate();
               updateSaltsSalt.close();
@@ -135,9 +150,14 @@
           // Do prepareStatment that commits data!?
           // no according to http://stackoverflow.com/questions/10814913/sql-preparedstatement-autocommit
           // but ResultSet.TYPE_SCROLL_SENSITIVE and CONCUR_UPDATABLE should make it? or is only for the rest created from that sql statement??
-          if(!mCon.getAutoCommit()) {
-            mCon.commit();
-          }
+          mCon.commit();
+          // aaaaaaa https://docs.oracle.com/javase/tutorial/jdbc/basics/transactions.html
+          System.err.println(mCon.getAutoCommit());
+          
+          mCon.setAutoCommit(oldAutoCommitVal);
+          
+          System.err.println(mCon.getAutoCommit());
+          
         }
         checkUserIdExists.close();
         mCon.close();
