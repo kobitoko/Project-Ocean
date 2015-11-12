@@ -39,7 +39,7 @@ CREATE TABLE salts (
 
 /* create default admin person with password admin */
 
-insert into persons (person_id, first_name, last_name, address, email, phone) values (2012, 'admin', 'administrator', 'cyberspace', admin@admins.com, '1234567890');
+insert into persons (person_id, first_name, last_name, address, email, phone) values (2012, 'admin', 'administrator', 'cyberspace', 'admin@admins.com', '1234567890');
 
 insert into users (user_name, password, role, person_id) values ('admin', '4CF49155816C245A106D80D64123BAE9', 'a', 2012);
 insert into salts (user_name, salt) values ('admin', 'A48E8B18189B4FB6691A56E1575D2280');
