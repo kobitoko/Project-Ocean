@@ -1,8 +1,15 @@
 <!--input-->
+<link rel="stylesheet" type="text/css" href="oceanstyler.css">
+<script src="imports.js"></script>
+<script>permission = 'admin';</script>
+ <body style="background:lightblue;">
+ <div id='header' style="height:50px;border-style:inset;"></div>
+  <div id='content'>
 <%@ page import="java.util.*, java.sql.*"%>
 <html>
   <head></head>
   <body>
+<div>
     <%
     
       Boolean debug = Boolean.TRUE;
@@ -47,7 +54,9 @@
             rset.absolute(1);
             rset.deleteRow();
 
-            out.println("The user " + user + " was removed.");
+            out.println("The user " + user + " was removed. You will be redirected in 3 seconds.  ");
+	String redirectCode = "<script language=\"javascript\" type=\"text/javascript\">window.setTimeout(\'window.location=\"usermanage.jsp\"; \',3000);</script>";
+              out.println(redirectCode);
           } else {
             out.println("Something went wrong.");  
           }
@@ -61,6 +70,7 @@
           System.err.println("SQLException: " + ex.getMessage());
       }      
     %>
-  
+  </div>
+</div>
   </body>
 </html>

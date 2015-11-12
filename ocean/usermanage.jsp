@@ -19,14 +19,58 @@
       <tr><td><p style="display:inline">Family Name: </p></td><td><input type="text" name="lname" maxlength="32" required placeholder="Last Name"><br></td></tr>
       <tr><td><p style="display:inline">Address: </p></td><td><input type="text" name="address" maxlength="32" required placeholder="Address"><br></td></tr>
       <tr><td><p style="display:inline">Email: </p></td><td><input type="text" name="email" maxlength="32" required placeholder="Email"><br></td></tr>
-      <tr><td><p style="display:inline">Phone: </p></td><td><input type="text" name="phone" maxlength="32" required placeholder="Phone"><br></td></tr>
-      <tr><td><p style="display:inline">User ID: </p></td><td><input id="pid" type="number" name="pid" min="0" required placeholder="Person ID"><br></td></tr>
-      <tr><td><p style="display:inline">Password Reset: </p></td><td><input type="password" name="password" min="0" required placeholder="New Password"><br></td></tr>
+      <%
+      Boolean debug = Boolean.TRUE;
+      
+      
+      String mUrl = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
+      String mDriverName = "oracle.jdbc.driver.OracleDriver";
+      
+      String mUser = "satyabra";
+      String mPass = "adasfa42";
+      Integer maxpid = 0;
+      Connection mCon;
+      Statement stmnt;
+      PreparedStatement pstmnt;
+      
+      // instantiate the driver.
+      try {
+          Class drvClass = Class.forName(mDriverName);
+          DriverManager.registerDriver((Driver) drvClass.newInstance());
+      } catch(Exception e) {
+          System.err.print("ClassNotFoundException: ");
+          System.err.print(e.getMessage());
+          if(debug)
+            out.println("<BR>-debugLog: Received a ClassNotFoundException: " + e.getMessage());
+      }
+	try{
+		String getMaxPID = "select MAX(PERSON_ID) from USERS";
+		mCon = DriverManager.getConnection(mUrl, mUser, mPass);
+          	stmnt = mCon.createStatement();
+          
+         	 ResultSet rset2 = stmnt.executeQuery(getMaxPID);
+		while(rset2.next()) {
+		  maxpid = new Integer(rset2.getInt(1)) + 1;
+		}
+
+  	} catch(SQLException ex) {
+          if (debug)
+            out.println("<BR>-debugLog: Received a SQLException: " + ex.getMessage());
+          System.err.println("SQLException: " + ex.getMessage());
+      }  
+
+
+	%>
+      <tr><td><p style="display:inline">Phone: </p></td><td><input type="text" name="phone" maxlength="10" required placeholder="Phone"><br></td></tr>
+      <tr><td><p style="display:inline">Person ID: </p></td><td><input id="pid" type="number" value="<%= maxpid %>" name="pid" min="0" maxlength="38" required placeholder="Person ID"><br></td></tr>
+      <tr><td><p style="display:inline">Password Reset: </p></td><td><input type="password" name="pass" min="0" required placeholder="New Password"><br></td></tr>
       </table>
   User's role is:<br>
-      <p style="display:inline">A</p><input type="radio" value="a" name="role" id="role">
-	<p style="display:inline">S</p><input type="radio" value="s" name="role" id="role">
-	<p style="display:inline">D</p><input type="radio" value="d" name="role" id="role">
+      <select id="role" name="role" form="addform">
+      <option value="s">Scientist</option>
+      <option value="d">Data Curator</option>
+      <option value="a">Administrator</option>
+      <select>
       <input type="submit" name="submit" value="Create!">
     </form>
     </div>
@@ -45,31 +89,7 @@
     </tr>
     <tr>
        <%
-      
-      Boolean debug = Boolean.TRUE;
       String queryUsers = "select USER_NAME, ROLE, PERSON_ID, DATE_REGISTERED from USERS";
-      
-      String mUrl = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
-      String mDriverName = "oracle.jdbc.driver.OracleDriver";
-      
-      String mUser = "satyabra";
-      String mPass = "adasfa42";
-      
-      Connection mCon;
-      Statement stmnt;
-      PreparedStatement pstmnt;
-      
-      // instantiate the driver.
-      try {
-          Class drvClass = Class.forName(mDriverName);
-          DriverManager.registerDriver((Driver) drvClass.newInstance());
-      } catch(Exception e) {
-          System.err.print("ClassNotFoundException: ");
-          System.err.print(e.getMessage());
-          if(debug)
-            out.println("<BR>-debugLog: Received a ClassNotFoundException: " + e.getMessage());
-      }
-      
       // actually log in and perform statements
       try {
           mCon = DriverManager.getConnection(mUrl, mUser, mPass);
@@ -123,6 +143,7 @@
 	</div>
     <div class="inline" style="border-style:inset;width:23%;">
     <b>Modify user:</b><br>
+    <p id="grabperson"></p>
     <form action="modifyAccount.jsp" name="modform" method="post">
       <!-- using placeholder assumes HTML5 support. Just use emtpy value or nothing if we cant use html5.-->
       <table style="width:100%;border-style:inset";>
@@ -132,16 +153,15 @@
       <tr><td><p style="display:inline">Address: </p></td><td><input type="text" name="address" maxlength="32" required placeholder="Address"><br></td></tr>
       <tr><td><p style="display:inline">Email: </p></td><td><input type="text" name="email" maxlength="32" required placeholder="Email"><br></td></tr>
       <tr><td><p style="display:inline">Phone: </p></td><td><input type="text" name="phone" maxlength="32" required placeholder="Phone"><br></td></tr>
+	 <tr><td><p style="display:inline">Person ID: </p></td><td><input id="modpid" type="number" value="" name="pid" min="0" maxlength="38" required placeholder="Person ID"><br></td></tr>
       <tr><td><p style="display:inline">Password Reset: </p></td><td><input type="password" name="pass" min="0" required placeholder="New Password"><br></td></tr>
       </table>
       User's role is:<br>
-      <select id="role" name="role" form="modform">
+      <select id="modrole" name="role" form="modform">
       <option value="s">Scientist</option>
       <option value="d">Data Curator</option>
       <option value="a">Administrator</option>
-      <select>
-      <input type="submit" name="submit" value="Create!">
-     
+      <select> 
       <input type="submit" name="submit" value="Update">
     </form>
     </div>
