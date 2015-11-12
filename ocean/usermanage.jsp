@@ -151,6 +151,7 @@
 <input id="modpid" type="number" value="" name="modpid" min="0" maxlength="38" required placeholder="Person ID"; >
 <input id="moduid" type="text" value="" name="moduid" min="0" maxlength="38" required placeholder="Username" >
 <select id="modrole" name="modrole" form="modi">
+
       <option value="s">Scientist</option>
       <option value="d">Data Curator</option>
       <option value="a">Administrator</option>
