@@ -10,18 +10,23 @@
   <div id='content'>
  <div>
  <div class="inline" style="border-style:inset;width:20%;;">
-    <form action="createAccount.jsp" method="post"name="addform' id="addform">
+    <form action="createAccount.jsp" method="post"name="addform" id="addform">
       <b>Create new user:</b><br>
-      <!-- using placeholder assumes HTML5 support. Just use emtpy value or nothing if we cant use html5.-->
-      <input type="text" name="uid" maxlength="32" required placeholder="Username"><br>
-      <input type="password" name="pass" maxlength="32" required placeholder="Password"><br>
-      <input type="number" name="pid" min="0" required placeholder="Person ID"><br>
+       <!-- using placeholder assumes HTML5 support. Just use emtpy value or nothing if we cant use html5.-->
+      <table style="width:100%;border-style:inset";>
+      <tr><td><p style="display:inline">Username: </p></td><td><input type="text" id="uid" name="uid" maxlength="32" required placeholder="Username"><br></td></tr>
+     <tr><td> <p style="display:inline">First Name: </p></td><td><input type="text" name="fname" maxlength="32" required placeholder="First Name"><br></td></tr>
+      <tr><td><p style="display:inline">Family Name: </p></td><td><input type="text" name="lname" maxlength="32" required placeholder="Last Name"><br></td></tr>
+      <tr><td><p style="display:inline">Address: </p></td><td><input type="text" name="address" maxlength="32" required placeholder="Address"><br></td></tr>
+      <tr><td><p style="display:inline">Email: </p></td><td><input type="text" name="email" maxlength="32" required placeholder="Email"><br></td></tr>
+      <tr><td><p style="display:inline">Phone: </p></td><td><input type="text" name="phone" maxlength="32" required placeholder="Phone"><br></td></tr>
+      <tr><td><p style="display:inline">User ID: </p></td><td><input id="pid" type="number" name="pid" min="0" required placeholder="Person ID"><br></td></tr>
+      <tr><td><p style="display:inline">Password Reset: </p></td><td><input type="password" name="password" min="0" required placeholder="New Password"><br></td></tr>
+      </table>
   User's role is:<br>
-      <select id="addrole" form="addform">
-      <option value="s">Scientist</option>
-      <option value="d">Data Curator</option>
-      <option value="a">Administrator</option>
-      <select>
+      <p style="display:inline">A</p><input type="radio" value="a" name="role" id="role">
+	<p style="display:inline">S</p><input type="radio" value="s" name="role" id="role">
+	<p style="display:inline">D</p><input type="radio" value="d" name="role" id="role">
       <input type="submit" name="submit" value="Create!">
     </form>
     </div>
@@ -74,17 +79,17 @@
           
           while(rset.next()) {
             String usr = rset.getString(1);
-            String role = rset.getString(2);
+            String grole = rset.getString(2);
             Integer pid = new Integer(rset.getInt(3));
             // not yet used is date.
             java.sql.Date dateReg = rset.getDate(4);
             
-            if(role.equals("a")) {
-              role = "Administrator";
-            } else if (role.equals("s")) {
-              role = "Scientist";
-            } else if (role.equals("d")) {
-              role = "Data Curator";
+            if(grole.equals("a")) {
+              grole = "Administrator";
+            } else if (grole.equals("s")) {
+              grole = "Scientist";
+            } else if (grole.equals("d")) {
+              grole = "Data Curator";
             }
             
             String open = "<td>";
@@ -92,12 +97,12 @@
 	    String tropen = "<tr>";
 	    String trclose = "</tr>";	
 			
-			String buttonmod = "<input type='radio' id='userToMod' name='userToMod' value='" + usr + ";;" + pid.toString() + ";;" + role +  "'>";
+			String buttonmod = "<input type='radio' id='userToMod' name='userToMod' value='" + usr + ";;" + pid.toString() + ";;" + grole +  "'>";
 			
 		
 			String buttonrm = "<input type='radio' name='userToDelete' value='" + usr + "'>";
 			
-            out.println( tropen + open + usr + close + open + pid.toString() + close + open + role + close + open + buttonmod +  close + open + buttonrm + close);
+            out.println( tropen + open + usr + close + open + pid.toString() + close + open + grole + close + open + buttonmod +  close + open + buttonrm + close + trclose);
             
           }
           
@@ -127,15 +132,16 @@
       <tr><td><p style="display:inline">Address: </p></td><td><input type="text" name="address" maxlength="32" required placeholder="Address"><br></td></tr>
       <tr><td><p style="display:inline">Email: </p></td><td><input type="text" name="email" maxlength="32" required placeholder="Email"><br></td></tr>
       <tr><td><p style="display:inline">Phone: </p></td><td><input type="text" name="phone" maxlength="32" required placeholder="Phone"><br></td></tr>
-      <tr><td><p style="display:inline">User ID: </p></td><td><input id="modpid" type="number" name="pid" min="0" required placeholder="Person ID"><br></td></tr>
       <tr><td><p style="display:inline">Password Reset: </p></td><td><input type="password" name="pass" min="0" required placeholder="New Password"><br></td></tr>
       </table>
       User's role is:<br>
-      <select id="modrole" form="modform">
+      <select id="role" name="role" form="modform">
       <option value="s">Scientist</option>
       <option value="d">Data Curator</option>
       <option value="a">Administrator</option>
       <select>
+      <input type="submit" name="submit" value="Create!">
+     
       <input type="submit" name="submit" value="Update">
     </form>
     </div>

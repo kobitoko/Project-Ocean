@@ -2,6 +2,10 @@
 
 
 window.onload = function(){
+	document.cookie = "name=jcadek;";
+	document.cookie = "role=a;";
+	document.cookie = "path=/;";
+	document.cookie = "domain=.cs.ualberta.ca;";
 	role = getRole();
 	
 	updateNav(role);
@@ -10,14 +14,9 @@ window.onload = function(){
 
 function getRole(){
 	var cooks = document.cookie.split(';');
-	
 	for(i=0;i<cooks.length;i++){
 		var temp = cooks[i].split("=");
-		
-		if(temp[0].replace(" ","") == "role"){
-			
-			return temp[1];
-		}
+		if(temp[0] == "role"){return temp[1];}
 		else {};
 	}
 }
@@ -26,17 +25,17 @@ function getUser(){
 	var cooks = document.cookie.split(';');
 	for(i=0;i<cooks.length;i++){
 		var temp = cooks[i].split("=");
-		if(temp[0].replace(" ","") == "name"){return temp[1];}
+		if(temp[0] == "name"){return temp[1];}
 		else {};
 	}
 }
 
 function updateNav(r){
 	role = r;
-	document.getElementById("header").innerHTML = '<button id="home" class="home";>HOME</button><button id="logout" class="logout">LOGOUT</button><button id="account" class="logout">MY INFO</button><button id="senman" class="sysadmin">SENSOR MANAGEMENT</button><button id="usrman" class="sysadmin">USER MANAGEMENT</button><button id="upload" class="curator">UPLOAD DATA</button><button id="search" class="navi">SEARCH SENSORS</button><button id="subscribe" class="navi">SENSOR SUBSCRIPTIONS</button><button id="analyze" class="navi">ANALYZE DATA</button>';
-
+	document.getElementById("header").innerHTML = '<button id="home" class="home";>HOME</button><button id="logout" class="logout">LOGOUT</button><button id="account" class="logout">MY INFO</button><button id="senman" class="sysadmin">SENSOR MANAGEMENT</button><button id="usrman" class="sysadmin">USER MANAGEMENT</button><button id="upload" class="curator">UPLOAD DATA</button><button id="search" class="navi">SEARCH SENSORS</button><button id="subscribe" class="navi">SENSOR SUBSCRIPTIONS</button><button id="analyze" class="navi">ANALYZE DATA</button><p id="testbed"></p>';
+document.getElementById("testbed").innerHTML = document.cookie.split(";");
 document.getElementById("home").onclick = function(){window.location.href="landing.html";}
-document.getElementById("logout").onclick = function(){document.cookie = "name=;";document.cookie = "role=;"; window.location.href="login.html";}
+document.getElementById("logout").onclick = function(){window.location.href="login.html";}
 document.getElementById("senman").onclick = function(){window.location.href="sensormanage.jsp";}
 document.getElementById("usrman").onclick = function(){window.location.href="usermanage.jsp";}
 document.getElementById("upload").onclick = function(){window.location.href="upload.html";}
@@ -72,9 +71,6 @@ else if(role == "d"){
 	document.getElementById("upload").style.display = 'none';
 	document.getElementById("usrman").style.display = 'none';
 	document.getElementById("senman").style.display = 'none';
-	document.getElementById("home").style.display = 'none';
-	document.getElementById("account").style.display = 'none';
-	document.getElementById("content").innerHTML = "<br>You are not logged in. Please <a href=login.html>Login</a>";
 }
 checkPermissions(role);
 }
@@ -89,6 +85,5 @@ function checkPermissions(r){
 	if(((permission == 'scientist') && (r != "s")) || ((permission == 'admin') && (r != "a")) || ((permission == 'curator') && (r != "d"))){
 		document.getElementById("content").innerHTML = "<br>You do not have permission to access this page. If you believe this is a mistake, please contact your System Administrator";	
 	}
-	
 }
 	
