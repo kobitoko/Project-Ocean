@@ -77,9 +77,7 @@
           
           ResultSet rset = stmnt.executeQuery(queryPeople);
           rset.moveToInsertRow();
-          out.println("before1");
           rset.updateInt(1,pid);
-          out.println("Not int 1");
           rset.updateString(2,fname);
           rset.updateString(3,lname);
           rset.updateString(4,address);
@@ -94,9 +92,7 @@
           rset.updateString(2,hashed);
           rset.updateString(3,role);
           rset.updateDate(4,date_reg);
-          out.println("before2" );
           rset.updateInt(5,pid);
-          out.println("Not int 2" );
 
           rset.insertRow();
           
