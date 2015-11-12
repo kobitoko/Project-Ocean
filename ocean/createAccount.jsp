@@ -1,4 +1,10 @@
 <!--input-->
+<link rel="stylesheet" type="text/css" href="oceanstyler.css">
+<script src="imports.js"></script>
+<script>permission = 'admin';</script>
+ <body style="background:lightblue;">
+ <div id='header' style="height:50px;border-style:inset;"></div>
+  <div id='content'>
 <%@ page import="java.util.*, java.sql.*, org.jasypt.digest.StandardStringDigester"%>
 <html>
   <head></head>
@@ -108,7 +114,9 @@
           ResultSet rset2 = pstmnt.executeQuery();
           
           if(rset2.next()) {
-            out.println("The new user " + user + " was succesfully created.");
+            out.println("The new user " + user + " was succesfully created. You will be redirected in 3 seconds");
+	String redirectCode = "<script language=\"javascript\" type=\"text/javascript\">window.setTimeout(\'window.location=\"usermanage.jsp\"; \',3000);</script>";
+              out.println(redirectCode);
           } else {
             out.println("Something went wrong...<br>Failed to create the new user " + user + "." );
           }
@@ -123,6 +131,7 @@
           System.err.println("SQLException: " + ex.getMessage());
       }      
     %>
-  
+  </div>
+</div>
   </body>
 </html>
