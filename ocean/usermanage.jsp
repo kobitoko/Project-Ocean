@@ -1,3 +1,4 @@
+
 <%@ page import="java.util.*, java.sql.*"%>
 <html>
   <head></head>
@@ -52,6 +53,9 @@
 		while(rset2.next()) {
 		  maxpid = new Integer(rset2.getInt(1)) + 1;
 		}
+	stmnt.close();
+          mCon.close();
+          
 
   	} catch(SQLException ex) {
           if (debug)
@@ -74,9 +78,8 @@
       <input type="submit" name="submit" value="Create!">
     </form>
     </div>
-    
     <div class="inline" style="border-style:inset;width:50%;">
-    <button onClick="modifyUser()" style="position:relative;left:40%;background-color:green;color:white;display:inline;"  value="Modify Checked User">Modify Checked User</button>
+
     <form action="removeThatAccount.jsp" method="post">
     <input style="position:relative;left:40%;background-color:blue;color:white;display:inline;" type="submit" name="submit" value="Remove Checked User">
     <table style="width:100%;border-style:inset";>
@@ -139,33 +142,24 @@
   	 </table>
      <input style="position:relative;left:40%;background-color:blue;color:white;display:inline;" type="submit" name="submit" value="Remove Checked User">
      </form>
- <button onClick="modifyUser()" style="position:relative;left:40%;background-color:green;color:white;display:inline;"  value="Modify Checked User">Modify Checked User</button>
+ 
 	</div>
-    <div class="inline" style="border-style:inset;width:23%;">
-    <b>Modify user:</b><br>
-    <p id="grabperson"></p>
-    <form action="modifyAccount.jsp" name="modform" method="post">
-      <!-- using placeholder assumes HTML5 support. Just use emtpy value or nothing if we cant use html5.-->
-      <table style="width:100%;border-style:inset";>
-      <tr><td><p style="display:inline">Username: </p></td><td><input type="text" id="moduid" name="uid" maxlength="32" required placeholder="Username"><br></td></tr>
-     <tr><td> <p style="display:inline">First Name: </p></td><td><input type="text" name="fname" maxlength="32" required placeholder="First Name"><br></td></tr>
-      <tr><td><p style="display:inline">Family Name: </p></td><td><input type="text" name="lname" maxlength="32" required placeholder="Last Name"><br></td></tr>
-      <tr><td><p style="display:inline">Address: </p></td><td><input type="text" name="address" maxlength="32" required placeholder="Address"><br></td></tr>
-      <tr><td><p style="display:inline">Email: </p></td><td><input type="text" name="email" maxlength="32" required placeholder="Email"><br></td></tr>
-      <tr><td><p style="display:inline">Phone: </p></td><td><input type="text" name="phone" maxlength="32" required placeholder="Phone"><br></td></tr>
-	 <tr><td><p style="display:inline">Person ID: </p></td><td><input id="modpid" type="number" value="" name="pid" min="0" maxlength="38" required placeholder="Person ID"><br></td></tr>
-      <tr><td><p style="display:inline">Password Reset: </p></td><td><input type="password" name="pass" min="0" required placeholder="New Password"><br></td></tr>
-      </table>
-      User's role is:<br>
-      <select id="modrole" name="role" form="modform">
+<div class="inline" style="border-style:inset;width:23%;">
+    <form action="modiUser.jsp" method="post" name="modi" id="modi">
+    <button onClick="modifyUser()"style="position:relative;background-color:green;color:white;display:inline;"  value="Modify Checked User">Modify Checked User</button>
+<div style="width:0;">
+<input id="modpid" type="number" value="" name="modpid" min="0" maxlength="38" required placeholder="Person ID"; >
+<input id="moduid" type="text" value="" name="moduid" min="0" maxlength="38" required placeholder="Username" >
+<select id="modrole" name="modrole" form="modi">
       <option value="s">Scientist</option>
       <option value="d">Data Curator</option>
       <option value="a">Administrator</option>
-      <select> 
-      <input type="submit" name="submit" value="Update">
+      <select>
+</div>
     </form>
-    </div>
+</div>
     </div>
     </div>
   </body>
 </html>
+
