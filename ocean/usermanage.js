@@ -1,3 +1,4 @@
+
 // JavaScript Document
 function removeUser(){
 	
@@ -29,3 +30,4 @@ function modifyUser(){
         document.getElementById("modrole").value = "d";
     }
 }
+

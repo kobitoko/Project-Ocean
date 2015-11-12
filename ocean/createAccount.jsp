@@ -32,11 +32,16 @@
 
       s.initialize();
       
-      
       String user = request.getParameter("uid");
-      String pw = request.getParameter("pass");
+      String pw = request.getParameter("password");
       String role = request.getParameter("role");
       Integer pid = Integer.parseInt(request.getParameter("pid"));
+      String phone = request.getParameter("phone");
+      String email = request.getParameter("email");
+      String address = request.getParameter("address");
+      String lname = request.getParameter("lname");
+      String fname = request.getParameter("fname");
+      
       // taken from BalusC's answer http://stackoverflow.com/questions/5393824/passing-date-from-an-html-form-to-a-servlet-to-an-sql-database
       java.util.Date date = new java.util.Date();
       java.sql.Date date_reg = new java.sql.Date(date.getTime());
@@ -46,10 +51,8 @@
       String hashed = digested.substring(32,64);
       String salt = digested.substring(0,32);
       
-      //String query = "select S.USER_NAME, S.SALT, U.USER_NAME, U.PASSWORD, U.ROLE, U.DATE_REGISTERED, U.PERSON_ID from USERS U, SALTS S";
-      //String queryUsers = "select USER_NAME, PASSWORD, ROLE, DATE_REGISTERED, PERSON_ID from USERS";
-      // PERSON_ID (Pid) is taken out for now until we can add things to persons table.
-      String queryUsers = "select USER_NAME, PASSWORD, ROLE, DATE_REGISTERED from USERS";
+      String queryPeople = "select person_id, first_name, last_name, address, email, phone from PERSONS";
+      String queryUsers = "select USER_NAME, PASSWORD, ROLE, DATE_REGISTERED, PERSON_ID from USERS";
       String querySalts = "select USER_NAME, SALT from SALTS";
       
       String mUrl = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
@@ -78,13 +81,24 @@
           mCon = DriverManager.getConnection(mUrl, mUser, mPass);
           stmnt = mCon.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
           
-          ResultSet rset = stmnt.executeQuery(queryUsers);
+          ResultSet rset = stmnt.executeQuery(queryPeople);
+          rset.moveToInsertRow();
+          rset.updateInt(1,pid);
+          rset.updateString(2,fname);
+          rset.updateString(3,lname);
+          rset.updateString(4,address);
+          rset.updateString(5,email);
+          rset.updateString(6,phone);
+          
+          rset.insertRow();
+          
+          rset = stmnt.executeQuery(queryUsers);
           rset.moveToInsertRow();
           rset.updateString(1,user);
           rset.updateString(2,hashed);
           rset.updateString(3,role);
           rset.updateDate(4,date_reg);
-          //stmnt.updateInt(5,pid);
+          rset.updateInt(5,pid);
 
           rset.insertRow();
           
