@@ -101,25 +101,30 @@
           updatePersons.setString(5, email);
           updatePersons.setString(6, phone);
           updatePersons.setInt(7, oldPID);
+          updatePersons.executeUpdate();
         
           updateUserId = mCon.prepareStatment("update USERS set USER_NAME=?, ROLE=?, PERSON_ID=? where USER_NAME=?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
           updateUserId.setString(1, uid);
           updateUserId.setString(2, role);
           updateUserId.setInt(3, personId);
           updateUserId.setString(4, oldUser);
+          updateUserId.executeUpdate();
           
           updateSaltsUid = mCon.prepareStatment("update SALTS set USER_NAME=? where USER_NAME=?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
           updateSaltsUid.setString(1, uid);
           updateSaltsUid.setString(2, oldUser);
+          updateSaltsUid.executeUpdate();
         
           if(!newPass.isEmpty()) {
               updatePassword = mCon.prepareStatment("update USERS set PASSWORD=? where USER_NAME=?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
               updatePassword.setString(1, hashed);
               updatePassword.setString(2, uid);
+              updatePassword.executeUpdate();
               
               updateSaltsSalt = mCon.prepareStatment("update SALTS set SALT=? where USER_NAME=?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
               updateSaltsSalt.setString(1, salt)
               updateSaltsSalt.setString(2, uid);
+              updateSaltsSalt.executeUpdate();
           }
           
           // Do prepareStatment that commits data!?
