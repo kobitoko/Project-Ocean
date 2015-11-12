@@ -1,3 +1,4 @@
+<%@ page import="java.util.*, java.sql.*"%>
 <!doctype html>
 <html>
 <head>
@@ -25,11 +26,35 @@
     <th>Unsubscirbe</th>
     </tr>
     <tr>
-    <td>00001</td>
-    <td>Zimbabwe</td>
-    <td>Neon-plasma</td>
-    <td>A shiny thing</td>
-    <td><input style="width:100%"; type="checkbox" placeholder="Subscribe?"></td>
+    <%
+	Boolean debug = Boolean.TRUE;
+      String querySubs 		= "select SENSOR_ID, PERSON_ID from SUBSCRIPTIONS";
+	  String querySensors	= "select SENSOR_ID, LOCATION, SENSOR_TYPE, DESCRIPTION from SENSORS";
+      
+      String mUrl = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
+      String mDriverName = "oracle.jdbc.driver.OracleDriver";
+      
+      String mUser = "satyabra";
+      String mPass = "adasfa42";
+      
+      Connection mCon;
+      Statement stmnt;
+      PreparedStatement pstmnt;
+      
+      // instantiate the driver.
+      try {
+          Class drvClass = Class.forName(mDriverName);
+          DriverManager.registerDriver((Driver) drvClass.newInstance());
+      } catch(Exception e) {
+          System.err.print("ClassNotFoundException: ");
+          System.err.print(e.getMessage());
+          if(debug)
+            out.println("<BR>-debugLog: Received a ClassNotFoundException: " + e.getMessage());
+      }
+      
+      // actually log in and perform statements
+%>
+      
     </tr>
   	 </table>
      <input type="submit" style="position:relative;left:40%;background-color:blue;color:white;" name="submit" value="Unsubscribe to checked Sensors">
@@ -53,14 +78,64 @@
     <th>Location</th>
     <th>Sensor Type</th>
     <th>Description</th>
-    <th>Subscribe</th>
+    <th>Subscirbe</th>
     </tr>
     <tr>
-    <td>00002</td>
-    <td>Zimbabwe</td>
-    <td>Xenon-plasma</td>
-    <td>A  slightly less shiny thing</td>
-    <td><input style="width:100%"; type="checkbox" placeholder="Subscribe?"></td>
+ <%
+	
+      
+      
+      // actually log in and perform statements
+      try {
+          mCon = DriverManager.getConnection(mUrl, mUser, mPass);
+          stmnt = mCon.createStatement();
+          
+          ResultSet rset = stmnt.executeQuery(querySubs);
+		  ResultSet rsetSen = stmnt.executeQuery(querySensors);
+		  
+	// rset.last(); 
+         int total = 12;
+	 //rset.first();	  
+         String[] subs = new String[total];
+		  int count = 0;
+		  while(rset.next()) {
+			  subs[count] = rset.getString(1);
+		  }
+          
+          while(rsetSen.next()) {
+            String sid = rset.getString(1);
+            String local = rset.getString(2);
+            String stype = rset.getString(3);
+            String desc= rset.getString(4);
+            if(Arrays.asList(subs).contains(sid)){
+			}else{
+				String open = "<td>";
+				String close = "</td>";
+				String tropen = "<tr>";
+				String trclose = "</tr>";	
+				String subcheck = "<input type='radio' name='subToAdd' value='" + sid + "'>";
+				out.println( tropen + open + sid + close + open + local + close + open + stype + close + open + desc +  close + open + subcheck + close + trclose);
+			}
+            
+          }
+          
+          stmnt.close();
+          mCon.close();
+          
+      } catch(SQLException ex) {
+          if (debug)
+            out.println("<BR>-debugLog: Received a SQLException: " + ex.getMessage());
+          System.err.println("SQLException: " + ex.getMessage());
+      }      
+	
+	
+	
+	
+	
+	
+	
+	
+	%>
     </tr>
   	 </table>
     <input type="submit" style="position:relative;left:40%;background-color:blue;color:white;" name="submit" value="Subscribe to new Sensors">

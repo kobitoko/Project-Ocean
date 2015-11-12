@@ -31,6 +31,7 @@
       Boolean validRow = Boolean.FALSE;
       String hashed = new String();
       String salt = new String();
+	String role = new String();
       
       /*
       String digested = s.digest(pw);
@@ -51,6 +52,7 @@
       
       Connection mCon;
       PreparedStatement pstmt;
+	  PreparedStatement pstmt2;
       
       // instantiate the driver.
       try {
@@ -66,7 +68,7 @@
       // actually log in and perform statements
       try {
           mCon = DriverManager.getConnection(mUrl, mUser, mPass);
-          pstmt = mCon.prepareStatement("select U.USER_NAME, U.PASSWORD, S.SALT from USERS U, SALTS S where U.USER_NAME=? and U.USER_NAME=S.USER_NAME");
+          pstmt = mCon.prepareStatement("select U.USER_NAME, U.PASSWORD, U.ROLE, S.SALT from USERS U, SALTS S where U.USER_NAME=? and U.USER_NAME=S.USER_NAME");
 
           pstmt.setString(1,user);
 
@@ -75,7 +77,7 @@
          
           hashed = rset.getString("PASSWORD");
           salt = rset.getString("SALT");
-         
+          role = rset.getString("ROLE");
           pstmt.close();
           mCon.close();
           
@@ -93,7 +95,7 @@
           if(validRow && goodPassword) {
               out.println("Welcome " + user + "!");
               // taken from http://www.pa.msu.edu/services/computing/faq/auto-redirect.html
-              String redirectCode = "<script language=\"javascript\" type=\"text/javascript\">window.setTimeout(\'window.location=\"landing.html\"; \',1500);</script>";
+              String redirectCode = "<script language=\"javascript\" type=\"text/javascript\">document.cookie = 'name=" + user + ";';document.cookie = 'role=" + role + ";';document.cookie = 'path=/;';document.cookie = 'domain=.cs.ualberta.ca;';window.setTimeout(\'window.location=\"landing.html\"; \',1500);</script>";
               out.println(redirectCode);
           } else {
               out.println("<br>Failed to log in: Wrong username or password.<br><button onclick='goBack()'>Try again</button><script>function goBack() {window.history.back();}</script>");
