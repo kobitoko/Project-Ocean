@@ -35,7 +35,7 @@
       Integer oldPID = -1;
       
       String uid = request.getParameter("uid");
-      String role = request.getParameter("role");
+      String role = request.getParameter("newrole");
       String fname = request.getParameter("fname");
       String lname = request.getParameter("lname");
       String address = request.getParameter("address");
@@ -75,13 +75,14 @@
       
       Connection mCon;
       
-      PreparedStatement checkUserIdExists;
-      PreparedStatement getOldPid;
-      PreparedStatement updatePersons;
-      PreparedStatement updateUserId;
-      PreparedStatement updateSaltsUid;
-      PreparedStatement updatePassword;
-      PreparedStatement updateSaltsSalt;
+      PreparedStatement checkUserIdExists = null;
+      PreparedStatement getOldPid = null;
+      PreparedStatement updatePersons = null;
+      PreparedStatement updateUserId = null;
+      PreparedStatement updateSaltsUid = null;
+      PreparedStatement updatePassword = null;
+      PreparedStatement updateSaltsSalt = null;
+      ArrayList<Integer> results = new ArrayList<Integer>();
       
       // actually log in and perform statements
       try{              
@@ -116,35 +117,30 @@
           updatePersons.setString(5, email);
           updatePersons.setString(6, phone);
           updatePersons.setInt(7, oldPID);
-          updatePersons.executeUpdate();
-          updatePersons.close();
+          results.add(updatePersons.executeUpdate());
         
           updateUserId = mCon.prepareStatement("UPDATE USERS set USER_NAME=?, ROLE=?, PERSON_ID=? where USER_NAME=?");
           updateUserId.setString(1, uid);
           updateUserId.setString(2, role);
           updateUserId.setInt(3, personId);
           updateUserId.setString(4, oldUser);
-          updateUserId.executeUpdate();
-          updateUserId.close();
+          results.add(updateUserId.executeUpdate());
           
           updateSaltsUid = mCon.prepareStatement("UPDATE SALTS set USER_NAME=? where USER_NAME=?");
           updateSaltsUid.setString(1, uid);
           updateSaltsUid.setString(2, oldUser);
-          updateSaltsUid.executeUpdate();
-          updateSaltsUid.close();
+          results.add(updateSaltsUid.executeUpdate());
         
           if(!newPass.isEmpty()) {
               updatePassword = mCon.prepareStatement("UPDATE USERS set PASSWORD=? where USER_NAME=?");
               updatePassword.setString(1, hashed);
               updatePassword.setString(2, uid);
-              updatePassword.executeUpdate();
-              updatePassword.close();
-              
+              results.add(updatePassword.executeUpdate());
+
               updateSaltsSalt = mCon.prepareStatement("UPDATE SALTS set SALT=? where USER_NAME=?");
               updateSaltsSalt.setString(1, salt);
               updateSaltsSalt.setString(2, uid);
-              updateSaltsSalt.executeUpdate();
-              updateSaltsSalt.close();
+              results.add(updateSaltsSalt.executeUpdate());
           }
           
           // Do prepareStatment that commits data!?
@@ -152,13 +148,37 @@
           // but ResultSet.TYPE_SCROLL_SENSITIVE and CONCUR_UPDATABLE should make it? or is only for the rest created from that sql statement??
           mCon.commit();
           // aaaaaaa https://docs.oracle.com/javase/tutorial/jdbc/basics/transactions.html
-          System.err.println(mCon.getAutoCommit());
+
+          int count = 0;
+          for(Integer a : results) {
+            System.err.println(Integer.valueOf(count).toString() + "index, value:" + a.toString());
+            ++count;
+          }
+          
+          System.err.println("oldUid:" + oldUser + "\n"
+          + "uid:" + uid+ "\n" 
+          + "role:"+role+ "\n"
+          + "fname:"+fname+ "\n"
+          + "lname:"+lname+ "\n"
+          + "address:"+address+ "\n"
+          + "email:"+email+ "\n"
+          + "phone:"+phone+ "\n"
+          + "personId:"+Integer.valueOf(personId).toString()+ "\n"
+          + "newPass:"  +newPass+ "\n"
+          );
           
           mCon.setAutoCommit(oldAutoCommitVal);
+
           
-          System.err.println(mCon.getAutoCommit());
-          
+          updatePersons.close();
+          updateUserId.close();
+          updateSaltsUid.close();
+          if(!newPass.isEmpty()) {
+            updatePassword.close();
+            updateSaltsSalt.close();
+          }
         }
+        getOldPid.close();
         checkUserIdExists.close();
         mCon.close();
       } catch(SQLException ex) {
