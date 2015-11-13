@@ -103,6 +103,11 @@ if(rset.next()){
 		document.getElementById("newrole").value = document.getElementById("orole").value;
 	}
 	
+  function releaseLocks(){
+    document.getElementById("ouid").disabled = "";
+    document.getElementById("opid").disabled = "";
+    document.getElementById("newrole").disabled = "";
+  }
 
       </script>
 	<select id="orole" name="orole" form="modform" onchange="changeRole()">
@@ -111,7 +116,7 @@ if(rset.next()){
       <option value="d">Data Curator</option>
       <option value="a">Administrator</option>
       <select> 
-      <input type="submit" name="submit" value="Update">
+      <button onClick="releaseLocks()" value="Update">Update</button>
     </form>
     </div>
 </div>
