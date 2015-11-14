@@ -205,10 +205,11 @@
           
           // Email unique constraint. If changed: update it, and also update when an insert due 
           // to new pid occurred, otherwise email would be empty.
-          if(!oldEmail.equals(email) || !oldPID.equals(personId)) {
+          if(oldEmail == null || !oldEmail.equals(email) || !oldPID.equals(personId)) {
             emailUpdate = mCon.prepareStatement("UPDATE PERSONS SET email=? WHERE person_id=?");
             emailUpdate.setString(1, email);
             emailUpdate.setInt(2, personId);
+            emailUpdate.executeUpdate();
           }
           
           mCon.commit();
