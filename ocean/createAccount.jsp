@@ -42,18 +42,6 @@
       String lname = request.getParameter("lname");
       String fname = request.getParameter("fname");
       
-       System.err.println("uid:" + user+ "\n"
-          + "ps:"  +pw+ "\n"
-          + "role:"+role+ "\n"
-          + "fname:"+fname+ "\n"
-          + "lname:"+lname+ "\n"
-          + "address:"+address+ "\n"
-          + "email:"+email+ "\n"
-          + "phone:"+phone+ "\n"
-          + "personId:"+pid.toString()+ "\n"
-
-          );
-      
       // taken from BalusC's answer http://stackoverflow.com/questions/5393824/passing-date-from-an-html-form-to-a-servlet-to-an-sql-database
       java.util.Date date = new java.util.Date();
       java.sql.Date date_reg = new java.sql.Date(date.getTime());
