@@ -31,7 +31,7 @@ Integer pid = null;
 //Based on tutorials at http://www.tutorialspoint.com/
 Cookie cookie = null;
 Cookie[] cookies = null;
-String comppid = "modpid";
+String comppid = "pid";
 cookies = request.getCookies();
    if( cookies != null ){
 	 for (Integer i = 0; i < cookies.length; i++){
@@ -41,8 +41,8 @@ cookies = request.getCookies();
 }
 }
 	Boolean debug = Boolean.TRUE;
-      String queryMySensors	= "select SENSOR_ID, LOCATION, SENSOR_TYPE, DESCRIPTION from SENSORS S, SUBSCRIPTIONS T where S.SENSOR_ID = T.SENSOR_ID and T.PERSON_ID = '"+ pid +"';";
-      String querySensors	= "select SENSOR_ID, LOCATION, SENSOR_TYPE, DESCRIPTION from SENSORS S, SUBSCRIPTIONS T where S.SENSOR_ID = T.SENSOR_ID and T.PERSON_ID != '"+ pid  +"';";
+      String queryMySensors	= "select S.SENSOR_ID, S.LOCATION, S.SENSOR_TYPE, S.DESCRIPTION from SENSORS S, SUBSCRIPTIONS T where S.SENSOR_ID=T.SENSOR_ID and T.PERSON_ID="+pid;
+      String querySensors	= "select distinct S.SENSOR_ID, S.LOCATION, S.SENSOR_TYPE, S.DESCRIPTION from SENSORS S, SUBSCRIPTIONS T where S.SENSOR_ID=T.SENSOR_ID and T.PERSON_ID!="+pid;
       
       String mUrl = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
       String mDriverName = "oracle.jdbc.driver.OracleDriver";
@@ -70,7 +70,7 @@ try {
           mCon = DriverManager.getConnection(mUrl, mUser, mPass);
           stmnt = mCon.createStatement();
           
-          ResultSet rset = stmnt.executeQuery(querySensors);
+          ResultSet rset = stmnt.executeQuery(queryMySensors);
           
           while(rset.next()) {
             Integer sID = new Integer(rset.getInt(1));

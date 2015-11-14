@@ -8,7 +8,7 @@
  <div id='header' style="height:50px;border-style:inset;"></div>
   <div id='content'>
  <div>
-
+<form action="removeSensor.jsp" id="sensform" method="post">
     <div class="inline" style="border-style:inset;width:75%;">
     <table style="width:100%;border-style:inset";>
     <tr>
@@ -92,6 +92,7 @@ Boolean debug = Boolean.TRUE;
     <tr>
   	 </table>
 	</div>
+</form>
     
     </div>
  <div class="inline" style="border-style:inset;width:23%;;">
