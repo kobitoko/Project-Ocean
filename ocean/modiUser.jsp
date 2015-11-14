@@ -91,7 +91,7 @@ if(rset.next()){
       <tr><td><p style="display:inline">Email: </p></td><td><input type="text" name="email" maxlength="32" value="<%= email%>" required placeholder="Email"><br></td></tr>
       <tr><td><p style="display:inline">Phone: </p></td><td><input type="text" name="phone" maxlength="32" value="<%= phone%>" required placeholder="Phone"><br></td></tr>
 	 <tr><td><p style="display:inline">Person ID: </p></td><td><input id="modpid" type="number" value="<%= pid%>" name="pid" min="0" maxlength="38" required placeholder="Person ID"><br></td></tr>
-      <tr><td><p style="display:inline">Password Reset: </p></td><td><input type="password" name="pass" min="0" required placeholder="New Password"><br></td></tr>
+      <tr><td><p style="display:inline">Password Reset: </p></td><td><input type="password" name="pass" min="0" placeholder="New Password"><br></td></tr>
  <tr><td><p style="display:inline">Old Username: </p></td><td><input type="text" id="ouid" value ="<%= user%>" name="ouid" maxlength="32" required placeholder="Username" disabled><br></td></tr>
 <tr><td><p style="display:inline">Old PID: </p></td><td><input id="opid" type="number" value="<%= pid%>" name="opid" min="0" maxlength="38" required placeholder="Person ID" disabled><br></td></tr>
 <tr><td><p style="display:inline">New Role: </p></td><td><input id="newrole" type="text" value="<%= role%>" name="newrole" min="0" maxlength="38" required placeholder="Person ID" disabled><br></td></tr>
@@ -103,6 +103,11 @@ if(rset.next()){
 		document.getElementById("newrole").value = document.getElementById("orole").value;
 	}
 	
+  function releaseLocks(){
+    document.getElementById("ouid").disabled = "";
+    document.getElementById("opid").disabled = "";
+    document.getElementById("newrole").disabled = "";
+  }
 
       </script>
 	<select id="orole" name="orole" form="modform" onchange="changeRole()">
@@ -111,7 +116,7 @@ if(rset.next()){
       <option value="d">Data Curator</option>
       <option value="a">Administrator</option>
       <select> 
-      <input type="submit" name="submit" value="Update">
+      <button onClick="releaseLocks()" value="Update">Update</button>
     </form>
     </div>
 </div>

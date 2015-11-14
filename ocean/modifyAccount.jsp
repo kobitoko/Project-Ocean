@@ -27,35 +27,31 @@
 
       s.initialize();
       
-      /*
-        the following data got from the previous page:
-        name="uid" Username
-        name="fname" First Name
-        name="lname" Last Name
-        name="address" Address
-        name="email" email
-        name="phone" phone
-        name="pid     personId
-        name="pass"  newPassword
-      */
-      
-      // Get this user with the old userID to find the user in the first place. 
-      String oldUser = request.getParameter("OLD_USERID");
+      // Get this user with the old userID and old PID to find the user in the first place. 
+      String oldUser = request.getParameter("ouid");
+      Integer oldPID = Integer.parseInt(request.getParameter("opid"));
       
       String uid = request.getParameter("uid");
+      String role = request.getParameter("newrole");
       String fname = request.getParameter("fname");
       String lname = request.getParameter("lname");
       String address = request.getParameter("address");
       String email = request.getParameter("email");
-      // phone is char(10) in persons table.
+      String oldEmail = new String();
       String phone = request.getParameter("phone");
-      String personId = request.getParameter("pid");
+      Integer personId = Integer.parseInt(request.getParameter("pid"));
       String newPass = request.getParameter("pass");
       
-      String digested = s.digest(newPass);
-      // substring's index begin is inclusive, and index end is exclusive.
-      String hashed = digested.substring(32,64);
-      String salt = digested.substring(0,32);
+      // initialize with default password "admin"
+      String hashed = "4CF49155816C245A106D80D64123BAE9";
+      String salt = "A48E8B18189B4FB6691A56E1575D2280";
+      
+      if(!newPass.isEmpty()) {
+        String digested = s.digest(newPass);
+        // substring's index begin is inclusive, and index end is exclusive.
+        hashed = digested.substring(32,64);
+        salt = digested.substring(0,32);
+      }
       
       String mUrl = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
       String mDriverName = "oracle.jdbc.driver.OracleDriver";
@@ -74,64 +70,164 @@
             out.println("<BR>-debugLog: Received a ClassNotFoundException: " + e.getMessage());
       }
       
-      Connection mCon;
+      Connection mCon = null;
+      Boolean oldAutoCommitVal = Boolean.TRUE;
       
-      PreparedStatement checkUserIdExists;
-      PreparedStatement updateUserId;
-      PreparedStatement updateSaltsUid;
-      
-      // this line here update userId from person table
-      PreparedStatement updatePassword;
-      PreparedStatement updateSaltsSalt;
+      PreparedStatement checkUserIdExists = null;
+      PreparedStatement insertPersons = null;
+      PreparedStatement emailUpdate = null;
+      PreparedStatement updateUserId = null;
+      PreparedStatement updateSaltsUid = null;
+      PreparedStatement updatePassword = null;
+      PreparedStatement updateSalt = null;
       
       // actually log in and perform statements
       try{              
         mCon = DriverManager.getConnection(mUrl, mUser, mPass);
+        oldAutoCommitVal = mCon.getAutoCommit();
+        mCon.setAutoCommit(Boolean.FALSE);
         
         // if this returns a table with 1 row, that new username is invalid!
-        checkUserIdExists = mCon.prepareStatment("select USER_NAME from USERS where USER_NAME=?");
+        checkUserIdExists = mCon.prepareStatement("select USER_NAME from USERS where USER_NAME=? AND USER_NAME<>?");
         checkUserIdExists.setString(1, uid);
-        checkUserIdExists.setString(1, uid);
-        
+        checkUserIdExists.setString(2, oldUser);
         ResultSet rset = checkUserIdExists.executeQuery();
         if(rset.next()) {
-          //Notify user that the new user name is already taken! And go back to previous page.
-          
+          // Notify user that the new user name is already taken! And go back to previous page.
+          checkUserIdExists.close();
+          out.println("Your new username: " + uid + " already exists! \n Try again please.");
+          System.err.println("New USER_NAME already exists!");
         } else if (!rset.next()) {
-        
-          updatePassword = mCon.prepareStatment("update USERS set PASSWORD=? where USER_NAME=?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-          updatePassword.setString(1, hashed);
-          updatePassword.setString(2, oldUser);
+          // New username is unique and ok to be used.
           
-          updateSaltsSalt = mCon.prepareStatment("update SALTS set SALT=? where USER_NAME=?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-          updateSaltsSalt.setString(1, salt)
-          updateSaltsSalt.setString(2, oldUser);
+          // Password hash and salt will be set to original if no new password.
+          if(newPass.isEmpty()) {              
+              // get old password, salt, and email
+              updatePassword = mCon.prepareStatement("select U.PASSWORD, S.SALT, P.email from USERS U, SALTS S, PERSONS P where U.USER_NAME=S.USER_NAME and P.PERSON_ID=U.PERSON_ID and U.USER_NAME=?");
+              updatePassword.setString(1, oldUser);
+              ResultSet getOldInfo = updatePassword.executeQuery();
+              
+              getOldInfo.next();
+              hashed = getOldInfo.getString(1);
+              salt = getOldInfo.getString(2);
+              oldEmail = getOldInfo.getString(3);
+          }
+          // Update salt
+          updateSalt = mCon.prepareStatement("UPDATE SALTS set SALT=? where USER_NAME=?");
+          updateSalt.setString(1, salt);
+          updateSalt.setString(2, oldUser);
+          updateSalt.executeUpdate();
           
-          // TODO: when people table is done, make info there updatable as well!!!!
+          // Update keys using the wihtin transaction method taken from http://stackoverflow.com/questions/2877540/is-it-possible-to-modify-the-value-of-a-records-primary-key-in-oracle-when-chil
+          // Update the personID key.
+          if(!oldPID.equals(personId)) {
+            // a new pid is provided.
+            insertPersons = mCon.prepareStatement("INSERT INTO PERSONS (first_name, last_name, address, phone, person_id) VALUES (?, ?, ?, ?, ?)");
+          } else {
+            // no new pid
+            insertPersons = mCon.prepareStatement("UPDATE PERSONS SET first_name=?, last_name=?, address=?, phone=? WHERE person_id=?");
+          }
+          insertPersons.setString(1, fname);
+          insertPersons.setString(2, lname);
+          insertPersons.setString(3, address);
+          insertPersons.setString(4, phone);
+          insertPersons.setInt(5,personId);
+          insertPersons.executeUpdate();
           
-          // Do this last, so you can use the old USER_NAME above.
-          updateUserId = mCon.prepareStatment("update USERS set USER_NAME=? where USER_NAME=?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-          updateUserId.setString(1, uid);
-          updateUserId.setString(2, oldUser);
-          
-          updateSaltsUid = mCon.prepareStatment("update SALTS set USER_NAME=? where USER_NAME=?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-          updateSaltsUid.setString(1, uid);
-          updateSaltsUid.setString(2, oldUser);
-          
-          // Do prepareStatment that commits data!?
-          // no according to http://stackoverflow.com/questions/10814913/sql-preparedstatement-autocommit
-          // but ResultSet.TYPE_SCROLL_SENSITIVE and CONCUR_UPDATABLE should make it? or is only for the rest created from that sql statement??
-          if(!mCon.getAutoCommit()) {
-            mCon.commit();
+          // update the userId only if changed, but other than userId still updates that users data.
+          if(oldUser.equals(uid)) {
+            // no userID change
+            updateUserId = mCon.prepareStatement("UPDATE USERS set PASSWORD=?, ROLE=?, PERSON_ID=? where USER_NAME=?");
+            updateUserId.setString(1, hashed);
+            updateUserId.setString(2, role);
+            updateUserId.setInt(3, personId);
+            updateUserId.setString(4, oldUser);
+            updateUserId.executeUpdate();
+          } else {
+            // userID is changing too.
+            updateUserId = mCon.prepareStatement("INSERT INTO USERS (USER_NAME, PASSWORD, ROLE, PERSON_ID, DATE_REGISTERED ) SELECT ?, ?, ?, ?, DATE_REGISTERED from USERS where USER_NAME=?");
+            updateUserId.setString(1, uid);
+            updateUserId.setString(2, hashed);
+            updateUserId.setString(3, role);
+            updateUserId.setInt(4, personId);
+            updateUserId.setString(5, oldUser);
+            updateUserId.executeUpdate();
+            
+            // update the salts table with new userId
+            updateSaltsUid = mCon.prepareStatement("UPDATE SALTS set USER_NAME=? where USER_NAME=?");
+            updateSaltsUid.setString(1, uid);
+            updateSaltsUid.setString(2, oldUser);
+            updateSaltsUid.executeUpdate();
+            
+            // Remove old userID 
+            PreparedStatement delOldUsr = mCon.prepareStatement("DELETE FROM USERS where USER_NAME=?");
+            delOldUsr.setString(1, oldUser);
+            delOldUsr.executeUpdate();
+            delOldUsr.close();
           }
           
+          // Remove old personId row only when pid changed.
+          if(!oldPID.equals(personId)) {
+            PreparedStatement delOldPerson = mCon.prepareStatement("DELETE FROM PERSONS where PERSON_ID=?");
+            delOldPerson.setString(1, oldPID.toString());
+            delOldPerson.executeUpdate();
+            delOldPerson.close();
+          }
+          
+          // Email unique constraint. If changed: update it, and also update when an insert due 
+          // to new pid copy because email unique constraint, otherwise email would be empty.
+          if(oldEmail == null || !oldEmail.equals(email) || !oldPID.equals(personId)) {
+            emailUpdate = mCon.prepareStatement("UPDATE PERSONS SET email=? WHERE person_id=?");
+            emailUpdate.setString(1, email);
+            emailUpdate.setInt(2, personId);
+            emailUpdate.executeUpdate();
+          }
+          
+          // Save all changes.
+          mCon.commit();
+          
+          // Show success of modification, returns to landing because admin and normal user share this jsp.
+          out.println("Information for " + uid + " were succesfully changed. You will be redirected in 3 seconds");
+          String redirectCode = "<script language=\"javascript\" type=\"text/javascript\">window.setTimeout(\'window.location=\"landing.html\"; \',3000);</script>";
+          out.println(redirectCode);
+          
         }
-      
       } catch(SQLException ex) {
           if (debug)
             out.println("<BR>-debugLog:Received a SQLException: " + ex.getMessage());
           System.err.println("SQLException: " + ex.getMessage());
-      }      
+          // something went wrong thus roll back.
+          mCon.rollback();
+      } finally {
+        // In case of exceptions etc. this will always run, and shut down connection of SQL properly.
+        
+        mCon.setAutoCommit(oldAutoCommitVal);
+        
+        if(insertPersons != null) {
+          insertPersons.close();
+        }
+        if(updateUserId != null) {
+          updateUserId.close();
+        }
+        if(updateSaltsUid != null) {
+          updateSaltsUid.close();
+        }
+        if(updateSalt != null) {
+          updateSalt.close();
+        }
+        if(emailUpdate != null) {
+          emailUpdate.close();
+        }
+        if(updatePassword != null) {
+          updatePassword.close();
+        }
+        if(checkUserIdExists != null) {
+          checkUserIdExists.close();
+        }
+        if(mCon != null) {
+          mCon.close();
+        }
+      }
     %>
   
   </body>

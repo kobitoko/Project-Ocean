@@ -33,7 +33,7 @@
       s.initialize();
       
       String user = request.getParameter("uid");
-      String pw = request.getParameter("password");
+      String pw = request.getParameter("pass");
       String role = request.getParameter("role");
       Integer pid = Integer.parseInt(request.getParameter("pid"));
       String phone = request.getParameter("phone");
@@ -115,21 +115,23 @@
           
           if(rset2.next()) {
             out.println("The new user " + user + " was succesfully created. You will be redirected in 3 seconds");
-	String redirectCode = "<script language=\"javascript\" type=\"text/javascript\">window.setTimeout(\'window.location=\"usermanage.jsp\"; \',3000);</script>";
+            String redirectCode = "<script language=\"javascript\" type=\"text/javascript\">window.setTimeout(\'window.location=\"usermanage.jsp\"; \',3000);</script>";
               out.println(redirectCode);
           } else {
             out.println("Something went wrong...<br>Failed to create the new user " + user + "." );
           }
 
-          stmnt.close();
-          pstmnt.close();
-          mCon.close();
+
           
       } catch(SQLException ex) {
           if (debug)
             out.println("<BR>-debugLog:Received a SQLException: " + ex.getMessage());
           System.err.println("SQLException: " + ex.getMessage());
-      }      
+      } finally {
+        stmnt.close();
+        pstmnt.close();
+        mCon.close();
+      }
     %>
   </div>
 </div>
