@@ -82,7 +82,7 @@ if(rset.next()){
 	out.println("Something went wrong.");
 }} catch(SQLException ex) {if (debug)out.println("<BR>-debugLog:Received a SQLException: " + ex.getMessage());System.err.println("SQLException: " + ex.getMessage());}%>
  <div class="inline" style="border-style:inset;width:23%;">
-    <form action="modifyAccount.jsp" name="modform" method="post">
+    <form action="mymodifyAccount.jsp" name="modform" method="post">
       <!-- using placeholder assumes HTML5 support. Just use emtpy value or nothing if we cant use html5.-->
       <table style="width:100%;border-style:inset";>
      <tr><td> <p style="display:inline">First Name: </p></td><td><input type="text" id="fname" name="fname" maxlength="32" value=<%= fname%> required placeholder="First Name"><br></td></tr>

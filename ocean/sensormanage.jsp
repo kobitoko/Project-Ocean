@@ -68,7 +68,7 @@ Boolean debug = Boolean.TRUE;
 		
 	    String buttonrm = "<input type='radio' name='userToDelete' value='" + sID + "'>";
 			
-            out.println( tropen + open + sID + close + open + local + close + open + type + close + open + desc +  close + trclose);
+            out.println( tropen + open + sID + close + open + local + close + open + type + close + open + desc +  close + open + buttonrm + close + trclose);
             
           }
           

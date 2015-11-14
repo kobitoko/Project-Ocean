@@ -29,12 +29,14 @@
       
       // Get this user with the old userID and old PID to find the user in the first place. 
       String oldUser = null;
+String oldRole = null;
       Integer oldPID = null;
 //Based on tutorials at http://www.tutorialspoint.com/
 Cookie cookie = null;
 Cookie[] cookies = null;
-String comppid = "modpid";
-String compname = "modname";
+String comppid = "pid";
+String compname = "name";
+String comprole = "role";
 cookies = request.getCookies();
    if( cookies != null ){
 	 for (Integer i = 0; i < cookies.length; i++){
@@ -42,19 +44,20 @@ cookies = request.getCookies();
 		
 		if(cookie.getName().equals(comppid)){oldPID = Integer.parseInt(cookie.getValue());}
 		if(cookie.getName().equals(compname)){oldUser = cookie.getValue();}
+		if(cookie.getName().equals(comprole)){oldRole = cookie.getValue();}
 }
 }
 
       
-      String uid = request.getParameter("uid");
-      String role = request.getParameter("newrole");
+      String uid = oldUser;
+      String role = oldRole;
       String fname = request.getParameter("fname");
       String lname = request.getParameter("lname");
       String address = request.getParameter("address");
       String email = request.getParameter("email");
       String oldEmail = new String();
       String phone = request.getParameter("phone");
-      Integer personId = Integer.parseInt(request.getParameter("pid"));
+      Integer personId = oldPID;
       String newPass = request.getParameter("pass");
       
       // initialize with default password "admin"
