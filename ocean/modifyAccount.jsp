@@ -27,10 +27,8 @@
 
       s.initialize();
       
-      // Get this user with the old userID to find the user in the first place. 
+      // Get this user with the old userID and old PID to find the user in the first place. 
       String oldUser = request.getParameter("ouid");
-      
-      // for some reason opod is NULL, but foudn other way to get it.
       Integer oldPID = Integer.parseInt(request.getParameter("opid"));
       
       String uid = request.getParameter("uid");
@@ -40,7 +38,6 @@
       String address = request.getParameter("address");
       String email = request.getParameter("email");
       String oldEmail = new String();
-      // phone is char(10) in persons table.
       String phone = request.getParameter("phone");
       Integer personId = Integer.parseInt(request.getParameter("pid"));
       String newPass = request.getParameter("pass");
@@ -75,6 +72,7 @@
       
       Connection mCon = null;
       Boolean oldAutoCommitVal = Boolean.TRUE;
+      
       PreparedStatement checkUserIdExists = null;
       PreparedStatement insertPersons = null;
       PreparedStatement emailUpdate = null;
@@ -82,7 +80,6 @@
       PreparedStatement updateSaltsUid = null;
       PreparedStatement updatePassword = null;
       PreparedStatement updateSalt = null;
-      ArrayList<Integer> results = new ArrayList<Integer>();
       
       // actually log in and perform statements
       try{              
@@ -90,36 +87,21 @@
         oldAutoCommitVal = mCon.getAutoCommit();
         mCon.setAutoCommit(Boolean.FALSE);
         
-                           
-          System.err.println("oldUid:" + oldUser + "\n"
-          + "oldPid:" +request.getParameter("opid")+ "\n"
-          + "uid:" + uid+ "\n" 
-          + "role:"+role+ "\n"
-          + "fname:"+fname+ "\n"
-          + "lname:"+lname+ "\n"
-          + "address:"+address+ "\n"
-          + "email:"+email+ "\n"
-          + "phone:"+phone+ "\n"
-          + "personId:"+Integer.valueOf(personId).toString()+ "\n"
-          + "newPass:"  +newPass+ "\n"
-          );
-              
-        
         // if this returns a table with 1 row, that new username is invalid!
         checkUserIdExists = mCon.prepareStatement("select USER_NAME from USERS where USER_NAME=? AND USER_NAME<>?");
         checkUserIdExists.setString(1, uid);
         checkUserIdExists.setString(2, oldUser);
         ResultSet rset = checkUserIdExists.executeQuery();
         if(rset.next()) {
-          //Notify user that the new user name is already taken! And go back to previous page.
-          out.println("Your new username:" + uid + " already exists! \n Try again please.");
+          // Notify user that the new user name is already taken! And go back to previous page.
+          checkUserIdExists.close();
+          out.println("Your new username: " + uid + " already exists! \n Try again please.");
           System.err.println("New USER_NAME already exists!");
         } else if (!rset.next()) {
+          // New username is unique and ok to be used.
           
           // Password hash and salt will be set to original if no new password.
-          if(newPass.isEmpty()) {
-              System.err.println("0");
-              
+          if(newPass.isEmpty()) {              
               // get old password, salt, and email
               updatePassword = mCon.prepareStatement("select U.PASSWORD, S.SALT, P.email from USERS U, SALTS S, PERSONS P where U.USER_NAME=S.USER_NAME and P.PERSON_ID=U.PERSON_ID and U.USER_NAME=?");
               updatePassword.setString(1, oldUser);
@@ -130,22 +112,19 @@
               salt = getOldInfo.getString(2);
               oldEmail = getOldInfo.getString(3);
           }
-          System.err.println("1");
           // Update salt
           updateSalt = mCon.prepareStatement("UPDATE SALTS set SALT=? where USER_NAME=?");
           updateSalt.setString(1, salt);
           updateSalt.setString(2, oldUser);
-          results.add(updateSalt.executeUpdate());
-          System.err.println("2");
+          updateSalt.executeUpdate();
           
           // Update keys using the wihtin transaction method taken from http://stackoverflow.com/questions/2877540/is-it-possible-to-modify-the-value-of-a-records-primary-key-in-oracle-when-chil
+          // Update the personID key.
           if(!oldPID.equals(personId)) {
             // a new pid is provided.
-            System.err.println("newPid");
             insertPersons = mCon.prepareStatement("INSERT INTO PERSONS (first_name, last_name, address, phone, person_id) VALUES (?, ?, ?, ?, ?)");
           } else {
             // no new pid
-            System.err.println("oldPid");
             insertPersons = mCon.prepareStatement("UPDATE PERSONS SET first_name=?, last_name=?, address=?, phone=? WHERE person_id=?");
           }
           insertPersons.setString(1, fname);
@@ -153,22 +132,18 @@
           insertPersons.setString(3, address);
           insertPersons.setString(4, phone);
           insertPersons.setInt(5,personId);
-          results.add(insertPersons.executeUpdate());
+          insertPersons.executeUpdate();
           
-          System.err.println("3");
-          
+          // update the userId only if changed, but other than userId still updates that users data.
           if(oldUser.equals(uid)) {
-            System.err.println("uId no change");
             // no userID change
             updateUserId = mCon.prepareStatement("UPDATE USERS set PASSWORD=?, ROLE=?, PERSON_ID=? where USER_NAME=?");
             updateUserId.setString(1, hashed);
             updateUserId.setString(2, role);
             updateUserId.setInt(3, personId);
             updateUserId.setString(4, oldUser);
-            results.add(updateUserId.executeUpdate());
-            System.err.println("4");
+            updateUserId.executeUpdate();
           } else {
-            System.err.println("uId change");
             // userID is changing too.
             updateUserId = mCon.prepareStatement("INSERT INTO USERS (USER_NAME, PASSWORD, ROLE, PERSON_ID, DATE_REGISTERED ) SELECT ?, ?, ?, ?, DATE_REGISTERED from USERS where USER_NAME=?");
             updateUserId.setString(1, uid);
@@ -176,21 +151,18 @@
             updateUserId.setString(3, role);
             updateUserId.setInt(4, personId);
             updateUserId.setString(5, oldUser);
-            results.add(updateUserId.executeUpdate());
-            System.err.println("5");
+            updateUserId.executeUpdate();
             
             // update the salts table with new userId
             updateSaltsUid = mCon.prepareStatement("UPDATE SALTS set USER_NAME=? where USER_NAME=?");
             updateSaltsUid.setString(1, uid);
             updateSaltsUid.setString(2, oldUser);
-            results.add(updateSaltsUid.executeUpdate());
-            System.err.println("6");
+            updateSaltsUid.executeUpdate();
             
             // Remove old userID 
             PreparedStatement delOldUsr = mCon.prepareStatement("DELETE FROM USERS where USER_NAME=?");
             delOldUsr.setString(1, oldUser);
-            results.add(delOldUsr.executeUpdate());
-            System.err.println("7");
+            delOldUsr.executeUpdate();
             delOldUsr.close();
           }
           
@@ -198,13 +170,12 @@
           if(!oldPID.equals(personId)) {
             PreparedStatement delOldPerson = mCon.prepareStatement("DELETE FROM PERSONS where PERSON_ID=?");
             delOldPerson.setString(1, oldPID.toString());
-            results.add(delOldPerson.executeUpdate());
-            System.err.println("8");
+            delOldPerson.executeUpdate();
             delOldPerson.close();
           }
           
           // Email unique constraint. If changed: update it, and also update when an insert due 
-          // to new pid occurred, otherwise email would be empty.
+          // to new pid copy because email unique constraint, otherwise email would be empty.
           if(oldEmail == null || !oldEmail.equals(email) || !oldPID.equals(personId)) {
             emailUpdate = mCon.prepareStatement("UPDATE PERSONS SET email=? WHERE person_id=?");
             emailUpdate.setString(1, email);
@@ -212,21 +183,20 @@
             emailUpdate.executeUpdate();
           }
           
+          // Save all changes.
           mCon.commit();
-          
-          int count = 0;
-          for(Integer a : results) {
-            System.err.println(Integer.valueOf(count).toString() + "index, value:" + a.toString());
-            ++count;
-          }
         }
       } catch(SQLException ex) {
           if (debug)
             out.println("<BR>-debugLog:Received a SQLException: " + ex.getMessage());
           System.err.println("SQLException: " + ex.getMessage());
+          // something went wrong thus roll back.
           mCon.rollback();
       } finally {
+        // In case of exceptions etc. this will always run, and shut down connection of SQL properly.
+        
         mCon.setAutoCommit(oldAutoCommitVal);
+        
         if(insertPersons != null) {
           insertPersons.close();
         }
