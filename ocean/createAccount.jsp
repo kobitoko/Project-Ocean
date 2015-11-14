@@ -61,9 +61,9 @@
       String mUser = "satyabra";
       String mPass = "adasfa42";
       
-      Connection mCon;
-      Statement stmnt;
-      PreparedStatement pstmnt;
+      Connection mCon = null;
+      Statement stmnt = null;
+      PreparedStatement pstmnt = null;
       
       // instantiate the driver.
       try {
@@ -128,9 +128,15 @@
             out.println("<BR>-debugLog:Received a SQLException: " + ex.getMessage());
           System.err.println("SQLException: " + ex.getMessage());
       } finally {
-        stmnt.close();
-        pstmnt.close();
-        mCon.close();
+        if(stmnt != null) {
+          stmnt.close();
+        }
+        if(pstmnt != null) {
+          pstmnt.close();
+        }
+        if(mCon != null) {
+          mCon.close();
+        }
       }
     %>
   </div>
