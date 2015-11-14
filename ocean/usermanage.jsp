@@ -78,17 +78,17 @@
       <input type="submit" name="submit" value="Create!">
     </form>
     </div>
-    <div class="inline" style="border-style:inset;width:50%;">
+    <div class="inline" style="border-style:inset;width:75%;">
+   
 
-    <form action="removeThatAccount.jsp" method="post">
-    <input style="position:relative;left:40%;background-color:blue;color:white;display:inline;" type="submit" name="submit" value="Remove Checked User">
     <table style="width:100%;border-style:inset";>
     <tr>
     <th>Username</th>
     <th>User ID</th>
     <th>Role</th>
-    <th>Modify User</th>
-    <th>Delete User</th>
+    <th><button onClick="modifyUser()"style="background-color:green;color:white;display:inline;"  value="Modify Checked User">Modify Checked User</button></th>
+    <form action="removeThatAccount.jsp" method="post">
+    <th><input style="background-color:blue;color:white;display:inline;" type="submit" name="submit" value="Remove Checked User"></th>
     </tr>
     <tr>
        <%
@@ -139,23 +139,25 @@
       }      
       %>
     </tr>
+<tr>
+    <th>Username</th>
+    <th>User ID</th>
+    <th>Role</th>
+	</form>
+    <th><button onClick="modifyUser()"style="background-color:green;color:white;display:inline;"  value="Modify Checked User">Modify Checked User</button></th>
+    <form action="removeThatAccount.jsp" method="post">
+    <th><input style="background-color:blue;color:white;display:inline;" type="submit" name="submit" value="Remove Checked User" form="removeThatAccount.jsp"></th>
+    </tr>
+    <tr>
   	 </table>
-     <input style="position:relative;left:40%;background-color:blue;color:white;display:inline;" type="submit" name="submit" value="Remove Checked User">
-     </form>
- 
-	</div>
-<div class="inline" style="border-style:inset;width:23%;">
-    <form action="modiUser.jsp" method="post" name="modi" id="modi">
-    <button onClick="modifyUser()"style="position:relative;background-color:green;color:white;display:inline;"  value="Modify Checked User">Modify Checked User</button>
-<div style="width:0;">
-<input id="modpid" type="number" value="" name="modpid" min="0" maxlength="38" required placeholder="Person ID"; >
-<input id="moduid" type="text" value="" name="moduid" min="0" maxlength="38" required placeholder="Username" >
-<select id="modrole" name="modrole" form="modi">
+    
+     
 
-      <option value="s">Scientist</option>
-      <option value="d">Data Curator</option>
-      <option value="a">Administrator</option>
-      <select>
+	</div>
+
+    
+
+
 </div>
     </form>
 </div>

@@ -28,8 +28,23 @@
       s.initialize();
       
       // Get this user with the old userID and old PID to find the user in the first place. 
-      String oldUser = request.getParameter("ouid");
-      Integer oldPID = Integer.parseInt(request.getParameter("opid"));
+      String oldUser = null;
+      Integer oldPID = null;
+//Based on tutorials at http://www.tutorialspoint.com/
+Cookie cookie = null;
+Cookie[] cookies = null;
+String comppid = "pid";
+String compname = "name";
+cookies = request.getCookies();
+   if( cookies != null ){
+	 for (Integer i = 0; i < cookies.length; i++){
+         	cookie = cookies[i];
+		
+		if(cookie.getName().equals(comppid)){oldPID = Integer.parseInt(cookie.getValue());}
+		if(cookie.getName().equals(compname)){oldUser = cookie.getValue();}
+}
+}
+
       
       String uid = request.getParameter("uid");
       String role = request.getParameter("newrole");

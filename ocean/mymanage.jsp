@@ -39,26 +39,25 @@
           if(debug)
             out.println("<BR>-debugLog: Received a ClassNotFoundException: " + e.getMessage());
       }
-	try{
-		String getMaxPID = "select MAX(PERSON_ID) from USERS";
-		mCon = DriverManager.getConnection(mUrl, mUser, mPass);
-          	stmnt = mCon.createStatement();
-          
-         	 ResultSet rset2 = stmnt.executeQuery(getMaxPID);
-		while(rset2.next()) {
-		  maxpid = new Integer(rset2.getInt(1)) + 1;
-		}
-	stmnt.close();
-          mCon.close();
-          
+Integer pid = null;
+//Based on tutorials at http://www.tutorialspoint.com/
+Cookie cookie = null;
+Cookie[] cookies = null;
+String comp = "pid";
+cookies = request.getCookies();
+   if( cookies != null ){
+	 for (Integer i = 0; i < cookies.length; i++){
+         	cookie = cookies[i];
+		
+		if(cookie.getName().equals(comp)){
 
-  	} catch(SQLException ex) {
-          if (debug)
-            out.println("<BR>-debugLog: Received a SQLException: " + ex.getMessage());
-          System.err.println("SQLException: " + ex.getMessage());
-      }  
+                     pid = Integer.parseInt(cookie.getValue());
+}
+}
+}
 
-Integer pid = Integer.parseInt(request.getParameter("mypid"));
+		
+
 String fname = "";
 String lname = "";
 String add = "";
@@ -66,6 +65,7 @@ String email = "";
 String phone = "";
 
 String queryMod = "select FIRST_NAME, LAST_NAME, ADDRESS, EMAIL, PHONE from PERSONS where PERSON_ID='" + pid + "'";
+
 try{mCon = DriverManager.getConnection(mUrl, mUser, mPass);
 stmnt = mCon.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 ResultSet rset = stmnt.executeQuery(queryMod);
@@ -85,12 +85,12 @@ if(rset.next()){
     <form action="modifyAccount.jsp" name="modform" method="post">
       <!-- using placeholder assumes HTML5 support. Just use emtpy value or nothing if we cant use html5.-->
       <table style="width:100%;border-style:inset";>
-     <tr><td> <p style="display:inline">First Name: </p></td><td><input type="text" id="fname" name="fname" maxlength="32" value="" required placeholder="First Name"><br></td></tr>
-      <tr><td><p style="display:inline">Family Name: </p></td><td><input type="text" name="lname" maxlength="32" required placeholder="Last Name"><br></td></tr>
-      <tr><td><p style="display:inline">Address: </p></td><td><input type="text" name="address" maxlength="32" required placeholder="Address"><br></td></tr>
-      <tr><td><p style="display:inline">Email: </p></td><td><input type="text" name="email" maxlength="32" required placeholder="Email"><br></td></tr>
-      <tr><td><p style="display:inline">Phone: </p></td><td><input type="text" name="phone" maxlength="32" required placeholder="Phone"><br></td></tr>
-      <tr><td><p style="display:inline">Change Password: </p></td><td><input type="password" name="pass" min="0" required placeholder="New Password"><br></td></tr>
+     <tr><td> <p style="display:inline">First Name: </p></td><td><input type="text" id="fname" name="fname" maxlength="32" value=<%= fname%> required placeholder="First Name"><br></td></tr>
+      <tr><td><p style="display:inline">Family Name: </p></td><td><input type="text" name="lname" maxlength="32" value=<%= lname%> valrequired placeholder="Last Name"><br></td></tr>
+      <tr><td><p style="display:inline">Address: </p></td><td><input type="text" name="address" maxlength="32" value=<%= add%> required placeholder="Address"><br></td></tr>
+      <tr><td><p style="display:inline">Email: </p></td><td><input type="text" name="email" maxlength="32" value=<%= email%> required placeholder="Email"><br></td></tr>
+      <tr><td><p style="display:inline">Phone: </p></td><td><input type="text" name="phone" maxlength="32" value=<%= phone%> required placeholder="Phone"><br></td></tr>
+      <tr><td><p style="display:inline">Change Password: </p></td><td><input type="password" name="pass" min="0" placeholder="New Password"><br></td></tr>
       </table>  
       <input type="submit" name="submit" value="Update">
     </form>
@@ -98,6 +98,3 @@ if(rset.next()){
  </div>
 </body>
 </html>
-<script>
-	document.getElementById("fname").value = getPID();
-</script>

@@ -95,6 +95,7 @@
             goodPassword = Boolean.valueOf(s.matches(pw, salt+hashed));
           
           if(validRow && goodPassword) {
+
               out.println("Welcome " + user + "!");
               // taken from http://www.pa.msu.edu/services/computing/faq/auto-redirect.html
               String redirectCode = "<script language=\"javascript\" type=\"text/javascript\">document.cookie = 'name=" + user + ";';document.cookie = 'role=" + role + ";';document.cookie = 'pid=" + pid + ";';document.cookie = 'path=/;';document.cookie = 'domain=.cs.ualberta.ca;';window.setTimeout(\'window.location=\"landing.html\"; \',1500);</script>";

@@ -56,9 +56,25 @@
           System.err.println("SQLException: " + ex.getMessage());
       }  
 
-Integer pid = Integer.parseInt(request.getParameter("modpid"));
-String user = request.getParameter("moduid");
-String role = request.getParameter("modrole");
+Integer pid = null;
+String user = null;
+String role = null;
+//Based on tutorials at http://www.tutorialspoint.com/
+Cookie cookie = null;
+Cookie[] cookies = null;
+String comppid = "modpid";
+String compname = "modname";
+String comprole = "modrole";
+cookies = request.getCookies();
+   if( cookies != null ){
+	 for (Integer i = 0; i < cookies.length; i++){
+         	cookie = cookies[i];
+		
+		if(cookie.getName().equals(comppid)){pid = Integer.parseInt(cookie.getValue());}
+		if(cookie.getName().equals(compname)){user = cookie.getValue();}
+		if(cookie.getName().equals(comprole)){role = cookie.getValue();}
+}
+}
 String fname = "";
 String lname = "";
 String add = "";
@@ -92,8 +108,6 @@ if(rset.next()){
       <tr><td><p style="display:inline">Phone: </p></td><td><input type="text" name="phone" maxlength="32" value="<%= phone%>" required placeholder="Phone"><br></td></tr>
 	 <tr><td><p style="display:inline">Person ID: </p></td><td><input id="modpid" type="number" value="<%= pid%>" name="pid" min="0" maxlength="38" required placeholder="Person ID"><br></td></tr>
       <tr><td><p style="display:inline">Password Reset: </p></td><td><input type="password" name="pass" min="0" placeholder="New Password"><br></td></tr>
- <tr><td><p style="display:inline">Old Username: </p></td><td><input type="text" id="ouid" value ="<%= user%>" name="ouid" maxlength="32" required placeholder="Username" disabled><br></td></tr>
-<tr><td><p style="display:inline">Old PID: </p></td><td><input id="opid" type="number" value="<%= pid%>" name="opid" min="0" maxlength="38" required placeholder="Person ID" disabled><br></td></tr>
 <tr><td><p style="display:inline">New Role: </p></td><td><input id="newrole" type="text" value="<%= role%>" name="newrole" min="0" maxlength="38" required placeholder="Person ID" disabled><br></td></tr>
       </table>
       User's role is:<br>
@@ -104,14 +118,13 @@ if(rset.next()){
 	}
 	
   function releaseLocks(){
-    document.getElementById("ouid").disabled = "";
-    document.getElementById("opid").disabled = "";
     document.getElementById("newrole").disabled = "";
   }
 
       </script>
 	<select id="orole" name="orole" form="modform" onchange="changeRole()">
  	<option value="<%= role%>">Keep Previous Role</option>
+	
       <option value="s">Scientist</option>
       <option value="d">Data Curator</option>
       <option value="a">Administrator</option>
