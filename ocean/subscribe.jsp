@@ -19,6 +19,11 @@
 </div>
 <table style="width:100%;border-style:inset";>
     <tr>
+<col>
+<col>
+<col>
+<col>
+<col width="150px">
     <th>Sensor ID</th>
     <th>Location</th>
     <th>Sensor Type</th>
@@ -130,6 +135,11 @@ try {
 
 <table style="width:100%;border-style:inset";>
     <tr>
+<col>
+<col>
+<col>
+<col>
+<col width="150px">
     <th>Sensor ID</th>
     <th>Location</th>
     <th>Sensor Type</th>

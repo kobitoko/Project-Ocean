@@ -15,7 +15,7 @@
       <b>Create new user:</b><br>
        <!-- using placeholder assumes HTML5 support. Just use emtpy value or nothing if we cant use html5.-->
       <table style="width:100%;border-style:inset";>
-      <tr><td><p style="display:inline">Username: </p></td><td><input type="text" id="uid" name="uid" maxlength="32" required placeholder="Username"><br></td></tr>
+      <tr><td ><p style="display:inline">Username: </p></td><td><input type="text" id="uid" name="uid" maxlength="32" required placeholder="Username"><br></td></tr>
      <tr><td> <p style="display:inline">First Name: </p></td><td><input type="text" name="fname" maxlength="32" required placeholder="First Name"><br></td></tr>
       <tr><td><p style="display:inline">Family Name: </p></td><td><input type="text" name="lname" maxlength="32" required placeholder="Last Name"><br></td></tr>
       <tr><td><p style="display:inline">Address: </p></td><td><input type="text" name="address" maxlength="32" required placeholder="Address"><br></td></tr>
@@ -83,10 +83,17 @@
 
     <table style="width:100%;border-style:inset";>
     <tr>
+    <col>
+<col>
+<col>
+<col width="150px">
+<col width="150px">
+<col width="150px">
+
     <th>Username</th>
     <th>User ID</th>
     <th>Role</th>
-    <th><button onClick="modifyUser()"style="background-color:green;color:white;display:inline;"  value="Modify Checked User">Modify Checked User</button></th>
+    <th ><button onClick="modifyUser()"style="background-color:green;color:white;display:inline;"  value="Modify Checked User">Modify Checked User</button></th>
     <form action="removeThatAccount.jsp" method="post">
     <th><input style="background-color:blue;color:white;display:inline;" type="submit" name="submit" value="Remove Checked User"></th>
     </tr>

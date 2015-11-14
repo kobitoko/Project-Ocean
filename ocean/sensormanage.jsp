@@ -12,7 +12,13 @@
     <div class="inline" style="border-style:inset;width:75%;">
     <table style="width:100%;border-style:inset";>
     <tr>
-    <th>SENSOR ID/th>
+  <col>
+<col>
+<col>
+<col>
+
+<col width="150px">
+    <th>SENSOR ID</th>
     <th>LOCATION</th>
     <th>TYPE</th>
     <th>DESCRIPTION</th>
