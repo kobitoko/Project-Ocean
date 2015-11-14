@@ -185,6 +185,12 @@
           
           // Save all changes.
           mCon.commit();
+          
+          // Show success of modification, returns to landing because admin and normal user share this jsp.
+          out.println("Information for " + uid + " were succesfully changed. You will be redirected in 3 seconds");
+          String redirectCode = "<script language=\"javascript\" type=\"text/javascript\">window.setTimeout(\'window.location=\"landing.html\"; \',3000);</script>";
+          out.println(redirectCode);
+          
         }
       } catch(SQLException ex) {
           if (debug)
