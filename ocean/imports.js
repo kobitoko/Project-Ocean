@@ -42,7 +42,7 @@ function getPID(){
 
 function updateNav(r){
 	role = r;
-	document.getElementById("header").innerHTML = '<button id="home" class="home";>HOME</button><button id="logout" class="logout">LOGOUT</button><button name="account" id="account" class="logout">MY INFO</button><button id="senman" class="sysadmin">SENSOR MANAGEMENT</button><button id="usrman" class="sysadmin">USER MANAGEMENT</button><button id="upload" class="curator">UPLOAD DATA</button><button id="search" class="navi">SEARCH SENSORS</button><button id="subscribe" class="navi">SENSOR SUBSCRIPTIONS</button><button id="analyze" class="navi">ANALYZE DATA</button>';
+	document.getElementById("header").innerHTML = '<button id="home" class="home";>HOME</button><button id="logout" class="logout">LOGOUT</button><button name="account" id="account" class="logout">MY INFO</button><button id="help" class="logout";>HELP</button><button id="senman" class="sysadmin">SENSOR MANAGEMENT</button><button id="usrman" class="sysadmin">USER MANAGEMENT</button><button id="upload" class="curator">UPLOAD DATA</button><button id="search" class="navi">SEARCH SENSORS</button><button id="subscribe" class="navi">SENSOR SUBSCRIPTIONS</button><button id="analyze" class="navi">ANALYZE DATA</button>';
 
 document.getElementById("home").onclick = function(){window.location.href="landing.html";}
 document.getElementById("logout").onclick = function(){document.cookie = "name=;";document.cookie = "role=;"; window.location.href="login.html";}
@@ -53,6 +53,7 @@ document.getElementById("search").onclick = function(){window.location.href="sea
 document.getElementById("subscribe").onclick = function(){window.location.href="subscribe.jsp";}
 document.getElementById("analyze").onclick = function(){window.location.href="analyze.html";}
 document.getElementById("account").onclick = function(){window.location.href="mymanage.jsp";}
+document.getElementById("help").onclick = function(){window.location.href="help.html";}
 
 
 
