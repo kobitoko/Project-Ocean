@@ -16,8 +16,24 @@
       
       String sid = request.getParameter("subToDelete");
       // potentially not safe if someone modifies the options in the list and passes a modified option to this jsp.
-      String queryDelSub ="select SENSOR_ID from SUBSCRIPTIONS where SENSOR_ID = "+sid;
+    
+Integer pid = null;
+//Based on tutorials at http://www.tutorialspoint.com/
+Cookie cookie = null;
+Cookie[] cookies = null;
+String comp = "pid";
+cookies = request.getCookies();
+   if( cookies != null ){
+	 for (Integer i = 0; i < cookies.length; i++){
+         	cookie = cookies[i];
+		
+		if(cookie.getName().equals(comp)){
 
+                     pid = Integer.parseInt(cookie.getValue());
+}
+}
+}
+  String queryDelSub ="select SENSOR_ID from SUBSCRIPTIONS where SENSOR_ID = "+sid+" and PERSON_ID="+pid;
       
       String mUrl = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
       String mDriverName = "oracle.jdbc.driver.OracleDriver";

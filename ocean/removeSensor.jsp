@@ -17,6 +17,7 @@
       String sid = request.getParameter("sensorToDelete");
       // potentially not safe if someone modifies the options in the list and passes a modified option to this jsp.
       String queryDelSensor ="select SENSOR_ID from SENSORS where SENSOR_ID = "+sid;
+      String queryDelSubs ="select SENSOR_ID from SUBSCRIPTIONS where SENSOR_ID="+sid;
 
       
       String mUrl = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
@@ -44,8 +45,12 @@
             mCon = DriverManager.getConnection(mUrl, mUser, mPass);
             stmnt = mCon.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             
-   
-            
+   	ResultSet rsetpre = stmnt.executeQuery(queryDelSubs);
+	 while(rsetpre.next()) {
+		rsetpre.absolute(1);
+            rsetpre.deleteRow();
+} 
+           
             ResultSet rset = stmnt.executeQuery(queryDelSensor);
 	if(rset.next()) {
             rset.absolute(1);
