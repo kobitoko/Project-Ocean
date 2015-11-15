@@ -122,8 +122,8 @@ try {
      </form>
 </div>
 <div style="border-style:inset;">
-<p style="display:inline"><b>Directly add by Sensor ID</b></p><form action="subSensor.jsp" id="subSensor" method="post">
-<input type="text" name="sid" maxlength="32" required placeholder="Sensor ID"><input type="submit" style="background-color:blue;color:white;" name="submit" value="Subscribe to Sensor">
+<p style="display:inline"><b>Directly add by Sensor ID</b></p><form action="directSubSensor.jsp" id="subSensor" method="post">
+<input type="text" name="dirsid" maxlength="32" required placeholder="Sensor ID"><input type="submit" style="background-color:blue;color:white;" name="submit" value="Subscribe to Sensor">
      </form>
 </form>
 
