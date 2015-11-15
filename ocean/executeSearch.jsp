@@ -4,6 +4,15 @@
   <head></head>
   <body>
     <%
+//todos based on: 
+//https://eclass.srv.ualberta.ca/mod/page/view.php?id=1627717
+//TODO: date should instead be datetime. dd/mm/yyyy. 
+//TODO: keyword should be exact match.
+//TODO: Apparently Sensor type must have a time period.
+//TODO: Select blob columns.
+//TODO: "If the keyword matches the sensor description, show all data from this sensor. 
+//If not (in case of audio files and images), try if it matches the image or audio description 
+//and show those records which match."
         Boolean debug = Boolean.TRUE;
     	/*search conditions. if nothing, it is null*/
         String keywords = request.getParameter("key");
@@ -12,56 +21,78 @@
 	String dateBefore = request.getParameter("dateUntil");
 	String dateAfter= request.getParameter("dateSince");
 	//String pId = ???
-	//String createView = "CREATE OR REPLACE VIEW SUBSCRIBED_SENSORS AS SELECT DISTINCT sub.sensor_id  FROM subscriptions sub WHERE sub.person_id = " + pId;
+	Integer pid = null;
+	//Based on tutorials at http://www.tutorialspoint.com/
+	Cookie cookie = null;
+	Cookie[] cookies = null;
+	String comp = "pid";
+	cookies = request.getCookies();
+   	if( cookies != null ){
+	 for (Integer i = 0; i < cookies.length; i++){
+         	cookie = cookies[i];
+		
+		if(cookie.getName().equals(comp)){
+
+                     pid = Integer.parseInt(cookie.getValue());
+		}
+	  }
+	}
+
 	//Version 1, designed to be slightly easier by creating a view first, and then checking if id in view.
+
 /*
+	String createView = "CREATE OR REPLACE VIEW SUBSCRIBED_SENSORS AS SELECT DISTINCT sub.sensor_id  FROM subscriptions sub WHERE sub.person_id = " + pid;
+
 	String queryAudio = "SELECT Distinct a.recording_id, a.sensor_id, a.date_created, a.length, a.description FROM sensors sen, audio_recordings a, subscribed_sensors WHERE a.sensor_id in (select * from subscribed_sensors)";
 	String queryImage = "SELECT Distinct i.image_id, i.sensor_id, i.date_created, i.description FROM sensors sen, images i, subscribed_sensors WHERE i.sensor_id in (select * from subscribed_sensors)";
 	String queryScalar = "SELECT Distinct s.id, s.sensor_id, s.date_created, s.value FROM sensors sen, scalar_data s, subscribed_sensors WHERE s.sensor_id in (select * from subscribed_sensors)";
 */	
-	//Version 2. Goes through subscriptions to itself.
-	String queryAudio = "SELECT Distinct a.recording_id, a.sensor_id, a.date_created, a.length, a.description FROM sensors sen, audio_recordings a, subscribed_sensors WHERE a.sensor_id in (select * from subscribed_sensors)";
-	String queryImage = "SELECT Distinct i.image_id, i.sensor_id, i.date_created, i.description FROM sensors sen, images i, subscribed_sensors WHERE i.sensor_id in (select * from subscribed_sensors)";
-	String queryScalar = "SELECT Distinct s.id, s.sensor_id, s.date_created, s.value FROM sensors sen, scalar_data s, subscribed_sensors WHERE s.sensor_id in (select * from subscribed_sensors)";
+	//Version 2. Goes through subscriptions itself.
+
+	String queryAudio = "SELECT Distinct a.recording_id, a.sensor_id, a.date_created, a.length, a.description FROM sensors sen, audio_recordings a WHERE a.sensor_id in (SELECT sensor_id FROM subscriptions WHERE person_id = "+pid+")";
+	String queryImage = "SELECT Distinct i.image_id, i.sensor_id, i.date_created, i.description FROM sensors sen, images i WHERE i.sensor_id in (SELECT sensor_id FROM subscriptions WHERE person_id = "+pid+")";
+	String queryScalar = "SELECT Distinct s.id, s.sensor_id, s.date_created, s.value FROM sensors sen, scalar_data s WHERE s.sensor_id in (SELECT sensor_id FROM subscriptions WHERE person_id = "+pid+")";
 
  
+
+//Currently does not select any blop fields. Easily added when we have test data that has it. 
 	if (sensorType != null && !sensorType.isEmpty()) {
 	   //sensorType = "AND sen.sensor_id = a.sensor_id AND sen.sensor_type = "+ sensorType;
-	   queryAudio = queryAudio + "AND sen.sensor_id = a.sensor_id AND sen.sensor_type = "+ sensorType;
-	   queryImage = queryImage + "AND sen.sensor_id = i.sensor_id AND sen.sensor_type = "+ sensorType;
-	   queryScalar = queryScalar + "AND sen.sensor_id = s.sensor_id AND sen.sensor_type = "+ sensorType;
-
+	   sensorType.toLowerCase();
+	   queryAudio = queryAudio + " AND sen.sensor_id = a.sensor_id AND sen.sensor_type = '"+ sensorType+"'";
+	   queryImage = queryImage + " AND sen.sensor_id = i.sensor_id AND sen.sensor_type = '"+ sensorType+"'";
+	   queryScalar = queryScalar + " AND sen.sensor_id = s.sensor_id AND sen.sensor_type = '"+ sensorType+"'";
 
 	}
 	if (location != null && !location.isEmpty()) {
 	   //location = "AND sen.sensor_id = a.sensor_id AND sen.location= "+ location;
-	   queryAudio = queryAudio + "AND sen.sensor_id = a.sensor_id AND sen.location= "+ location;
-	   queryImage = queryImage + "AND sen.sensor_id = i.sensor_id AND sen.location= "+ location;
-	   queryScalar = queryScalar + "AND sen.sensor_id = s.sensor_id AND sen.location= "+ location;
+	   queryAudio = queryAudio + " AND sen.sensor_id = a.sensor_id AND sen.location = '"+ location+"'";
+	   queryImage = queryImage + " AND sen.sensor_id = i.sensor_id AND sen.location = '"+ location+"'";
+	   queryScalar = queryScalar + " AND sen.sensor_id = s.sensor_id AND sen.location = '"+ location+"'";
 
-
-	}    
+	}
+    
 	if (keywords != null && !keywords.isEmpty()) {
 	    //keywords = "AND a.description LIKE '%"+keywords+"%'";
- 	   queryAudio = queryAudio + "AND a.description LIKE '%"+keywords+"%'";
- 	   queryImage = queryImage + "AND i.description LIKE '%"+keywords+"%'";
+ 	   queryAudio = queryAudio + " AND a.description LIKE '%"+keywords+"%'";
+ 	   queryImage = queryImage + " AND i.description LIKE '%"+keywords+"%'";
  	  // queryScalar = queryScalar + "AND s.description LIKE '%"+keywords+"%'";
 
 
 	}
 	if (dateBefore != null && !dateBefore.isEmpty()) {
 		//dateBefore = "AND a.date_created <= TO_DATE("+dateBefore+",'mm/dd/yyyy')";
-	   queryAudio = queryAudio + "AND a.date_created <= TO_DATE("+dateBefore+",'mm/dd/yyyy')";
-	   queryImage = queryImage + "AND i.date_created <= TO_DATE("+dateBefore+",'mm/dd/yyyy')";
-	   queryScalar = queryScalar + "AND s.date_created <= TO_DATE("+dateBefore+",'mm/dd/yyyy')";
+	   queryAudio = queryAudio + " AND a.date_created <= TO_DATE('"+dateBefore+"','mm/dd/yyyy')";
+	   queryImage = queryImage + " AND i.date_created <= TO_DATE('"+dateBefore+"','mm/dd/yyyy')";
+	   queryScalar = queryScalar + " AND s.date_created <= TO_DATE('"+dateBefore+"','mm/dd/yyyy')";
 
 
 	} 
 	if (dateAfter != null && !dateAfter.isEmpty()) {
 		//dateAfter = "AND a.date_created >= TO_DATE("+dateAfter+",'mm/dd/yyyy')";
-	   queryAudio = queryAudio + "AND a.date_created >= TO_DATE("+dateAfter+",'mm/dd/yyyy')";
-	   queryImage = queryImage + "AND i.date_created >= TO_DATE("+dateAfter+",'mm/dd/yyyy')";
-	   queryAudio = queryScalar + "AND s.date_created >= TO_DATE("+dateAfter+",'mm/dd/yyyy')";
+	   queryAudio = queryAudio + " AND a.date_created >= TO_DATE('"+dateAfter+"','mm/dd/yyyy')";
+	   queryImage = queryImage + " AND i.date_created >= TO_DATE('"+dateAfter+"','mm/dd/yyyy')";
+	   queryAudio = queryScalar + " AND s.date_created >= TO_DATE('"+dateAfter+"','mm/dd/yyyy')";
 
 	} 
 		
@@ -124,7 +155,6 @@
 		}
 	}	 
 	*/
-	    /*while going through the result set, must search the descriptions for keywords.*/
             /*Display all hits. */
         stmnt.close();
         mCon.close();
@@ -133,6 +163,7 @@
             if (debug)
               out.println("<BR>-debugLog:Received a SQLException: " + ex.getMessage());
             System.err.println("SQLException: " + ex.getMessage());
+	//Need to close connections if they exist here. But I don't know how to check if there is currently a connection.
         }      
    %>
   
