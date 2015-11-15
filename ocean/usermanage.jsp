@@ -1,3 +1,4 @@
+
 <%@ page import="java.util.*, java.sql.*"%>
 <html>
   <head></head>
@@ -14,7 +15,7 @@
       <b>Create new user:</b><br>
        <!-- using placeholder assumes HTML5 support. Just use emtpy value or nothing if we cant use html5.-->
       <table style="width:100%;border-style:inset";>
-      <tr><td><p style="display:inline">Username: </p></td><td><input type="text" id="uid" name="uid" maxlength="32" required placeholder="Username"><br></td></tr>
+      <tr><td ><p style="display:inline">Username: </p></td><td><input type="text" id="uid" name="uid" maxlength="32" required placeholder="Username"><br></td></tr>
      <tr><td> <p style="display:inline">First Name: </p></td><td><input type="text" name="fname" maxlength="32" required placeholder="First Name"><br></td></tr>
       <tr><td><p style="display:inline">Family Name: </p></td><td><input type="text" name="lname" maxlength="32" required placeholder="Last Name"><br></td></tr>
       <tr><td><p style="display:inline">Address: </p></td><td><input type="text" name="address" maxlength="32" required placeholder="Address"><br></td></tr>
@@ -52,6 +53,9 @@
 		while(rset2.next()) {
 		  maxpid = new Integer(rset2.getInt(1)) + 1;
 		}
+	stmnt.close();
+          mCon.close();
+          
 
   	} catch(SQLException ex) {
           if (debug)
@@ -63,7 +67,7 @@
 	%>
       <tr><td><p style="display:inline">Phone: </p></td><td><input type="text" name="phone" maxlength="10" required placeholder="Phone"><br></td></tr>
       <tr><td><p style="display:inline">Person ID: </p></td><td><input id="pid" type="number" value="<%= maxpid %>" name="pid" min="0" maxlength="38" required placeholder="Person ID"><br></td></tr>
-      <tr><td><p style="display:inline">Password Reset: </p></td><td><input type="password" name="pass" min="0" required placeholder="New Password"><br></td></tr>
+      <tr><td><p style="display:inline">Password: </p></td><td><input type="password" name="pass" min="0" required placeholder="New Password"><br></td></tr>
       </table>
   User's role is:<br>
       <select id="role" name="role" form="addform">
@@ -74,18 +78,24 @@
       <input type="submit" name="submit" value="Create!">
     </form>
     </div>
-    
-    <div class="inline" style="border-style:inset;width:50%;">
-    <button onClick="modifyUser()" style="position:relative;left:40%;background-color:green;color:white;display:inline;"  value="Modify Checked User">Modify Checked User</button>
-    <form action="removeThatAccount.jsp" method="post">
-    <input style="position:relative;left:40%;background-color:blue;color:white;display:inline;" type="submit" name="submit" value="Remove Checked User">
+    <div class="inline" style="border-style:inset;width:75%;">
+   
+
     <table style="width:100%;border-style:inset";>
     <tr>
+    <col>
+<col>
+<col>
+<col width="150px">
+<col width="150px">
+<col width="150px">
+
     <th>Username</th>
     <th>User ID</th>
     <th>Role</th>
-    <th>Modify User</th>
-    <th>Delete User</th>
+    <th ><button onClick="modifyUser()"style="background-color:green;color:white;display:inline;"  value="Modify Checked User">Modify Checked User</button></th>
+    <form action="removeThatAccount.jsp" method="post">
+    <th><input style="background-color:blue;color:white;display:inline;" type="submit" name="submit" value="Remove Checked User"></th>
     </tr>
     <tr>
        <%
@@ -136,36 +146,30 @@
       }      
       %>
     </tr>
+<tr>
+    <th>Username</th>
+    <th>User ID</th>
+    <th>Role</th>
+	</form>
+    <th><button onClick="modifyUser()"style="background-color:green;color:white;display:inline;"  value="Modify Checked User">Modify Checked User</button></th>
+    <form action="removeThatAccount.jsp" method="post">
+    <th><input style="background-color:blue;color:white;display:inline;" type="submit" name="submit" value="Remove Checked User" form="removeThatAccount.jsp"></th>
+    </tr>
+    <tr>
   	 </table>
-     <input style="position:relative;left:40%;background-color:blue;color:white;display:inline;" type="submit" name="submit" value="Remove Checked User">
-     </form>
- <button onClick="modifyUser()" style="position:relative;left:40%;background-color:green;color:white;display:inline;"  value="Modify Checked User">Modify Checked User</button>
+    
+     
+
 	</div>
-    <div class="inline" style="border-style:inset;width:23%;">
-    <b>Modify user:</b><br>
-    <p id="grabperson"></p>
-    <form action="modifyAccount.jsp" name="modform" method="post">
-      <!-- using placeholder assumes HTML5 support. Just use emtpy value or nothing if we cant use html5.-->
-      <table style="width:100%;border-style:inset";>
-      <tr><td><p style="display:inline">Username: </p></td><td><input type="text" id="moduid" name="uid" maxlength="32" required placeholder="Username"><br></td></tr>
-     <tr><td> <p style="display:inline">First Name: </p></td><td><input type="text" name="fname" maxlength="32" required placeholder="First Name"><br></td></tr>
-      <tr><td><p style="display:inline">Family Name: </p></td><td><input type="text" name="lname" maxlength="32" required placeholder="Last Name"><br></td></tr>
-      <tr><td><p style="display:inline">Address: </p></td><td><input type="text" name="address" maxlength="32" required placeholder="Address"><br></td></tr>
-      <tr><td><p style="display:inline">Email: </p></td><td><input type="text" name="email" maxlength="32" required placeholder="Email"><br></td></tr>
-      <tr><td><p style="display:inline">Phone: </p></td><td><input type="text" name="phone" maxlength="32" required placeholder="Phone"><br></td></tr>
-	 <tr><td><p style="display:inline">Person ID: </p></td><td><input id="modpid" type="number" value="" name="pid" min="0" maxlength="38" required placeholder="Person ID"><br></td></tr>
-      <tr><td><p style="display:inline">Password Reset: </p></td><td><input type="password" name="pass" min="0" required placeholder="New Password"><br></td></tr>
-      </table>
-      User's role is:<br>
-      <select id="modrole" name="role" form="modform">
-      <option value="s">Scientist</option>
-      <option value="d">Data Curator</option>
-      <option value="a">Administrator</option>
-      <select> 
-      <input type="submit" name="submit" value="Update">
+
+    
+
+
+</div>
     </form>
-    </div>
+</div>
     </div>
     </div>
   </body>
 </html>
+

@@ -15,21 +15,39 @@
 <b> My Subscriptions </b>
 <form action="unsubSensor.jsp" id="unsubSensor" method="post">
 <div>
-<input  type="submit" style="position:relative;left:40%;background-color:blue;color:white;" name="submit" value="Unsubscribe to checked Sensors">
+
 </div>
 <table style="width:100%;border-style:inset";>
     <tr>
+<col>
+<col>
+<col>
+<col>
+<col width="150px">
     <th>Sensor ID</th>
     <th>Location</th>
     <th>Sensor Type</th>
     <th>Description</th>
-    <th>Unsubscirbe</th>
+    <th><input  type="submit" style="background-color:blue;color:white;" name="submit" value="Unsubscribe to checked Sensors"></th>
     </tr>
     <tr>
     <%
+Integer pid = null;
+//Based on tutorials at http://www.tutorialspoint.com/
+Cookie cookie = null;
+Cookie[] cookies = null;
+String comppid = "pid";
+cookies = request.getCookies();
+   if( cookies != null ){
+	 for (Integer i = 0; i < cookies.length; i++){
+         	cookie = cookies[i];
+		
+		if(cookie.getName().equals(comppid)){pid = Integer.parseInt(cookie.getValue());}
+}
+}
 	Boolean debug = Boolean.TRUE;
-      String querySubs 		= "select SENSOR_ID, PERSON_ID from SUBSCRIPTIONS";
-	  String querySensors	= "select SENSOR_ID, LOCATION, SENSOR_TYPE, DESCRIPTION from SENSORS";
+      String queryMySensors	= "select S.SENSOR_ID, S.LOCATION, S.SENSOR_TYPE, S.DESCRIPTION from SENSORS S, SUBSCRIPTIONS T where S.SENSOR_ID=T.SENSOR_ID and T.PERSON_ID="+pid;
+      String querySensors	= "select distinct S.SENSOR_ID, S.LOCATION, S.SENSOR_TYPE, S.DESCRIPTION from SENSORS S, SUBSCRIPTIONS T where S.SENSOR_ID not in (select S.SENSOR_ID from SENSORS S, SUBSCRIPTIONS T where S.SENSOR_ID=T.SENSOR_ID and T.PERSON_ID="+pid+")";
       
       String mUrl = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
       String mDriverName = "oracle.jdbc.driver.OracleDriver";
@@ -53,69 +71,30 @@
       }
       
       // actually log in and perform statements
-%>
-      
-    </tr>
-  	 </table>
-     <input type="submit" style="position:relative;left:40%;background-color:blue;color:white;" name="submit" value="Unsubscribe to checked Sensors">
-     </form>
-</div>
-<div style="border-style:inset;">
-<p style="display:inline"><b>Directly add by Sensor ID</b></p><form action="subSensor.jsp" id="subSensor" method="post">
-<input type="text" name="sid" maxlength="32" required placeholder="Sensor ID"><input type="submit" style="background-color:blue;color:white;" name="submit" value="Subscribe to Sensor">
-     </form>
-</form>
-
-</div>
-<br><br>
-<div>
-<b>Other Sensors</b>
-<form action="subSensor.jsp" id="subSensor" method="post">
-<input type="submit" style="position:relative;left:40%;background-color:blue;color:white;" name="submit" value="Subscribe to new Sensors">
-<table style="width:100%;border-style:inset";>
-    <tr>
-    <th>Sensor ID</th>
-    <th>Location</th>
-    <th>Sensor Type</th>
-    <th>Description</th>
-    <th>Subscirbe</th>
-    </tr>
-    <tr>
- <%
-	
-      
-      
-      // actually log in and perform statements
-      try {
+try {
           mCon = DriverManager.getConnection(mUrl, mUser, mPass);
           stmnt = mCon.createStatement();
           
-          ResultSet rset = stmnt.executeQuery(querySubs);
-		  ResultSet rsetSen = stmnt.executeQuery(querySensors);
-		  
-	// rset.last(); 
-         int total = 12;
-	 //rset.first();	  
-         String[] subs = new String[total];
-		  int count = 0;
-		  while(rset.next()) {
-			  subs[count] = rset.getString(1);
-		  }
+          ResultSet rset = stmnt.executeQuery(queryMySensors);
           
-          while(rsetSen.next()) {
-            String sid = rset.getString(1);
+          while(rset.next()) {
+            Integer sID = new Integer(rset.getInt(1));
             String local = rset.getString(2);
-            String stype = rset.getString(3);
-            String desc= rset.getString(4);
-            if(Arrays.asList(subs).contains(sid)){
-			}else{
-				String open = "<td>";
-				String close = "</td>";
-				String tropen = "<tr>";
-				String trclose = "</tr>";	
-				String subcheck = "<input type='radio' name='subToAdd' value='" + sid + "'>";
-				out.println( tropen + open + sid + close + open + local + close + open + stype + close + open + desc +  close + open + subcheck + close + trclose);
-			}
+            String type = rset.getString(3);
+            String desc = rset.getString(4);
+            
+
+            
+            String open = "<td>";
+            String close = "</td>";
+	    String tropen = "<tr>";
+	    String trclose = "</tr>";	
+			
+			
+		
+	    String buttonrm = "<input type='radio' name='subToDelete' value='" + sID + "'>";
+			
+            out.println( tropen + open + sID + close + open + local + close + open + type + close + open + desc +  close + open + buttonrm + close + trclose);
             
           }
           
@@ -127,18 +106,97 @@
             out.println("<BR>-debugLog: Received a SQLException: " + ex.getMessage());
           System.err.println("SQLException: " + ex.getMessage());
       }      
-	
-	
-	
-	
-	
-	
-	
-	
-	%>
+      
+%>
+      
+    </tr>
+<tr>
+    <th>Sensor ID</th>
+    <th>Location</th>
+    <th>Sensor Type</th>
+    <th>Description</th>
+    <th><input  type="submit" style="background-color:blue;color:white;" name="submit" value="Unsubscribe to checked Sensors"></th>
     </tr>
   	 </table>
-    <input type="submit" style="position:relative;left:40%;background-color:blue;color:white;" name="submit" value="Subscribe to new Sensors">
+     
+     </form>
+</div>
+<div style="border-style:inset;">
+<p style="display:inline"><b>Directly add by Sensor ID</b></p><form action="directSubSensor.jsp" id="subSensor" method="post">
+<input type="text" name="dirsid" maxlength="32" required placeholder="Sensor ID"><input type="submit" style="background-color:blue;color:white;" name="submit" value="Subscribe to Sensor">
+     </form>
+</form>
+
+</div>
+<br><br>
+<div>
+<b>Other Sensors</b>
+<form action="subSensor.jsp" id="subSensor" method="post">
+
+<table style="width:100%;border-style:inset";>
+    <tr>
+<col>
+<col>
+<col>
+<col>
+<col width="150px">
+    <th>Sensor ID</th>
+    <th>Location</th>
+    <th>Sensor Type</th>
+    <th>Description</th>
+    <th><input type="submit" style="background-color:blue;color:white;" name="submit" value="Subscribe to new Sensors"></th>
+    </tr>
+    <tr>
+  <%
+
+    
+      // actually log in and perform statements
+      try {
+          mCon = DriverManager.getConnection(mUrl, mUser, mPass);
+          stmnt = mCon.createStatement();
+          
+          ResultSet rset = stmnt.executeQuery(querySensors);
+          
+          while(rset.next()) {
+            Integer sID = new Integer(rset.getInt(1));
+            String local = rset.getString(2);
+            String type = rset.getString(3);
+            String desc = rset.getString(4);
+            
+
+            
+            String open = "<td>";
+            String close = "</td>";
+	    String tropen = "<tr>";
+	    String trclose = "</tr>";	
+			
+			
+		
+	    String buttonrm = "<input type='radio' name='subToAdd' value='" + sID + "'>";
+			
+            out.println( tropen + open + sID + close + open + local + close + open + type + close + open + desc +  close + open + buttonrm + close + trclose);
+            
+          }
+          
+          stmnt.close();
+          mCon.close();
+          
+      } catch(SQLException ex) {
+          if (debug)
+            out.println("<BR>-debugLog: Received a SQLException: " + ex.getMessage());
+          System.err.println("SQLException: " + ex.getMessage());
+      }      
+      %>
+    </tr>
+ <tr>
+    <th>Sensor ID</th>
+    <th>Location</th>
+    <th>Sensor Type</th>
+    <th>Description</th>
+    <th><input type="submit" style="background-color:blue;color:white;" name="submit" value="Subscribe to new Sensors"></th>
+    </tr>
+  	 </table>
+    
      </form>
 </div>
 </div>
