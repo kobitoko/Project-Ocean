@@ -67,7 +67,7 @@
 	%>
       <tr><td><p style="display:inline">Phone: </p></td><td><input type="text" name="phone" maxlength="10" required placeholder="Phone"><br></td></tr>
       <tr><td><p style="display:inline">Person ID: </p></td><td><input id="pid" type="number" value="<%= maxpid %>" name="pid" min="0" maxlength="38" required placeholder="Person ID"><br></td></tr>
-      <tr><td><p style="display:inline">Password Reset: </p></td><td><input type="password" name="pass" min="0" required placeholder="New Password"><br></td></tr>
+      <tr><td><p style="display:inline">Password: </p></td><td><input type="password" name="pass" min="0" required placeholder="New Password"><br></td></tr>
       </table>
   User's role is:<br>
       <select id="role" name="role" form="addform">

@@ -47,7 +47,7 @@ cookies = request.getCookies();
 }
 	Boolean debug = Boolean.TRUE;
       String queryMySensors	= "select S.SENSOR_ID, S.LOCATION, S.SENSOR_TYPE, S.DESCRIPTION from SENSORS S, SUBSCRIPTIONS T where S.SENSOR_ID=T.SENSOR_ID and T.PERSON_ID="+pid;
-      String querySensors	= "select distinct S.SENSOR_ID, S.LOCATION, S.SENSOR_TYPE, S.DESCRIPTION from SENSORS S, SUBSCRIPTIONS T where S.SENSOR_ID=T.SENSOR_ID and T.PERSON_ID!="+pid;
+      String querySensors	= "select distinct S.SENSOR_ID, S.LOCATION, S.SENSOR_TYPE, S.DESCRIPTION from SENSORS S, SUBSCRIPTIONS T where S.SENSOR_ID not in (select S.SENSOR_ID from SENSORS S, SUBSCRIPTIONS T where S.SENSOR_ID=T.SENSOR_ID and T.PERSON_ID="+pid+")";
       
       String mUrl = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
       String mDriverName = "oracle.jdbc.driver.OracleDriver";
@@ -92,7 +92,7 @@ try {
 			
 			
 		
-	    String buttonrm = "<input type='radio' name='userToDelete' value='" + sID + "'>";
+	    String buttonrm = "<input type='radio' name='subToDelete' value='" + sID + "'>";
 			
             out.println( tropen + open + sID + close + open + local + close + open + type + close + open + desc +  close + open + buttonrm + close + trclose);
             
@@ -172,7 +172,7 @@ try {
 			
 			
 		
-	    String buttonrm = "<input type='radio' name='userToDelete' value='" + sID + "'>";
+	    String buttonrm = "<input type='radio' name='subToAdd' value='" + sID + "'>";
 			
             out.println( tropen + open + sID + close + open + local + close + open + type + close + open + desc +  close + open + buttonrm + close + trclose);
             
