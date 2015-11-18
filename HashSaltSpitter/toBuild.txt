@@ -1,0 +1,3 @@
+Compile to the class file:
+javac -d bin -cp jasypt-1.9.2.jar src/jasyptexperiment/JasyptExperiment.java
+jar cmvf META-INF/MANIFEST.MF HashingSaltSpitter.jar jasyptexperiment/JasyptExperiment.class
