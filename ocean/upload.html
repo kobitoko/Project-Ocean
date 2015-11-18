@@ -10,8 +10,20 @@
  <body style="background:lightblue;">
  <div id='header' style="height:50px;border-style:inset;"></div>
   <div id='content'>
+  
+    <form action="upload.jsp" name="uploadform" method="post">
+    <!-- taken from http://www.w3schools.com/tags/att_input_accept.asp 
+         and http://www.freeformatter.com/mime-types-list.html -->
+      Image file (jpg/jpeg only):</br>
+          <input type="file" name="jpgfile" accept="image/jpeg"></br>
+      Audio file (wav only):</br>
+          <input type="file" name="audiofile" accept="audio/x-wav"></br>
+      CSV file containing scalar data:</br>
+          <input type="file" name="csvfile" accept="text/csv"></br>
+      <input type="submit" name="submit" value="Upload">
+    </form>
+  
   </div>
-
 
 </body>
 </html>
