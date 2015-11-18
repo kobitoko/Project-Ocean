@@ -4,7 +4,8 @@ insert into persons values (1213, 'Scootallo','D', 'St. Starswirl Orphanage', 'r
 insert into persons values (9821, 'Pipsqueak' ,'Junior', '1414 63 Ave SE', 'pirates10@gmail.com', 7773231991);
 
 
-insert into users values ('Crake', 'Crake', 's','7777', to_date('2042-12-25','yyyy-mm-dd'));
+insert into users values ('Crake', '883442F8094BF7BB387BC98199D68053', 's','7777', to_date('2042-12-25','yyyy-mm-dd'));
+insert into salts values ('Crake','220B5EBE80237C18B55320FB2F376B08');
 
 insert into sensors values (01, 'Trench Entrance, Mid', 'i', 'A visual sensor placed to watch for any motion of any creatures or objects that attempt to leave or enter the trench.');
 insert into sensors values (12, 'Trench Interior, Mid', 'a', 'An audio recorder placed to listen for abnormal sounds that may occur inside the trench.');
