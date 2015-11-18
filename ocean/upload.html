@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <head>
 <meta charset="utf-8">
 <title>Ocean Observation System</title>
@@ -15,13 +16,38 @@
     <!-- taken from http://www.w3schools.com/tags/att_input_accept.asp 
          and http://www.freeformatter.com/mime-types-list.html -->
       Image file (jpg/jpeg only):</br>
-          <input type="file" name="jpgfile" accept="image/jpeg"></br>
+      <input type="file" id="jpgfileget" name="jpgfileget" accept="image/jpeg"></br>
+      
       Audio file (wav only):</br>
-          <input type="file" name="audiofile" accept="audio/x-wav"></br>
+      <input type="file" id="audiofileget" name="audiofileget" accept="audio/x-wav"></br>
+      
       CSV file containing scalar data:</br>
-          <input type="file" name="csvfile" accept="text/csv"></br>
+      <input type="file" id="csvfileget" name="csvfileget" accept="text/csv"></br>
+      
+      <input type="hidden" id="jpgfileput" name="jpgfileput">
+      <input type="hidden" id="audiofileput" name="audiofileput">
+      <input type="hidden" id="csvfileput" name="csvfileput">
+      
+      <!--Taken from http://stackoverflow.com/questions/15201071/how-to-get-full-path-of-selected-file-on-change-of-input-type-file-using-jav -->
+      <script>
+        $('#jpgfileget').change( function(event) {
+          var tmppath = URL.createObjectURL(event.target.files[0]);
+          $("#jpgfileput").val(tmppath);
+        });
+        $('#audiofileget').change( function(event) {
+          var tmppath = URL.createObjectURL(event.target.files[0]);
+          $("#audiofileput").val(tmppath);
+        });
+        $('#csvfileget').change( function(event) {
+          var tmppath = URL.createObjectURL(event.target.files[0]);
+          $("#csvfileput").val(tmppath);
+        });
+      </script>
+      
       <input type="submit" name="submit" value="Upload">
     </form>
+  
+
   
   </div>
 

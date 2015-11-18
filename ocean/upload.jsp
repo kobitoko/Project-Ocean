@@ -1,5 +1,5 @@
 <!--input-->
-<%@ page import="java.util.*, java.sql.*, java.io.*. "%>
+<%@ page import="java.util.*, java.sql.*, java.nio.charset.StandardCharsets, java.nio.file.*, java.io.* "%>
 <html>
   <head></head>
   <body>
@@ -10,7 +10,7 @@
       // Get this user with the old userID and old PID to find the user in the first place. 
       String User = null;
       Integer PID = null;
-      //Based on tutorials at http://www.tutorialspoint.com/
+      // Based on tutorials at http://www.tutorialspoint.com/
       Cookie cookie = null;
       Cookie[] cookies = null;
       String comppid = "modpid";
@@ -24,9 +24,11 @@
          }
       }
       
-      String dirJpg = request.getParameter("jpgfile");
-      String dirWav = request.getParameter("audiofile");
-      String dirCSV = request.getParameter("csvfile");
+      String dirJpg = request.getParameter("jpgfileput");
+      String dirWav = request.getParameter("audiofileput");
+      String dirCSV = request.getParameter("csvfileput");
+      
+      System.err.println("JpgBlob: " + dirJpg + " wavBlob: " + dirWav +" csvBlob: " + dirCSV );
       
       java.io.File wavFile = new java.io.File(dirWav);
       int wavFileLen = (int) wavFile.length();
@@ -38,7 +40,8 @@
       //int csvFileLen = (int) csvFile.length();
       
       // Taken from http://stackoverflow.com/questions/326390/how-to-create-a-java-string-from-the-contents-of-a-file
-      ArrayList<String> csvLines = Files.readAllLines(Path.resolve(dirCSV), StandardCharsets.UTF_8));
+
+      List<String> csvLines = java.nio.file.Files.readAllLines( FileSystems.getDefault().getPath(dirCSV), StandardCharsets.UTF_8);
       
       java.io.InputStream wavStream = new java.io.FileInputStream(wavFile);
       java.io.InputStream jpgStream = new java.io.FileInputStream(jpgFile);
@@ -130,7 +133,8 @@ CREATE TABLE scalar_data(
           // something went wrong thus roll back.
           mCon.rollback();
       } finally {
-       
+       // revoke objects of all the stuff, its uploaded we don't need these blobs anymore 
+       //revokeObjectURL(url : String) : undefined 
       }
     %>
   
