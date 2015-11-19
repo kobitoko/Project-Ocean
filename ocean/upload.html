@@ -12,22 +12,84 @@
  <div id='header' style="height:50px;border-style:inset;"></div>
   <div id='content'>
   
-    <form action="upload.jsp" ENCTYPE="multipart/form-data" name="uploadform" method="post">
+    <form action="upload.jsp" name="uploadform" method="post">
     <!-- taken from http://www.w3schools.com/tags/att_input_accept.asp 
-         and http://www.freeformatter.com/mime-types-list.html -->
+         and http://www.freeformatter.com/mime-types-list.html 
+      -->
       Image file (jpg/jpeg only):</br>
-      <input type="file" id="jpgfileget" name="jpgfileget" accept="image/jpeg"></br>
-      
+      <input type="file" id="jpgfileget" name="jpgfileget" accept="image/jpeg" onchange="openFile(this, event)"></br>
+      <div id="jpgload">Choose a jpg file please.</div>
+      </br>
       Audio file (wav only):</br>
-      <input type="file" id="audiofileget" name="audiofileget" accept="audio/x-wav"></br>
-      
+      <input type="file" id="audiofileget" name="audiofileget" accept="audio/x-wav" onchange="openFile(this, event)"></br>
+      <div id="wavload">Choose a wav file please.</div>
+      </br>
       CSV file containing scalar data:</br>
-      <input type="file" id="csvfileget" name="csvfileget" accept="text/csv"></br>
+      <input type="file" id="csvfileget" name="csvfileget" accept="text/csv" onchange="openFile(this, event)"></br>
+      <div id="csvload">Choose a csv file please.</div>
+      </br>
+      <input type="hidden" id="jpgfileput" name="jpgfileput">
+      <input type="hidden" id="audiofileput" name="audiofileput">
+      <input type="hidden" id="csvfileput" name="csvfileput">
+      
+      <!--Taken from http://www.javascripture.com/FileReader 
+      and http://stackoverflow.com/questions/7627161/get-id-of-element-that-called-a-function
+      should using loading ??  http://www.sitepoint.com/html5-javascript-file-upload-progress-bar/
+      -->
+      <script>
+        var openFile = function(callingElement, event) {
+          var input = event.target;
+          var id = callingElement.id;
+
+          var printEventType = function(e) {
+            var loaded =  e.loaded;
+            var total =  e.total;
+            var percentage = (loaded/total)*100;
+            var percentageString = "Uploading: " + percentage + "%";
+            
+            console.log('got event: ' + e.type +" loaded:" + loaded + " Total:"+ total);
+            
+            if(id === "jpgfileget") {
+              $("#jpgload").html(percentageString);
+            } else if(id === "audiofileget") {
+              $("#wavload").html(percentageString);
+            } else if(id === "csvfileget") {
+              $("#csvload").html(percentageString);
+            } 
+          };
+
+          var setHiddenField = function(e) {
+            var base64File = reader.result;
+            var stringReady = "Ready to submit.";
+            
+            console.log('got base64:' + base64File);
+            
+            if(id === "jpgfileget") {
+              $("#jpgfileput").val(base64File);
+              $("#jpgload").html(stringReady);
+            } else if(id === "audiofileget") {
+              $("#audiofileput").val(base64File);
+              $("#wavload").html(stringReady);
+            } else if(id === "csvfileget") {
+              $("#csvfileput").val(base64File);
+              $("#csvload").html(stringReady);
+            } 
+          }
+          
+          var reader = new FileReader();
+          //reader.onloadstart = printEventType;
+          reader.onprogress = printEventType;
+          reader.onload = setHiddenField;
+          //reader.onabort = printEventType;
+          //reader.onerror = printEventType;
+          //reader.onloadend = printEventType;
+          
+          reader.readAsDataURL(input.files[0]);
+        };
+      </script>    
       
       <input type="submit" name="submit" value="Upload">
     </form>
-  
-
   
   </div>
 

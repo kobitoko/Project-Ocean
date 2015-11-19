@@ -24,18 +24,30 @@
          }
       }
       
-      String j = request.getParameter("jpgfileget");
-      String a = request.getParameter("audiofileget");
-      String c = request.getParameter("csvfileget");
+      String j = request.getParameter("jpgfileput");
+      String a = request.getParameter("audiofileput");
+      String c = request.getParameter("csvfileput");
       
-      System.err.println("aaJpgBlob: " + j + " wavBlob: " + a +" csvBlob: " + c);
+      System.err.println("JpgBase64: " + j + "\nwavBase64: " + a +"\ncsvBase64: " + c);
       
       
-      // http://stackoverflow.com/questions/8324862/how-to-create-file-object-from-url-object
-      // OR JUST THIS
-      // http://www.codejava.net/coding/upload-files-to-database-servlet-jsp-mysql
-      // OR THIS
-      // http://java.ittoolbox.com/groups/technical-functional/jsp-l/using-jsp-how-to-upload-a-file-or-image-to-sql-data-base-with-html-ltinput-typefilegt-control-1626544
+      // there just pass the variable "dataurl" that will contain something like data:audio/wav;base64,UklGRgQj
+      // and in the jsp to encode it from base64 
+      // http://stackoverflow.com/questions/11472731/base64-inputstream-to-string
+      // resize image http://stackoverflow.com/questions/244164/how-can-i-resize-an-image-using-java
+      
+      // later for downloading stuff http://stackoverflow.com/questions/7115379/how-i-do-get-an-image-blob-from-jsp-to-javascript
+      // and 
+      //ByteArrayOutputStream byteArrayBitmapStream = new ByteArrayOutputStream();
+      //image.compress(Bitmap.CompressFormat.JPEG, COMPRESSION_QUALITY, byteArrayBitmapStream);
+      //byte[] b = byteArrayBitmapStream.toByteArray();
+      //return Base64.encodeToString(b, Base64.DEFAULT);
+      // perhaps needed this encode if wanting to  resize.
+      // and for preparedstamementVar.setBinaryStream(2, inputStreamVar, fileLength);
+      // so need to convert it to File? since in html can do src=theStringBase64File can assign file to it too?
+      // or need to decode the base64 to bytestream? idk??
+      
+      /*
       File dirJpg = new File(j); 
       File dirWav = new File(a);
       File dirCSV = new File(c);
@@ -50,6 +62,7 @@
       
       FileInputStream jpgStream = new FileInputStream(dirJpg);
       FileInputStream wavStream = new FileInputStream(dirWav);
+      */
       
       String mUrl = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
       String mDriverName = "oracle.jdbc.driver.OracleDriver";
