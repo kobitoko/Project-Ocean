@@ -60,7 +60,10 @@ insert into scalar_data values(2233, 22, to_date('2051-12-01','yyyy-mm-dd'), 15)
 insert into scalar_data values(2251, 22, to_date('2051-12-20','yyyy-mm-dd'), 12);
 insert into scalar_data values(2259, 22, to_date('2052-05-01','yyyy-mm-dd'), 10);
 insert into scalar_data values(2266, 22, to_date('2052-09-20','yyyy-mm-dd'), 15);
+insert into scalar_data values(2273, 22, to_date('2052-11-01','yyyy-mm-dd'), 17);
+insert into scalar_data values(2274, 22, to_date('2052-11-01','yyyy-mm-dd'), 20);
 insert into scalar_data values(2275, 22, to_date('2052-11-01','yyyy-mm-dd'), 50);
+insert into scalar_data values(2276, 22, to_date('2052-11-01','yyyy-mm-dd'), 42);
 insert into scalar_data values(2280, 22, to_date('2053-09-20','yyyy-mm-dd'), 25);
 insert into scalar_data values(2285, 22, to_date('2054-09-20','yyyy-mm-dd'), 10);
 insert into scalar_data values(2290, 22, to_date('2055-11-01','yyyy-mm-dd'), 05);

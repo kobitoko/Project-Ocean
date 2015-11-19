@@ -6,14 +6,15 @@
     <%
 //todos based on: 
 //https://eclass.srv.ualberta.ca/mod/page/view.php?id=1627717
-//TODO: date should instead be datetime. dd/mm/yyyy. 
+//DONE on my end. Need to edit html side:  dd/mm/yyyy. 
 //DONE: keyword should be exact match.
+//TODO: Ask TA if the user needs to be able to search by hour,min,second. If so, implement that.
 //TODO: Apparently Sensor type must have a time period.
 //TODO: Select blob columns.
 //DONE: "If the keyword matches the sensor description, show all data from this sensor. 
 //If not (in case of audio files and images), try if it matches the image or audio description 
 //and show those records which match."
-//TODO: Error catching. A common offender will be if they input date off format.
+//DONE in a sense. Need to handle it website side as well: Error catching. A common offender will be if they input date off format.
 //TODO: Testing Website side.
         Boolean debug = Boolean.TRUE;
     	/*search conditions. if nothing, it is null*/
@@ -95,21 +96,21 @@
 	}
 	if (dateBefore != null && !dateBefore.isEmpty()) {
 		//dateBefore = "AND a.date_created <= TO_DATE("+dateBefore+",'mm/dd/yyyy')";
-	   queryAudio = queryAudio + " AND a.date_created <= TO_DATE('"+dateBefore+"','mm/dd/yyyy')";
-	   queryImage = queryImage + " AND i.date_created <= TO_DATE('"+dateBefore+"','mm/dd/yyyy')";
-	   queryScalar = queryScalar + " AND s.date_created <= TO_DATE('"+dateBefore+"','mm/dd/yyyy')";
+	   queryAudio = queryAudio + " AND a.date_created <= TO_DATE('"+dateBefore+"','dd/mm/yyyy')";
+	   queryImage = queryImage + " AND i.date_created <= TO_DATE('"+dateBefore+"','dd/mm/yyyy')";
+	   queryScalar = queryScalar + " AND s.date_created <= TO_DATE('"+dateBefore+"','dd/mm/yyyy')";
 
-	   querySensor = querySensor + " AND sen.date_created <= TO_DATE('"+dateBefore+"','mm/dd/yyyy')";
+	   querySensor = querySensor + " AND sen.date_created <= TO_DATE('"+dateBefore+"','dd/mm/yyyy')";
 
 
 	} 
 	if (dateAfter != null && !dateAfter.isEmpty()) {
 		//dateAfter = "AND a.date_created >= TO_DATE("+dateAfter+",'mm/dd/yyyy')";
-	   queryAudio = queryAudio + " AND a.date_created >= TO_DATE('"+dateAfter+"','mm/dd/yyyy')";
-	   queryImage = queryImage + " AND i.date_created >= TO_DATE('"+dateAfter+"','mm/dd/yyyy')";
-	   queryScalar = queryScalar + " AND s.date_created >= TO_DATE('"+dateAfter+"','mm/dd/yyyy')";
+	   queryAudio = queryAudio + " AND a.date_created >= TO_DATE('"+dateAfter+"','dd/mm/yyyy')";
+	   queryImage = queryImage + " AND i.date_created >= TO_DATE('"+dateAfter+"','dd/mm/yyyy')";
+	   queryScalar = queryScalar + " AND s.date_created >= TO_DATE('"+dateAfter+"','dd/mm/yyyy')";
 
-	   querySensor = querySensor + " AND sen.date_created >= TO_DATE('"+dateAfter+"','mm/dd/yyyy')";
+	   querySensor = querySensor + " AND sen.date_created >= TO_DATE('"+dateAfter+"','dd/mm/yyyy')";
 
 
 	} 
@@ -135,10 +136,10 @@
       String mUrl = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
       String mDriverName = "oracle.jdbc.driver.OracleDriver";
       
-      //String mUser = "satyabra";
-      //String mPass = "adasfa42";
-      String mUser = "koukoula";
-      String mPass = "diamondT1ara";
+      String mUser = "satyabra";
+      String mPass = "adasfa42";
+      //String mUser = "koukoula";
+      //String mPass = "diamondT1ara";
       Connection mCon;
       Statement stmnt;
              // instantiate the driver.
@@ -204,15 +205,19 @@
 	 
 */	
             /*Display all hits. */
-        stmnt.close();
-        mCon.close();
-          
         } catch(SQLException ex) {
             if (debug)
               out.println("<BR>-debugLog:Received a SQLException: " + ex.getMessage() +"\n"+ queryImage + "\n" + queryAudio + "\n" +queryScalar );
             System.err.println("SQLException: " + ex.getMessage());
 	//Need to close connections if they exist here. But I don't know how to check if there is currently a connection.
-        }      
+        } 
+	finally {
+		stmnt.close();
+        	mCon.close();
+	}
+          
+
+	     
    %>
   
   </body>
