@@ -1,5 +1,5 @@
 <!--input-->
-<%@ page import="java.util.*, java.sql.*, java.io.*, org.apache.commons.io.FileUtils, java.net.URL "%>
+<%@ page import="java.util.*, java.sql.*, java.io.*"%>
 <html>
   <head></head>
   <body>
@@ -24,18 +24,21 @@
          }
       }
       
-      File dirJpg = null; 
-      File dirWav = null;
-      File dirCSV = null;
+      String j = request.getParameter("jpgfileget");
+      String a = request.getParameter("audiofileget");
+      String c = request.getParameter("csvfileget");
       
-      System.err.println("JpgBlob: " + request.getParameter("jpgfileput") + " wavBlob: " + request.getParameter("audiofileput") +" csvBlob: " + request.getParameter("csvfileput") );
+      System.err.println("aaJpgBlob: " + j + " wavBlob: " + a +" csvBlob: " + c);
+      
       
       // http://stackoverflow.com/questions/8324862/how-to-create-file-object-from-url-object
       // OR JUST THIS
       // http://www.codejava.net/coding/upload-files-to-database-servlet-jsp-mysql
-      FileUtils.copyURLToFile(new URL(request.getParameter("jpgfileput")), dirJpg);
-      FileUtils.copyURLToFile(new URL(request.getParameter("audiofileput")), dirWav);
-      FileUtils.copyURLToFile(new URL(request.getParameter("csvfileput")), dirCSV);
+      // OR THIS
+      // http://java.ittoolbox.com/groups/technical-functional/jsp-l/using-jsp-how-to-upload-a-file-or-image-to-sql-data-base-with-html-ltinput-typefilegt-control-1626544
+      File dirJpg = new File(j); 
+      File dirWav = new File(a);
+      File dirCSV = new File(c);
       
       int jpgFileLen = (int) dirJpg.length();
       
@@ -45,8 +48,8 @@
       
       System.err.println("JpgBlob: " + Integer.valueOf(wavFileLen).toString() + " wavBlob: " + Integer.valueOf(wavFileLen).toString() +" csvBlob: " + Integer.valueOf(csvFileLen).toString() );
       
-      InputStream jpgStream = new FileInputStream(dirJpg);
-      InputStream wavStream = new FileInputStream(dirWav);
+      FileInputStream jpgStream = new FileInputStream(dirJpg);
+      FileInputStream wavStream = new FileInputStream(dirWav);
       
       String mUrl = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
       String mDriverName = "oracle.jdbc.driver.OracleDriver";
