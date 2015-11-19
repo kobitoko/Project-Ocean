@@ -1,5 +1,5 @@
 <!--input-->
-<%@ page import="java.util.*, java.sql.*, java.nio.charset.StandardCharsets, java.nio.file.*, java.io.* "%>
+<%@ page import="java.util.*, java.sql.*, java.io.*, org.apache.commons.io.FileUtils, java.net.URL "%>
 <html>
   <head></head>
   <body>
@@ -24,27 +24,29 @@
          }
       }
       
-      String dirJpg = request.getParameter("jpgfileput");
-      String dirWav = request.getParameter("audiofileput");
-      String dirCSV = request.getParameter("csvfileput");
+      File dirJpg = null; 
+      File dirWav = null;
+      File dirCSV = null;
       
-      System.err.println("JpgBlob: " + dirJpg + " wavBlob: " + dirWav +" csvBlob: " + dirCSV );
+      System.err.println("JpgBlob: " + request.getParameter("jpgfileput") + " wavBlob: " + request.getParameter("audiofileput") +" csvBlob: " + request.getParameter("csvfileput") );
       
-      java.io.File wavFile = new java.io.File(dirWav);
-      int wavFileLen = (int) wavFile.length();
+      // http://stackoverflow.com/questions/8324862/how-to-create-file-object-from-url-object
+      // OR JUST THIS
+      // http://www.codejava.net/coding/upload-files-to-database-servlet-jsp-mysql
+      FileUtils.copyURLToFile(new URL(request.getParameter("jpgfileput")), dirJpg);
+      FileUtils.copyURLToFile(new URL(request.getParameter("audiofileput")), dirWav);
+      FileUtils.copyURLToFile(new URL(request.getParameter("csvfileput")), dirCSV);
       
-      java.io.File jpgFile = new java.io.File(dirJpg);
-      int jpgFileLen = (int) jpgFile.length();
+      int jpgFileLen = (int) dirJpg.length();
+      
+      int wavFileLen = (int) dirWav.length();
 
-      //java.io.File csvFile = new java.io.File(dirCSV);
-      //int csvFileLen = (int) csvFile.length();
+      int csvFileLen = (int) dirCSV.length();
       
-      // Taken from http://stackoverflow.com/questions/326390/how-to-create-a-java-string-from-the-contents-of-a-file
-
-      List<String> csvLines = java.nio.file.Files.readAllLines( FileSystems.getDefault().getPath(dirCSV), StandardCharsets.UTF_8);
+      System.err.println("JpgBlob: " + Integer.valueOf(wavFileLen).toString() + " wavBlob: " + Integer.valueOf(wavFileLen).toString() +" csvBlob: " + Integer.valueOf(csvFileLen).toString() );
       
-      java.io.InputStream wavStream = new java.io.FileInputStream(wavFile);
-      java.io.InputStream jpgStream = new java.io.FileInputStream(jpgFile);
+      InputStream jpgStream = new FileInputStream(dirJpg);
+      InputStream wavStream = new FileInputStream(dirWav);
       
       String mUrl = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
       String mDriverName = "oracle.jdbc.driver.OracleDriver";
