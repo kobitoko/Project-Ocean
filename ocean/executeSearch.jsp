@@ -100,7 +100,7 @@
 	   queryImage = queryImage + " AND i.date_created <= TO_DATE('"+dateBefore+"','dd/mm/yyyy')";
 	   queryScalar = queryScalar + " AND s.date_created <= TO_DATE('"+dateBefore+"','dd/mm/yyyy')";
 
-	   querySensor = querySensor + " AND sen.date_created <= TO_DATE('"+dateBefore+"','dd/mm/yyyy')";
+	   //querySensor = querySensor + " AND sen.date_created <= TO_DATE('"+dateBefore+"','dd/mm/yyyy')";
 
 
 	} 
@@ -110,7 +110,7 @@
 	   queryImage = queryImage + " AND i.date_created >= TO_DATE('"+dateAfter+"','dd/mm/yyyy')";
 	   queryScalar = queryScalar + " AND s.date_created >= TO_DATE('"+dateAfter+"','dd/mm/yyyy')";
 
-	   querySensor = querySensor + " AND sen.date_created >= TO_DATE('"+dateAfter+"','dd/mm/yyyy')";
+	   //querySensor = querySensor + " AND sen.date_created >= TO_DATE('"+dateAfter+"','dd/mm/yyyy')";
 
 
 	} 
@@ -164,14 +164,12 @@
              stmnt = mCon.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY); 
 	
              ResultSet rsetA = stmnt.executeQuery(queryAudio);
-             ResultSet rsetI = stmnt.executeQuery(queryImage);
-             ResultSet rsetS = stmnt.executeQuery(queryScalar);
 	
-	     
-	/*	
+	    
+	
 	     ResultSetMetaData rsetMetaDataA = rsetA.getMetaData();
 	     int Count = rsetMetaDataA.getColumnCount();
-	    
+	     String value;
 	     Object o;	
 	     while (rsetA.next()) {
 		for (int i = 1; i <= Count; i++){
@@ -181,6 +179,8 @@
 			out.print(value+"\n");
 		}
 	}
+             ResultSet rsetI = stmnt.executeQuery(queryImage);
+
 	     ResultSetMetaData rsetMetaDataI = rsetI.getMetaData();
 	     Count = rsetMetaDataI.getColumnCount();
 	     while (rsetI.next()) {
@@ -190,25 +190,23 @@
 			else value = "null";
 			out.print(value+"\n");
 		}
-	}
-*/	
- 	String value; 
-	Object o;	
+	}	 
+            
+
+	 ResultSet rsetS = stmnt.executeQuery(queryScalar);
+
 	     ResultSetMetaData rsetMetaDataS = rsetS.getMetaData();
-	     int Count = rsetMetaDataS.getColumnCount();
-	     
+	     Count = rsetMetaDataS.getColumnCount();
 	     while (rsetS.next()) {
-		%><p><%= Count%><%
 		for (int i = 1; i <= Count; i++){
 			o = rsetS.getObject(i);
 			if (o!=null) value = o.toString();
 			else value = "null";
-			out.print(value+"SS\n");
+			out.print(value+"\n");
 			
 		}
 	}	 
 	 
-	
             /*Display all hits. */
         } catch(SQLException ex) {
             if (debug)
