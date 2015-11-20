@@ -24,9 +24,9 @@
          }
       }
       
-      String j = request.getParameter("jpgfileput");
-      String a = request.getParameter("audiofileput");
-      String c = request.getParameter("csvfileput");
+      String imageBase64Input = request.getParameter("jpgfileput");
+      String audioBase64Input = request.getParameter("audiofileput");
+      String csvFileContent = request.getParameter("csvfileput");
       
       System.err.println("JpgBase64: " + j + "\nwavBase64: " + a +"\ncsvBase64: " + c);
       
@@ -46,11 +46,11 @@
       // and for preparedstamementVar.setBinaryStream(2, inputStreamVar, fileLength);
       // so need to convert it to File? since in html can do src=theStringBase64File can assign file to it too?
       // or need to decode the base64 to bytestream? idk??
+      // for download, put the thing in the url to open file e.g. in the url bar data:audio/wav;base64,UklGRu... 
       
       /*
       File dirJpg = new File(j); 
       File dirWav = new File(a);
-      File dirCSV = new File(c);
       
       int jpgFileLen = (int) dirJpg.length();
       

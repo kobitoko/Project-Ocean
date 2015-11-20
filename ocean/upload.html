@@ -76,19 +76,30 @@
             } 
           }
           
+          var disableSubmit = function(e) {
+            $("#submit").attr("disabled", true);
+          }
+          
+          var enableSubmit = function(e) {
+            $("#submit").attr("disabled", false);
+          }
+          
           var reader = new FileReader();
-          //reader.onloadstart = printEventType;
+          reader.onloadstart = disableSubmit;
           reader.onprogress = printEventType;
           reader.onload = setHiddenField;
           //reader.onabort = printEventType;
           //reader.onerror = printEventType;
-          //reader.onloadend = printEventType;
-          
-          reader.readAsDataURL(input.files[0]);
+          reader.onloadend = enableSubmit;
+          if(id === "csvfileget") {
+            reader.readAsText(input.files[0]);
+          } else {
+            reader.readAsDataURL(input.files[0]);
+          }
         };
       </script>    
       
-      <input type="submit" name="submit" value="Upload">
+      <input type="submit" id="submit" name="submit" value="Upload">
     </form>
   
   </div>
