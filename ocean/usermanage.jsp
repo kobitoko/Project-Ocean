@@ -86,20 +86,22 @@
     <col>
 <col>
 <col>
+<col width="90px">
 <col width="150px">
-<col width="150px">
-<col width="150px">
+<col width="75px">
 
     <th>Username</th>
     <th>User ID</th>
     <th>Role</th>
-    <th ><button onClick="modifyUser()"style="background-color:green;color:white;display:inline;"  value="Modify Checked User">Modify Checked User</button></th>
-    <form action="removeThatAccount.jsp" method="post">
-    <th><input style="background-color:blue;color:white;display:inline;" type="submit" name="submit" value="Remove Checked User"></th>
+    <th ><button onClick="modifyUser()"style="background-color:green;color:white;display:inline;"  value="Modify Checked User">Modify User</button></th>
+<th><button onClick="assocUser()"style="background-color:yellow;color:black;display:inline;"  value="Add Associated User">Add Associated User</button></th>
+    <form action="removeThatAccount.jsp" method="post">   
+    <th><input style="background-color:blue;color:white;display:inline;" type="submit" name="submit" value="Remove User"></th>
+ 
     </tr>
     <tr>
        <%
-      String queryUsers = "select USER_NAME, ROLE, PERSON_ID, DATE_REGISTERED from USERS";
+      String queryUsers = "select USER_NAME, ROLE, PERSON_ID from USERS order by PERSON_ID, USER_NAME, ROLE";
       // actually log in and perform statements
       try {
           mCon = DriverManager.getConnection(mUrl, mUser, mPass);
@@ -111,9 +113,8 @@
             String usr = rset.getString(1);
             String grole = rset.getString(2);
             Integer pid = new Integer(rset.getInt(3));
-            // not yet used is date.
-            java.sql.Date dateReg = rset.getDate(4);
-            
+     
+            if(grole == null){grole="";};
             if(grole.equals("a")) {
               grole = "Administrator";
             } else if (grole.equals("s")) {
@@ -131,8 +132,10 @@
 			
 		
 			String buttonrm = "<input type='radio' name='userToDelete' value='" + usr + "'>";
+
+			String buttonassoc = "<input type='radio' name='userToAssoc' value='" + pid.toString() + "'>";
 			
-            out.println( tropen + open + usr + close + open + pid.toString() + close + open + grole + close + open + buttonmod +  close + open + buttonrm + close + trclose);
+            out.println( tropen + open + usr + close + open + pid.toString() + close + open + grole + close + open + buttonmod +  close + open + buttonassoc + close + open + buttonrm + close + trclose);
             
           }
           
@@ -146,16 +149,8 @@
       }      
       %>
     </tr>
-<tr>
-    <th>Username</th>
-    <th>User ID</th>
-    <th>Role</th>
-	</form>
-    <th><button onClick="modifyUser()"style="background-color:green;color:white;display:inline;"  value="Modify Checked User">Modify Checked User</button></th>
-    <form action="removeThatAccount.jsp" method="post">
-    <th><input style="background-color:blue;color:white;display:inline;" type="submit" name="submit" value="Remove Checked User" form="removeThatAccount.jsp"></th>
-    </tr>
-    <tr>
+
+
   	 </table>
     
      

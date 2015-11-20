@@ -12,5 +12,13 @@ function modifyUser(){
 window.setTimeout('window.location="modiUser.jsp"; ',50);
 }
 
+function assocUser(){
+    
+    var usr = document.querySelector('input[name="userToAssoc"]:checked').value;
+  
+document.cookie = 'modpid="' + usr + '";';
+window.setTimeout('window.location="assocUser.jsp"; ',50);
+}
+
 
 
