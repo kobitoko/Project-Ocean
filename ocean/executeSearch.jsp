@@ -171,7 +171,7 @@
 	/*	
 	     ResultSetMetaData rsetMetaDataA = rsetA.getMetaData();
 	     int Count = rsetMetaDataA.getColumnCount();
-	     String value;
+	    
 	     Object o;	
 	     while (rsetA.next()) {
 		for (int i = 1; i <= Count; i++){
@@ -190,20 +190,25 @@
 			else value = "null";
 			out.print(value+"\n");
 		}
-	}	 
+	}
+*/	
+ 	String value; 
+	Object o;	
 	     ResultSetMetaData rsetMetaDataS = rsetS.getMetaData();
-	     Count = rsetMetaDataS.getColumnCount();
+	     int Count = rsetMetaDataS.getColumnCount();
+	     
 	     while (rsetS.next()) {
+		%><p><%= Count%><%
 		for (int i = 1; i <= Count; i++){
 			o = rsetS.getObject(i);
 			if (o!=null) value = o.toString();
 			else value = "null";
-			out.print(value+"\n");
+			out.print(value+"SS\n");
 			
 		}
 	}	 
 	 
-*/	
+	
             /*Display all hits. */
         } catch(SQLException ex) {
             if (debug)

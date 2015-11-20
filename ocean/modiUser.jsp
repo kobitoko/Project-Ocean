@@ -75,6 +75,9 @@ cookies = request.getCookies();
 		if(cookie.getName().equals(comprole)){role = cookie.getValue();}
 }
 }
+if(role.equals("Scientist")){role = "s";
+}else if(role.equals("Administrator")){role = "a";
+}else if(role.equals("Data Curator")){role = "d";};
 String fname = "";
 String lname = "";
 String add = "";
