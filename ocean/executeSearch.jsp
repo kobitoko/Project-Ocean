@@ -140,8 +140,8 @@
       String mPass = "adasfa42";
       //String mUser = "koukoula";
       //String mPass = "diamondT1ara";
-      Connection mCon;
-      Statement stmnt;
+      Connection mCon = null;
+      Statement stmnt = null;
              // instantiate the driver.
       try {
           Class drvClass = Class.forName(mDriverName);
