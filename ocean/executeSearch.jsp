@@ -1,8 +1,17 @@
 <!--input-->
 <%@ page import="java.util.*, java.sql.*"%>
 <html>
-  <head></head>
-  <body>
+<head>
+<meta charset="utf-8">
+<title>Ocean Observation System</title>
+</head>
+<link rel="stylesheet" type="text/css" href="oceanstyler.css">
+<script src="imports.js"></script>
+<script>permission = 'scientist';</script>
+ <body style="background:lightblue;">
+ <div id='header' style="height:50px;border-style:inset;"></div>
+ <div id='content'>
+
     <%
 //todos based on: 
 //https://eclass.srv.ualberta.ca/mod/page/view.php?id=1627717
@@ -23,6 +32,8 @@
         String location = request.getParameter("local");
 	String dateBefore = request.getParameter("dateUntil");
 	String dateAfter= request.getParameter("dateSince");
+	%><p id="search">Search results where :<%
+	
 	//String pId = ???
 	Integer pid = null;
 	//Based on tutorials at http://www.tutorialspoint.com/
@@ -63,6 +74,7 @@
 
 //Currently does not select any blop fields. Easily added when we have test data that has it. 
 	if (sensorType != null && !sensorType.isEmpty()) {
+	   	%>type is <%= sensorType%>, <%
 	   //sensorType = "AND sen.sensor_id = a.sensor_id AND sen.sensor_type = "+ sensorType;
 	   sensorType.toLowerCase();
 	   queryAudio = queryAudio + " AND sen.sensor_id = a.sensor_id AND sen.sensor_type = '"+ sensorType+"'";
@@ -73,6 +85,7 @@
 
 	}
 	if (location != null && !location.isEmpty()) {
+		%>location is <%= location%>, <%
 	   //location = "AND sen.sensor_id = a.sensor_id AND sen.location= "+ location;
 	   queryAudio = queryAudio + " AND sen.sensor_id = a.sensor_id AND sen.location = '"+ location+"'";
 	   queryImage = queryImage + " AND sen.sensor_id = i.sensor_id AND sen.location = '"+ location+"'";
@@ -83,6 +96,7 @@
 	}
     
 	if (keywords != null && !keywords.isEmpty()) {
+		%>contains the keyword' <%= keywords%>', <%
 	    //keywords = "AND a.description LIKE '%"+keywords+"%'";
  	   //queryAudio = queryAudio + " AND a.description LIKE '%"+keywords+"%'";
  	   //queryImage = queryImage + " AND i.description LIKE '%"+keywords+"%'";
@@ -95,6 +109,7 @@
 
 	}
 	if (dateBefore != null && !dateBefore.isEmpty()) {
+		%>contains data recorded before <%= dateBefore%>', <%
 		//dateBefore = "AND a.date_created <= TO_DATE("+dateBefore+",'mm/dd/yyyy')";
 	   queryAudio = queryAudio + " AND a.date_created <= TO_DATE('"+dateBefore+"','dd/mm/yyyy')";
 	   queryImage = queryImage + " AND i.date_created <= TO_DATE('"+dateBefore+"','dd/mm/yyyy')";
@@ -105,6 +120,7 @@
 
 	} 
 	if (dateAfter != null && !dateAfter.isEmpty()) {
+		%>contains data recorded after <%= dateBefore%>', <%
 		//dateAfter = "AND a.date_created >= TO_DATE("+dateAfter+",'mm/dd/yyyy')";
 	   queryAudio = queryAudio + " AND a.date_created >= TO_DATE('"+dateAfter+"','dd/mm/yyyy')";
 	   queryImage = queryImage + " AND i.date_created >= TO_DATE('"+dateAfter+"','dd/mm/yyyy')";
@@ -114,7 +130,7 @@
 
 
 	} 
-		
+	%><br><%	
 	//Currently have redudent search conditions if multiple search conditions.
 	//String queryAudio = "SELECT Distinct a.recording_id, a.sensor_id, a.date_created, a.length, a.description FROM sensors sen, audio_recordings a, subscribed_sensors WHERE a.sensor_id in (select * from subscribed_sensors)" + sensorType + location+ dateBefore+dateAfter+keywords+ ";"; 
 
@@ -162,50 +178,126 @@
 	     //stmntView.close();
 
              stmnt = mCon.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY); 
+	 ResultSet rsetS = stmnt.executeQuery(queryScalar);
+
+	     ResultSetMetaData rsetMetaDataS = rsetS.getMetaData();
+	     int Count = rsetMetaDataS.getColumnCount();
+
+%>
+<p>SCALAR RESULTS</p>
+<table style="border-style:inset";>
+
+
+	<tr>
+<col width="150px">
+<col width="150px">
+<col width="150px">
+<col width="150px">
+
+
+    	<th>DATA ID</th>
+    	<th>SENSOR ID</th>
+   	 <th>VALUE</th>
+	<th>DATE CREATED</th>
+
+	</tr>
+<%
+	String open = "<td>";
+           	 String close = "</td>";
+	    	 String tropen = "<tr>";
+	   	 String trclose = "</tr>";
+	     while (rsetS.next()) {
+		
+		for (int i = 1; i <= Count; i++){
+			Integer did = new Integer(rsetS.getInt(1));
+			Integer sid = new Integer(rsetS.getInt(2));
+			java.sql.Date date = rsetS.getDate(3);
+			String val = rsetS.getString(4);
+			out.println( tropen + open + did + close + open + sid + close + open + val + close + open + date +  close + trclose);
+		}
+	}	
 	
              ResultSet rsetA = stmnt.executeQuery(queryAudio);
 	
 	    
 	
 	     ResultSetMetaData rsetMetaDataA = rsetA.getMetaData();
-	     int Count = rsetMetaDataA.getColumnCount();
+	     Count = rsetMetaDataA.getColumnCount();
 	     String value;
-	     Object o;	
+	    
+
+%>
+</table>
+<p>AUDIO RESULTS</p>
+<table style="border-style:inset";>
+
+
+	<tr>
+<col width="150px">
+<col width="150px">
+<col width="150px">
+<col width="150px">
+
+
+    	<th>DATA ID</th>
+    	<th>SENSOR ID</th>
+   	 <th>LENGTH</th>
+	 <th>DESCRIPTION</th>
+	 <th>DOWNLOAD</th>
+	<th>DATE CREATED</th>
+
+	</tr>
+
+<%
 	     while (rsetA.next()) {
 		for (int i = 1; i <= Count; i++){
-			o = rsetA.getObject(i);
-			if (o!=null) value = o.toString();
-			else value = "null";
-			out.print(value+"\n");
+			Integer did = new Integer(rsetA.getInt(1));
+			Integer sid = new Integer(rsetA.getInt(2));
+			java.sql.Date date = rsetA.getDate(3);
+			Integer len = new Integer(rsetA.getInt(4));
+			String val = rsetA.getString(5);
+			out.println( tropen + open + did + close + open + sid + close + open + len + close + open + val + close + open + close + open + date +  close + trclose);
 		}
 	}
              ResultSet rsetI = stmnt.executeQuery(queryImage);
 
 	     ResultSetMetaData rsetMetaDataI = rsetI.getMetaData();
 	     Count = rsetMetaDataI.getColumnCount();
+
+%>
+</table>
+<p>IMAGES RESULTS</p>
+<table style="border-style:inset";>
+
+
+	<tr>
+<col width="150px">
+<col width="150px">
+<col width="150px">
+<col width="150px">
+
+
+    	<th>DATA ID</th>
+    	<th>SENSOR ID</th>
+   	 <th>DESCRIPTION</th>
+	 <th>DOWNLOAD</th>
+	<th>DATE CREATED</th>
+
+	</tr>
+
+<%
 	     while (rsetI.next()) {
 		for (int i = 1; i <= Count; i++){
-			o = rsetI.getObject(i);
-			if (o!=null) value = o.toString();
-			else value = "null";
-			out.print(value+"\n");
+			Integer did = new Integer(rsetI.getInt(1));
+			Integer sid = new Integer(rsetI.getInt(2));
+			java.sql.Date date = rsetI.getDate(3);
+			String val = rsetI.getString(4);
+			out.println( tropen + open + did + close + open + sid + close  + open + val + close + open + close + open + date +  close + trclose);
 		}
 	}	 
             
 
-	 ResultSet rsetS = stmnt.executeQuery(queryScalar);
-
-	     ResultSetMetaData rsetMetaDataS = rsetS.getMetaData();
-	     Count = rsetMetaDataS.getColumnCount();
-	     while (rsetS.next()) {
-		for (int i = 1; i <= Count; i++){
-			o = rsetS.getObject(i);
-			if (o!=null) value = o.toString();
-			else value = "null";
-			out.print(value+"\n");
-			
-		}
-	}	 
+ 
 	 
             /*Display all hits. */
         } catch(SQLException ex) {
@@ -222,6 +314,7 @@
 
 	     
    %>
-  
-  </body>
+ </table>
+</div>
+</body>
 </html>

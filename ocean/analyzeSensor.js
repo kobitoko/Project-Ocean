@@ -42,6 +42,7 @@ function updateRollup(){
 	if(document.getElementById("month").value != 0){
 		document.getElementById("emptyWK").selected = 'selected';
 	}
+
 }
 
 function updateRollupWK(){

@@ -48,7 +48,7 @@ cookies = request.getCookies();
 }
 }
 
-	String createOLAPview = "CREATE OR REPLACE VIEW OLAP_DATA AS SELECT s.sensor_id, EXTRACT (YEAR from s.date_created) AS Year, to_char(s.date_created, 'Q') AS Quarter, EXTRACT (MONTH FROM s.date_created) AS Month, to_char(s.date_created,'IW') AS Week, EXTRACT (DAY from s.date_created) AS Day, AVG(s.value) AS Average, MIN(s.value) AS Minimum, MAX(s.value) AS Maximum FROM scalar_data s WHERE s.sensor_id IN (SELECT sensor_id FROM subscriptions WHERE person_id = 7777) AND s.sensor_id = '22' GROUP BY s.sensor_id, ROLLUP(EXTRACT (YEAR from s.date_created), to_char(s.date_created, 'Q'), EXTRACT (MONTH FROM s.date_created), to_char(s.date_created,'IW') , EXTRACT (DAY from s.date_created))";
+	String createOLAPview = "CREATE OR REPLACE VIEW OLAP_DATA AS SELECT s.sensor_id, EXTRACT (YEAR from s.date_created) AS Year, to_char(s.date_created, 'Q') AS Quarter, EXTRACT (MONTH FROM s.date_created) AS Month, to_char(s.date_created,'IW') AS Week, EXTRACT (DAY from s.date_created) AS Day, AVG(s.value) AS Average, MIN(s.value) AS Minimum, MAX(s.value) AS Maximum FROM scalar_data s WHERE s.sensor_id IN (SELECT sensor_id FROM subscriptions WHERE person_id =" + pid + ") AND s.sensor_id = '" + sid + "' GROUP BY s.sensor_id, ROLLUP(EXTRACT (YEAR from s.date_created), to_char(s.date_created, 'Q'), EXTRACT (MONTH FROM s.date_created), to_char(s.date_created,'IW') , EXTRACT (DAY from s.date_created))";
 
 	String queryYears = "Select distinct year from olap_data ORDER BY year";
 
@@ -192,6 +192,7 @@ var outString = "";
 if(setQU != "qu0"){
 	document.getElementById(setQU).selected = 'selected';
 	outString =  "Quarter <%= grabQU%> of ";
+	
 } else { 
 	document.getElementById("emptyQU").selected = 'selected';
 }
@@ -231,15 +232,15 @@ document.getElementById("caption").innerHTML = genString + outString;
 
 </script>
 <button onClick="updateOLAPcookies()" style="background-color:green;color:white;display:inline;">Update Analysis</button>
-      <table style="width:100%;border-style:inset";>
+      <table style="border-style:inset";>
 
 
 	<tr>
-<col width="20px">
-<col width="20px">
-<col width="20px">
-<col width="20px">
-<col width="20px">
+<col width="150px">
+<col width="150px">
+<col width="150px">
+<col width="150px">
+<col width="150px">
 
     	<th>Filter From</th>
     	<th>Subset</th>

@@ -8,6 +8,8 @@ window.onload = function(){
 	
 }
 
+
+
 function getRole(){
 	var cooks = document.cookie.split(';');
 	
