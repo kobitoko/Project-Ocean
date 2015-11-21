@@ -110,13 +110,7 @@ try {
 %>
       
     </tr>
-<tr>
-    <th>Sensor ID</th>
-    <th>Location</th>
-    <th>Sensor Type</th>
-    <th>Description</th>
-    <th><input  type="submit" style="background-color:blue;color:white;" name="submit" value="Unsubscribe to checked Sensors"></th>
-    </tr>
+
   	 </table>
      
      </form>
@@ -188,13 +182,7 @@ try {
       }      
       %>
     </tr>
- <tr>
-    <th>Sensor ID</th>
-    <th>Location</th>
-    <th>Sensor Type</th>
-    <th>Description</th>
-    <th><input type="submit" style="background-color:blue;color:white;" name="submit" value="Subscribe to new Sensors"></th>
-    </tr>
+
   	 </table>
     
      </form>

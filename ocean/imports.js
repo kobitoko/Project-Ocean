@@ -51,7 +51,7 @@ document.getElementById("usrman").onclick = function(){window.location.href="use
 document.getElementById("upload").onclick = function(){window.location.href="upload.html";}
 document.getElementById("search").onclick = function(){window.location.href="search.jsp";}
 document.getElementById("subscribe").onclick = function(){window.location.href="subscribe.jsp";}
-document.getElementById("analyze").onclick = function(){window.location.href="analyze.html";}
+document.getElementById("analyze").onclick = function(){window.location.href="analyze.jsp";}
 document.getElementById("account").onclick = function(){window.location.href="mymanage.jsp";}
 document.getElementById("help").onclick = function(){window.location.href="help.html";}
 
