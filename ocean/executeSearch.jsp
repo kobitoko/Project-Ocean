@@ -32,7 +32,7 @@
         String location = request.getParameter("local");
 	String dateBefore = request.getParameter("dateUntil");
 	String dateAfter= request.getParameter("dateSince");
-	%><p id="search">Search results where :<%
+	%><p id="search">Search results where: <%
 	
 	//String pId = ???
 	Integer pid = null;
