@@ -120,7 +120,7 @@
 
 	} 
 	if (dateAfter != null && !dateAfter.isEmpty()) {
-		%>contains data recorded after <%= dateBefore%>', <%
+		%>contains data recorded after <%= dateAfter%>', <%
 		//dateAfter = "AND a.date_created >= TO_DATE("+dateAfter+",'mm/dd/yyyy')";
 	   queryAudio = queryAudio + " AND a.date_created >= TO_DATE('"+dateAfter+"','dd/mm/yyyy')";
 	   queryImage = queryImage + " AND i.date_created >= TO_DATE('"+dateAfter+"','dd/mm/yyyy')";
