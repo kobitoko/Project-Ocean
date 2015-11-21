@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <head>
 <meta charset="utf-8">
 <title>Ocean Observation System</title>
@@ -10,8 +11,168 @@
  <body style="background:lightblue;">
  <div id='header' style="height:50px;border-style:inset;"></div>
   <div id='content'>
-  </div>
+  
+    <form action="uploadToDatabase.jsp" name="uploadform" method="post">
+    <!-- taken from http://www.w3schools.com/tags/att_input_accept.asp 
+         and http://www.freeformatter.com/mime-types-list.html 
+      -->
+      </br>
+      Image Record:</br>
+      <input type="file" id="jpgfileget" name="jpgfileget" accept="image/jpeg" onchange="openFile(this, event)">
+      <div id="jpgload">Choose a JPG file please. Or leave empty to skip Image Record.</div> 
+      <!--for now a text, later make a dropdown menu for numnber..-->
+      <table>
+      <tr><td>Sensor ID:</td><td><input type="number" id="jpgsensorid" name="jpgsensorid" placeholder="Sensor ID umber"></td></tr> 
+      <tr><td>Time created:</td><td><input type="text" id="jpgtimecreated" name="jpgtimecreated" placeholder="HH:MI:SS"></td></tr>
+      <tr><td>Date created:</td><td><input type="text" id="jpgdatecreated" name="jpgdatecreated" placeholder="DD/MM/YYYY"></td></tr> 
+      <tr><td>Image description:</td><td><input type="text" id="jpgdescription" name="jpgdescription" maxlength="128" placeholder="Description goes here."></td></tr> 
+      </table>
+      </br>
+      Audio Record:</br>
+      <input type="file" id="audiofileget" name="audiofileget" accept="audio/x-wav" onchange="openFile(this, event)">
+      <div id="wavload">Choose a WAV file please. Or leave empty to skip Audio Record.</div>
+      <!--for now a text, later make a dropdown menu for numnber..-->
+      <table>
+      <tr><td>Sensor ID:</td><td><input type="number" id="wavsensorid" name="wavsensorid" placeholder="Sensor ID number"></td></tr> 
+      <tr><td>Time created:</td><td><input type="text" id="wavtimecreated" name="wavtimecreated" placeholder="HH:MI:SS"></td></tr> 
+      <tr><td>Date created:</td><td><input type="text" id="wavdatecreated" name="wavdatecreated" placeholder="DD/MM/YYYY"></td></tr> 
+      <tr><td>Audio length:</td><td><input type="number" id="wavlength" name="wavlength" min="0" placeholder="in seconds"></td></tr> 
+      <tr><td>Audio description:</td><td><input type="text" id="wavdescription" name="wavdescription" maxlength="128" placeholder="Description goes here."></td></tr> 
+      </table></br>
+      Batch scalar data:</br>
+      <input type="file" id="csvfileget" name="csvfileget" accept="text/csv" onchange="openFile(this, event)">
+      <div id="csvload">Choose a csv file please. Or leave empty to skip Scalar Data.</div></br>
+      </br>
+      <input type="hidden" id="jpgfileput" name="jpgfileput">
+      <input type="hidden" id="jpgthumbnailfileput" name="jpgthumbnailfileput">
+      <input type="hidden" id="audiofileput" name="audiofileput">
+      <input type="hidden" id="csvfileput" name="csvfileput">
+      
+      <!--Taken from http://www.javascripture.com/FileReader 
+      and http://stackoverflow.com/questions/7627161/get-id-of-element-that-called-a-function
+      -->
+      <script>
+        var openFile = function(callingElement, event) {
+          var input = event.target;
+          var id = callingElement.id;
+          
+          var printEventType = function(e) {
+            var loaded =  e.loaded;
+            var total =  e.total;
+            var percentage = (loaded/total)*100;
+            var percentageString = "Uploading: " + percentage + "%";
+            
+            console.log('got event: ' + e.type +" loaded:" + loaded + " Total:"+ total);
+            
+            if(id === "jpgfileget") {
+              $("#jpgload").html(percentageString);
+            } else if(id === "audiofileget") {
+              $("#wavload").html(percentageString);
+            } else if(id === "csvfileget") {
+              $("#csvload").html(percentageString);
+            } 
+          };
 
+          // Taken from http://www.iminfo.in/post/how-to-create-thumbnail-image-using-html5-canvas-and-javascript
+         var makeThumbnail = function (originalImageDataUrl) {
+            var canvas = document.createElement('canvas');
+            var ratio = 1;
+            var longestEdge = 150;
+            
+            // get original image and it's dimensions.
+            var img = new Image();
+            img.src = originalImageDataUrl;
+            
+            img.onload = function() {
+              var imgw = img.width;
+              var imgh = img.height;
+              
+              // keep aspect ratio.
+              if(imgh>imgw) {
+                ratio = imgw/imgh;
+              } else {
+                ratio = imgh/imgw;
+              }
+              
+              // set canvas' dimensions to thumbnail size.
+              canvas.id = "tmpCan";
+              if(imgh>imgw) {
+                canvas.height = longestEdge;
+                canvas.width = ratio*longestEdge;
+              } else {
+                canvas.width = longestEdge;
+                canvas.height = ratio*longestEdge;
+              }
+              // draw on canvas the thumbnail and set hidden field
+              if(canvas.getContext) {
+                var ctxt = canvas.getContext('2d');
+                ctxt.drawImage(img, 0, 0, canvas.width, canvas.height);
+                // force jpeg. taken from http://stackoverflow.com/questions/20744628/how-to-convert-a-image-from-png-to-jpeg-using-javascript
+                var thumbnailBase64 = canvas.toDataURL("image/jpeg");
+                console.log('got thumbnailbase64:' + thumbnailBase64);
+                $("#jpgthumbnailfileput").val(thumbnailBase64);
+                // Enable submit after thumbnail is finished.
+                $("#submit").attr("disabled", false);
+              } else {
+                somethingWentWrong();
+              }
+            }
+          };
+          
+          var setHiddenField = function(e) {
+            var base64File = reader.result;
+            var stringReady = "File is ready to be submitted.";
+            
+            console.log('got base64:' + base64File);
+            
+            if(id === "jpgfileget") {
+              $("#jpgfileput").val(base64File);
+              makeThumbnail(base64File);
+              $("#jpgload").html(stringReady);
+            } else if(id === "audiofileget") {
+              $("#audiofileput").val(base64File);
+              $("#wavload").html(stringReady);
+            } else if(id === "csvfileget") {
+              $("#csvfileput").val(base64File);
+              $("#csvload").html(stringReady);
+            } 
+          };
+          
+          var somethingWentWrong = function() {
+            alert("Something went wrong. Please try " + id + " again.");
+          };
+          
+          var disableSubmit = function(e) {
+            $("#submit").attr("disabled", true);
+          };
+          
+          var enableSubmit = function(e) {
+            $("#submit").attr("disabled", false);
+          };
+          
+          var reader = new FileReader();
+          reader.onloadstart = disableSubmit;
+          reader.onprogress = printEventType;
+          reader.onload = setHiddenField;
+          reader.onabort = somethingWentWrong;
+          reader.onerror = somethingWentWrong;
+          if(id !== "jpgfileget") {
+            reader.onloadend = enableSubmit;
+          }
+          
+          if(id === "csvfileget") {
+            reader.readAsText(input.files[0]);
+          } else {
+            reader.readAsDataURL(input.files[0]);
+          }
+        };
+          
+      </script>    
+      
+      <input type="submit" id="submit" name="submit" value="Upload">
+    </form>
+  
+  </div>
 
 </body>
 </html>
