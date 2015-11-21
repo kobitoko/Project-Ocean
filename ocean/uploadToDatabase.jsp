@@ -43,6 +43,7 @@
       //printing text data.
       //System.err.println("image Base64Data: " + imageBase64Input + "\n\n audio Base64Data: " + audioBase64Input + "\n\n csv textData: " + csvFileContent + "\n\n");
       
+      
       // later for downloading stuff http://stackoverflow.com/questions/7115379/how-i-do-get-an-image-blob-from-jsp-to-javascript
       // and 
       //ByteArrayOutputStream byteArrayBitmapStream = new ByteArrayOutputStream();
@@ -55,6 +56,7 @@
       // or need to decode the base64 to bytestream? idk??
       // for download, put the thing in the url to open file e.g. in the url bar data:audio/wav;base64,UklGRu... 
       // to download can use http://stackoverflow.com/questions/10473932/browser-html-force-download-of-image-from-src-dataimage-jpegbase64
+      
       
       // taken from http://stackoverflow.com/questions/782178/how-do-i-convert-a-string-to-an-inputstream-in-java
       byte[] imageByteArr = imageBase64Input.getBytes("UTF-8");
@@ -98,54 +100,44 @@
         mCon = DriverManager.getConnection(mUrl, mUser, mPass);
         mCon.setAutoCommit(Boolean.FALSE);
         
-        //------------> FIND ERROR  invalid host/bind variable name!!!!!!
-        
-        // some wav tutorial/reference http://www.ibmpressbooks.com/articles/article.asp?p=1146304&seqNum=3
-
-        // csv https://en.wikipedia.org/wiki/Comma-separated_values
-        
         // for getting 0 number when max value of id in table is nothing (table empty) http://stackoverflow.com/questions/15475059/how-to-treat-max-of-empty-table-as-0-instead-of-null
-        String queryMaxIdValues = "select coalesce(MAX(i.image_id), 0), coalesce(MAX(a.recording_id), 0), coalesce(MAX(d.id), 0) from images i, audio_recordings a, scalar_data d";        
-        
+        String queryMaxIdValues = "select coalesce(MAX(i.image_id), 0), coalesce(MAX(a.recording_id), 0), coalesce(MAX(d.id), 0) from images i, audio_recordings a, scalar_data d";
         maxIdValues = mCon.createStatement();
         maxIdVals = maxIdValues.executeQuery(queryMaxIdValues);
         maxIdVals.next();
         Integer maxImageId = Integer.valueOf(maxIdVals.getInt(1));
         Integer maxAudioId = Integer.valueOf(maxIdVals.getInt(2));
         Integer maxScalarId = Integer.valueOf(maxIdVals.getInt(3));
-        
-        jpgData = mCon.prepareStatement("insert into IMAGES (image_id, sensor_id, date_created, description, thumbnail, recoreded_data) values (?,?,TO_DATE(? ?,'DD/MM/YYYY HH:MI:SS'),?,?,?)");
+        // to_date query format masks taken from http://www.dba-oracle.com/f_to_date.htm
+        jpgData = mCon.prepareStatement("insert into IMAGES (image_id, sensor_id, date_created, description, thumbnail, recoreded_data) values (?,?,TO_DATE(?,'DD/MM/YYYY HH24:MI:SS'),?,?,?)");
         jpgData.setInt(1, maxImageId+1);
         jpgData.setInt(2, imageSensorId);
-        jpgData.setString(3, imageDateCreated);
-        jpgData.setString(4, imageTimeCreated);
-        jpgData.setString(5, imageDescription);              
-        // then do setBlob(int parameterIndex, InputStream inputStream, long length);
-        jpgData.setBlob(6, jpgThumbStream, imageThumbByteArrSize);
-        jpgData.setBlob(7, jpgStream, imageByteArrSize);
+        jpgData.setString(3, imageDateCreated + " " + imageTimeCreated);
+        jpgData.setString(4, imageDescription);
+        // set blob taken from http://www.ibmpressbooks.com/articles/article.asp?p=1146304&seqNum=3
+        jpgData.setBlob(5, jpgThumbStream, imageThumbByteArrSize);
+        jpgData.setBlob(6, jpgStream, imageByteArrSize);
         jpgData.executeUpdate();
         
-        wavData = mCon.prepareStatement("insert into audio_recordings (recording_id, sensor_id, date_created, length, description, recorded_data) values (?,?,TO_DATE(? ?,'DD/MM/YYYY HH:MI:SS'),?,?,?)");
+        wavData = mCon.prepareStatement("insert into audio_recordings (recording_id, sensor_id, date_created, length, description, recorded_data) values (?,?,TO_DATE(?,'DD/MM/YYYY HH24:MI:SS'),?,?,?)");
         wavData.setInt(1, maxAudioId+1);
         wavData.setInt(2, audioSensorId);
-        wavData.setString(3, audioDateCreated);
-        wavData.setString(4, audioTimeCreated);
-        wavData.setInt(5, audioLength);
-        wavData.setString(6, audioDescription);              
-        wavData.setBlob(7, wavStream, audioByteArrSize);
+        wavData.setString(3, audioDateCreated + " " + audioTimeCreated);
+        wavData.setInt(4, audioLength);
+        wavData.setString(5, audioDescription);              
+        wavData.setBlob(6, wavStream, audioByteArrSize);
         wavData.executeUpdate();
         
+        // csv https://en.wikipedia.org/wiki/Comma-separated_values
         //to split strings using patterns from https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html#sum
         String regexDelimiters = "[,(\n$)]";
         String[] datas = csvFileContent.split(regexDelimiters);
         
         //System.err.print("len"+datas.length/3);
-        
         for(int i=0; i<datas.length; i+=3) {
           //out.println(datas[i]+"_"+datas[i+1]+"_._"+datas[i+2]+"<br>");
-          
           maxScalarId +=1;
-          csvData = mCon.prepareStatement("insert into scalar_data (id, sensor_id, date_created, value) values (?,?,TO_DATE(?,'DD/MM/YYYY HH:MI:SS'),?)");
+          csvData = mCon.prepareStatement("insert into scalar_data (id, sensor_id, date_created, value) values (?,?,TO_DATE(?,'DD/MM/YYYY HH24:MI:SS'),?)");
           csvData.setInt(1, maxScalarId);
           csvData.setInt(2, Integer.parseInt(datas[i]));
           csvData.setString(3, datas[i+1]);
