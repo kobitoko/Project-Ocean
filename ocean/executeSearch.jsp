@@ -208,13 +208,13 @@
 	   	 String trclose = "</tr>";
 	     while (rsetS.next()) {
 		
-		for (int i = 1; i <= Count; i++){
+		
 			Integer did = new Integer(rsetS.getInt(1));
 			Integer sid = new Integer(rsetS.getInt(2));
 			java.sql.Date date = rsetS.getDate(3);
 			String val = rsetS.getString(4);
 			out.println( tropen + open + did + close + open + sid + close + open + val + close + open + date +  close + trclose);
-		}
+		
 	}	
 	
              ResultSet rsetA = stmnt.executeQuery(queryAudio);
@@ -250,14 +250,14 @@
 
 <%
 	     while (rsetA.next()) {
-		for (int i = 1; i <= Count; i++){
+		
 			Integer did = new Integer(rsetA.getInt(1));
 			Integer sid = new Integer(rsetA.getInt(2));
 			java.sql.Date date = rsetA.getDate(3);
 			Integer len = new Integer(rsetA.getInt(4));
 			String val = rsetA.getString(5);
 			out.println( tropen + open + did + close + open + sid + close + open + len + close + open + val + close + open + close + open + date +  close + trclose);
-		}
+	
 	}
              ResultSet rsetI = stmnt.executeQuery(queryImage);
 
@@ -287,13 +287,13 @@
 
 <%
 	     while (rsetI.next()) {
-		for (int i = 1; i <= Count; i++){
+		
 			Integer did = new Integer(rsetI.getInt(1));
 			Integer sid = new Integer(rsetI.getInt(2));
 			java.sql.Date date = rsetI.getDate(3);
 			String val = rsetI.getString(4);
-			out.println( tropen + open + did + close + open + sid + close  + open + val + close + open + close + open + date +  close + trclose);
-		}
+		out.println( tropen + open + did + close + open + sid + close  + open + val + close + open + close + open + date +  close + trclose);
+		
 	}	 
             
 
