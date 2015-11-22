@@ -47,7 +47,9 @@ cookies = request.getCookies();
 		if(cookie.getName().equals(compDY)){grabDY = Integer.parseInt(cookie.getValue());}
 }
 }
+
 	String createOLAPview = "CREATE OR REPLACE VIEW OLAP_DATA AS SELECT s.sensor_id, EXTRACT (YEAR from s.date_created) AS Year, to_char(s.date_created, 'Q') AS Quarter, EXTRACT (MONTH FROM s.date_created) AS Month, (CEIL((to_char(s.date_created, 'DD') - to_char(s.date_created, 'D'))/7)+1) AS Week, to_char(s.date_created, 'D') AS Day, AVG(s.value) AS Average, MIN(s.value) AS Minimum, MAX(s.value) AS Maximum FROM scalar_data s WHERE s.sensor_id IN (SELECT sensor_id FROM subscriptions WHERE person_id = '" + pid + "') AND s.sensor_id = '" + sid + "' GROUP BY s.sensor_id, ROLLUP(EXTRACT (YEAR from s.date_created), to_char(s.date_created, 'Q'), EXTRACT (MONTH FROM s.date_created), (CEIL((to_char(s.date_created, 'DD') - to_char(s.date_created, 'D'))/7)+1),to_char(s.date_created, 'D'))";
+
 	String queryYears = "Select distinct year from olap_data where YEAR IS NOT NULL ORDER BY year ";
 	String queryAll = "select YEAR, AVERAGE, MINIMUM, MAXIMUM from OLAP_DATA where QUARTER IS NULL ";
 	String queryYear = "select QUARTER, AVERAGE, MINIMUM, MAXIMUM from OLAP_DATA where YEAR = " + grabYR + " AND MONTH IS NULL AND WEEK IS NULL";

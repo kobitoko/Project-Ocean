@@ -1,8 +1,7 @@
 
 // JavaScript Document
-function removeUser(){
-	
-}
+
+//When a button is pressed that calls this, it will read the checked value and save it to cookies
 function modifyUser(){
     
     var usr = document.querySelector('input[name="userToMod"]:checked').value;
@@ -12,6 +11,7 @@ function modifyUser(){
 window.setTimeout('window.location="modiUser.jsp"; ',50);
 }
 
+//When a button is pressed that calls this, it will read the checked value and save it to cookies
 function assocUser(){
     
     var usr = document.querySelector('input[name="userToAssoc"]:checked').value;
