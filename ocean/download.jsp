@@ -56,7 +56,7 @@
 
         String dataUrl = "";
         String closeButton = "<button onClick=\"closing()\">Close.</button>  <script> function closing() {window.self.close();}</script>";
-        String somethingWrong = "<B>Sorry something went wrong, could not retrieve the image. </B>" + closeButton;
+        String somethingWrong = "<B>Sorry something went wrong, could not retrieve the file. </B>" + closeButton;
         
         if(downloadType.compareTo("image") == 0) {
           getBlob = mCon.prepareStatement("select recoreded_data from images where image_id=?");
