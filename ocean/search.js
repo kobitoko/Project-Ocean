@@ -1,3 +1,4 @@
+//if a type is present, make the date fields required
 function verifyTime(){
 	if(document.getElementById("stype").value.length == 1){
 		document.getElementById("dateSince").required = true;

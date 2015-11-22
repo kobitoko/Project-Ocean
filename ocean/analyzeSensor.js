@@ -88,7 +88,7 @@ function cascadeLocks(){
 	}
 	
 }
-//converts nubmer to date string
+//converts number to date string
 function dtoDate(code){
  	if(code == 1){return "Sunday";}
 	if(code == 2){return "Monday";}
