@@ -76,7 +76,7 @@ try {
           stmnt = mCon.createStatement();
           
           ResultSet rset = stmnt.executeQuery(queryMySensors);
-          
+          //displays subscribed sensors
           while(rset.next()) {
             Integer sID = new Integer(rset.getInt(1));
             String local = rset.getString(2);
@@ -91,7 +91,7 @@ try {
 	    String trclose = "</tr>";	
 			
 			
-		
+	
 	    String buttonrm = "<input type='radio' name='subToDelete' value='" + sID + "' checked>";
 			
             out.println( tropen + open + sID + close + open + local + close + open + type + close + open + desc +  close + open + buttonrm + close + trclose);
@@ -150,7 +150,7 @@ try {
           stmnt = mCon.createStatement();
           
           ResultSet rset = stmnt.executeQuery(querySensors);
-          
+          //displays all sesnors you are not subscribed to
           while(rset.next()) {
             Integer sID = new Integer(rset.getInt(1));
             String local = rset.getString(2);
