@@ -80,7 +80,7 @@ Boolean debug = Boolean.TRUE;
 			
 			
 		
-	    String buttonrm = "<input type='radio' name='sensorToDelete' value='" + sID + "'>";
+	    String buttonrm = "<input type='radio' name='sensorToDelete' value='" + sID + "' checked>";
 			
             out.println( tropen + open + sID + close + open + local + close + open + type + close + open + desc +  close + open + buttonrm + close + trclose);
             

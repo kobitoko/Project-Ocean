@@ -92,7 +92,7 @@ try {
 			
 			
 		
-	    String buttonrm = "<input type='radio' name='subToDelete' value='" + sID + "'>";
+	    String buttonrm = "<input type='radio' name='subToDelete' value='" + sID + "' checked>";
 			
             out.println( tropen + open + sID + close + open + local + close + open + type + close + open + desc +  close + open + buttonrm + close + trclose);
             
@@ -166,7 +166,7 @@ try {
 			
 			
 		
-	    String buttonrm = "<input type='radio' name='subToAdd' value='" + sID + "'>";
+	    String buttonrm = "<input type='radio' name='subToAdd' value='" + sID + "' checked>";
 			
             out.println( tropen + open + sID + close + open + local + close + open + type + close + open + desc +  close + open + buttonrm + close + trclose);
             

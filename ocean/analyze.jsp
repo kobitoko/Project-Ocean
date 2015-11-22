@@ -93,7 +93,7 @@ try {
 			
 			
 		
-	    String buttonrm = "<input type='radio' name='subToAnal' value='" + sID + "'>";
+	    String buttonrm = "<input type='radio' name='subToAnal' value='" + sID + "' checked>";
 			
             out.println( tropen + open + sID + close + open + local + close + open + type + close + open + desc +  close + open + buttonrm + close + trclose);
             

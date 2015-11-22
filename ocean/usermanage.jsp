@@ -128,12 +128,12 @@
 	    String tropen = "<tr>";
 	    String trclose = "</tr>";	
 			
-			String buttonmod = "<input type='radio' id='userToMod' name='userToMod' value='" + usr + ";;" + pid.toString() + ";;" + grole +  "'>";
+			String buttonmod = "<input type='radio' id='userToMod' name='userToMod' value='" + usr + ";;" + pid.toString() + ";;" + grole +  "' checked>";
 			
 		
-			String buttonrm = "<input type='radio' name='userToDelete' value='" + usr + "'>";
+			String buttonrm = "<input type='radio' name='userToDelete' value='" + usr + "' checked>";
 
-			String buttonassoc = "<input type='radio' name='userToAssoc' value='" + pid.toString() + "'>";
+			String buttonassoc = "<input type='radio' name='userToAssoc' value='" + pid.toString() + "' checked>";
 			
             out.println( tropen + open + usr + close + open + pid.toString() + close + open + grole + close + open + buttonmod +  close + open + buttonassoc + close + open + buttonrm + close + trclose);
             
