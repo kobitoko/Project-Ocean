@@ -110,7 +110,7 @@ if(rset.next()){
       <tr><td><p style="display:inline">Email: </p></td><td><input type="text" name="email" maxlength="128" value="<%= email%>" required placeholder="Email"><br></td></tr>
       <tr><td><p style="display:inline">Phone: </p></td><td><input type="text" name="phone" maxlength="10" value="<%= phone%>" required placeholder="Phone"><br></td></tr>
 	 <tr><td><p style="display:inline">Person ID: </p></td><td><input id="modpid" type="number" value="<%= pid%>" name="pid" min="0" maxlength="38" required placeholder="Person ID"><br></td></tr>
-      <tr><td><p style="display:inline">Password: </p></td><td><input type="password" name="pass" min="0" maxlength="32" required placeholder="New Password"><br></td></tr>
+      <tr><td><p style="display:inline">Password: </p></td><td><input type="password" name="pass" min="0" maxlength="32" placeholder="New Password"><br></td></tr>
 <tr><td><p style="display:inline">New Role: </p></td><td><input id="newrole" type="text" value="<%= role%>" name="newrole" min="0" maxlength="1" required placeholder="Person ID" disabled><br></td></tr>
       </table>
       User's role is:<br>
