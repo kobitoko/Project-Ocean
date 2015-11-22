@@ -68,5 +68,48 @@ insert into scalar_data values(2280, 22, to_date('2053-09-20','yyyy-mm-dd'), 25)
 insert into scalar_data values(2285, 22, to_date('2054-09-20','yyyy-mm-dd'), 10);
 insert into scalar_data values(2290, 22, to_date('2055-11-01','yyyy-mm-dd'), 05);
 insert into scalar_data values(2295, 22, to_date('2056-09-20','yyyy-mm-dd'), 35);
+
+
+/*first week of december*/
+
+insert into scalar_data values(2013, 21, to_date('2015-12-01', 'yyyy-mm-dd'), 13);
+insert into scalar_data values(2014, 21, to_date('2015-12-02', 'yyyy-mm-dd'), 14);
+insert into scalar_data values(2015, 21, to_date('2015-12-03', 'yyyy-mm-dd'), 15);
+insert into scalar_data values(2016, 21, to_date('2015-12-04', 'yyyy-mm-dd'), 16);
+insert into scalar_data values(2017, 21, to_date('2015-12-05', 'yyyy-mm-dd'), 17);
+
+
+/*last week of december*/
+insert into scalar_data values(2051, 21, to_date('2015-12-27', 'yyyy-mm-dd'), 51);
+insert into scalar_data values(2052, 21, to_date('2015-12-28', 'yyyy-mm-dd'), 52);
+insert into scalar_data values(2053, 21, to_date('2015-12-29', 'yyyy-mm-dd'), 53);
+insert into scalar_data values(2054, 21, to_date('2015-12-30', 'yyyy-mm-dd'), 54);
+insert into scalar_data values(2055, 21, to_date('2015-12-31', 'yyyy-mm-dd'), 55);
+
+/*first week of january*/
+insert into scalar_data values(3016, 21, to_date('2016-01-01', 'yyyy-mm-dd'), 16);
+insert into scalar_data values(3017, 21, to_date('2016-01-02', 'yyyy-mm-dd'), 17);
+
+/*second week*/
+insert into scalar_data values(3021, 21, to_date('2016-01-03', 'yyyy-mm-dd'), 21);
+insert into scalar_data values(3122, 21, to_date('2016-01-04', 'yyyy-mm-dd'), 22);
+insert into scalar_data values(3023, 21, to_date('2016-01-05', 'yyyy-mm-dd'), 23);
+insert into scalar_data values(3031, 21, to_date('2016-01-10', 'yyyy-mm-dd'), 31);
+
+/*13th of several months*/
+insert into scalar_data values(4027, 21, to_date('2016-02-13', 'yyyy-mm-dd'), 27);
+insert into scalar_data values(4042, 21, to_date('2016-03-13', 'yyyy-mm-dd'), 42);
+insert into scalar_data values(4034, 21, to_date('2016-04-13', 'yyyy-mm-dd'), 34);
+insert into scalar_data values(4026, 21, to_date('2016-05-13', 'yyyy-mm-dd'), 26);
+
+/*last week of january... is only 1 day, checking a bit of the second last week*/
+insert into scalar_data values(5056, 21, to_date('2016-01-29', 'yyyy-mm-dd'), 56);
+insert into scalar_data values(5057, 21, to_date('2016-01-30', 'yyyy-mm-dd'), 57);
+insert into scalar_data values(5061, 21, to_date('2016-01-31', 'yyyy-mm-dd'), 61);
+
+/*first week of feb.*/
+insert into scalar_data values(5112, 21, to_date('2016-02-01', 'yyyy-mm-dd'), 12);
+insert into scalar_data values(5113, 21, to_date('2016-02-02', 'yyyy-mm-dd'), 13);
+insert into scalar_data values(5114, 21, to_date('2016-02-03', 'yyyy-mm-dd'), 14);
 commit;
 
