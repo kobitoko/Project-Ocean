@@ -41,7 +41,7 @@ cookies = request.getCookies();
    
 	 <tr><td><p style="display:inline">Person ID: </p></td><td><input id="modpid" type="number" value="<%= pid%>" name="pid" min="0" maxlength="38" required placeholder="Password ID" disabled><br></td></tr>
 <tr><td><p style="display:inline">New Role: </p></td><td><input id="role" type="text" value="s" name="role" min="1" maxlength="1" required placeholder="Role" disabled><br></td></tr>
-      <tr><td><p style="display:inline">New Password: </p></td><td><input type="password" name="pass" min="0" maxlength="32" placeholder="New Password"><br></td></tr>
+      <tr><td><p style="display:inline">Password: </p></td><td><input type="password" name="pass" min="0" maxlength="32" required placeholder="New Password"><br></td></tr>
 
       </table>
       User's role is:<br>

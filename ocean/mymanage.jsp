@@ -90,7 +90,7 @@ if(rset.next()){
       <tr><td><p style="display:inline">Address: </p></td><td><input type="text" name="address" maxlength="128" value=<%= add%> required placeholder="Address"><br></td></tr>
       <tr><td><p style="display:inline">Email: </p></td><td><input type="text" name="email" maxlength="128" value=<%= email%> required placeholder="Email"><br></td></tr>
       <tr><td><p style="display:inline">Phone: </p></td><td><input type="text" name="phone" maxlength="10" value=<%= phone%> required placeholder="Phone"><br></td></tr>
-      <tr><td><p style="display:inline">Change Password: </p></td><td><input type="password" name="pass" min="0" maxlength="32" required placeholder="New Password"><br></td></tr>
+      <tr><td><p style="display:inline">Change Password: </p></td><td><input type="password" name="pass" min="0" maxlength="32" placeholder="New Password"><br></td></tr>
       </table>  
       <input type="submit" name="submit" value="Update">
     </form>
