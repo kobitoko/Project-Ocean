@@ -1,7 +1,7 @@
 
 
 
-
+//called from a button. This will grab detect which row is wanted and create the cookies
 function olapSensor(){
     
     var usr = document.querySelector('input[name="subToAnal"]:checked').value;
@@ -11,6 +11,7 @@ writeOLAPcookies();
 window.setTimeout('window.location="analyzeSensor.jsp"; ',50);
 }
 
+//creates cookies from current olap depth
 function updateOLAPcookies(){
 document.cookie = 'olapYR="' + document.getElementById("year").value + '";';
 document.cookie = 'olapQU="' + document.getElementById("quarter").value + '";';;
@@ -20,6 +21,7 @@ document.cookie = 'olapDY="' + document.getElementById("day").value + '";';;
 window.setTimeout('window.location="analyzeSensor.jsp"; ',50);
 }
 
+//initialize olap cookies
 function writeOLAPcookies(){
 document.cookie = 'olapYR="0"';
 document.cookie = 'olapQU="0"';
@@ -28,6 +30,7 @@ document.cookie = 'olapWK="0"';
 document.cookie = 'olapDY="0"';
 }
 
+//collapses levels when the higher level is absent
 function updateRollup(){
  	if(document.getElementById("year").value == 0){
 		document.getElementById("emptyQU").selected = 'selected';
@@ -45,6 +48,7 @@ function updateRollup(){
 
 }
 
+//locks months that are not in the selected quarter
 function cascadeLocks(){
 	if(document.getElementById("quarter").value != 1){
 		document.getElementById("mo1").disabled = "disabled";
@@ -84,7 +88,7 @@ function cascadeLocks(){
 	}
 	
 }
-
+//converts number to date string
 function dtoDate(code){
  	if(code == 1){return "Sunday";}
 	if(code == 2){return "Monday";}

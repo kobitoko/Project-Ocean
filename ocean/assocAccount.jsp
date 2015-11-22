@@ -35,6 +35,7 @@
       String user = request.getParameter("uid");
       String pw = request.getParameter("pass");
       String role = request.getParameter("role");
+	//pid passed from other pages.
       Integer pid = Integer.parseInt(request.getParameter("pid"));
       String phone = request.getParameter("phone");
       String email = request.getParameter("email");
