@@ -34,7 +34,7 @@ Boolean debug = Boolean.TRUE;
       
       String mUser = "satyabra";
       String mPass = "adasfa42";
-      Integer maxpid = 0;
+      Integer maxsid = 0;
       Connection mCon;
       Statement stmnt;
       PreparedStatement pstmnt;
@@ -54,6 +54,14 @@ Boolean debug = Boolean.TRUE;
       try {
           mCon = DriverManager.getConnection(mUrl, mUser, mPass);
           stmnt = mCon.createStatement();
+
+		String getMaxSID = "select MAX(SENSOR_ID) from SENSORS";
+		
+          
+         	 ResultSet rset2 = stmnt.executeQuery(getMaxSID);
+		while(rset2.next()) {
+		  maxsid = new Integer(rset2.getInt(1)) + 1;
+		}
           
           ResultSet rset = stmnt.executeQuery(querySensors);
           
@@ -105,7 +113,7 @@ Boolean debug = Boolean.TRUE;
     <form action="createSensor.jsp" id="sensform" method="post">
       <b>Create new sensor:</b><br>
       <!-- using placeholder assumes HTML5 support. Just use emtpy value or nothing if we cant use html5.-->
-      <input type="text" name="sid" maxlength="38" required placeholder="Sensor ID"><br>
+      <input type="text" name="sid" maxlength="38" value="<%= maxsid%>" required placeholder="Sensor ID"><br>
       <input type="text" name="local" maxlength="64" required placeholder="Location"><br>
      	<input type="text" name="stype" maxlength="1" required placeholder="Type"><br>
      	<input type="text" maxlength="128" name="sdesc" required placeholder="Description"></textarea><br>
