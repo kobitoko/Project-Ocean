@@ -1,5 +1,5 @@
 <!--input-->
-<%@ page import="java.util.*, java.sql.*"%>
+<%@ page import="java.util.*, java.sql.*, java.text.*"%>
 <html>
 <head>
 <meta charset="utf-8">
@@ -187,7 +187,7 @@
 	     int Count = rsetMetaDataS.getColumnCount();
 
 %>
-<p>SCALAR RESULTS</p>
+<p><u>SCALAR RESULTS</u></p>
 <table style="border-style:inset";>
 
 
@@ -205,33 +205,56 @@
 
 	</tr>
 <%
+    
+    String csvAppend = "";
+    
 	String open = "<td>";
            	 String close = "</td>";
 	    	 String tropen = "<tr>";
 	   	 String trclose = "</tr>";
-	     while (rsetS.next()) {
-		
-		
-			Integer did = new Integer(rsetS.getInt(1));
-			Integer sid = new Integer(rsetS.getInt(2));
-			java.sql.Date date = rsetS.getDate(3);
-			String val = rsetS.getString(4);
-			out.println( tropen + open + did + close + open + sid + close + open + val + close + open + date +  close + trclose);
-		
-	}	
-	
-             ResultSet rsetA = stmnt.executeQuery(queryAudio);
-	
-	    
+    while (rsetS.next()) {
+
+
+        Integer did = new Integer(rsetS.getInt(1));
+        Integer sid = new Integer(rsetS.getInt(2));
+        java.sql.Date date = rsetS.getDate(3);
+        String val = rsetS.getString(4);
+        out.println( tropen + open + did + close + open + sid + close + open + val + close + open + date +  close + trclose);
+        
+        Timestamp ts = rsetS.getTimestamp(3);
+        java.util.Date dateTime = null;
+        String dateTimeStr = "";
+        if(ts != null)
+            dateTime = new java.util.Date(ts.getTime());
+        if(dateTime != null) {
+            // taken from http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            StringBuffer sb = new StringBuffer();
+            sdf.format(dateTime, sb,new FieldPosition(0));
+            dateTimeStr = sb.toString();
+            dateTimeStr = dateTimeStr.substring(0, 11) + "&nbsp;" + dateTimeStr.substring(11);
+        }
+            
+        csvAppend = csvAppend.concat( sid.toString() +"%2C"+ dateTimeStr +"%2C"+ val +"%0A");
+	}
+
+    out.println("</table>");
+    
+	// writing into a csv file taken from http://stackoverflow.com/questions/3665115/create-a-file-in-memory-for-user-to-download-not-through-server
+    String downloadLink = "<br><a href=\"data:application/csv;charset=utf-8," + csvAppend + "\" download=\"scalar-data_batch("+dateAfter+"_until_"+dateBefore+").csv\" >Click here to <b>download</b></a> this Scalar Data batch. <br>";
+    out.println( downloadLink);
+         
+         
+         ResultSet rsetA = stmnt.executeQuery(queryAudio);
 	
 	     ResultSetMetaData rsetMetaDataA = rsetA.getMetaData();
 	     Count = rsetMetaDataA.getColumnCount();
 	     String value;
-	    
-
+	
 %>
-</table>
-<p>AUDIO RESULTS</p>
+
+<br>
+<p><u>AUDIO RESULTS</u></p>
 <table style="border-style:inset";>
 
 
@@ -272,7 +295,8 @@
 
 %>
 </table>
-<p>IMAGES RESULTS</p>
+<br>
+<p><u>IMAGES RESULTS</u></p>
 <table style="border-style:inset";>
 
 

@@ -2,7 +2,7 @@
 <%@ page import="java.util.*, java.sql.*, java.io.*, java.text.* "%>
 <html>
   <head></head>
-  <body>
+  <body style="background:lightblue;">
     <%
     
       Boolean debug = Boolean.TRUE;
@@ -148,6 +148,9 @@
           out.println("Audio Data successfully submitted!<br>");
         if(!csvFileContent.isEmpty())
           out.println("Batch Scalar Data successfully submitted!<br>");
+        out.println("You will be redirected in 3 seconds.");
+        String redirectCode = "<script language=\"javascript\" type=\"text/javascript\">window.setTimeout(\'window.location=\"upload.html\"; \',3000);</script>";
+        out.println(redirectCode);
         
       } catch(SQLException ex) {
         
