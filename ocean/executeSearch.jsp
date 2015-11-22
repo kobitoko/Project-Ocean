@@ -18,11 +18,11 @@
 //DONE on my end. Need to edit html side:  dd/mm/yyyy. 
 //DONE: keyword should be exact match.
 //TODO: Ask TA if the user needs to be able to search by hour,min,second. If so, implement that.
-//TODO: Apparently Sensor type must have a time period.
-//TODO: Select blob columns.
+//DONE?: Apparently Sensor type must have a time period.
+//DONE: Select blob columns.
 //DONE: "If the keyword matches the sensor description, show all data from this sensor. 
-//If not (in case of audio files and images), try if it matches the image or audio description 
-//and show those records which match."
+//If not (in case of audio files and images), try if it matches the image or audio description.
+//and show those records which match." I can't simply search sensor because sensor doesn't have a date created. Therefore, if I use a "or" statement there, time doesn't matter.
 //DONE in a sense. Need to handle it website side as well: Error catching. A common offender will be if they input date off format.
 //TODO: Testing Website side.
         Boolean debug = Boolean.TRUE;
@@ -63,12 +63,13 @@
 */	
 	//Version 2. Goes through subscriptions itself.
 	//Had to insert brackets before the WHERE, and around query sensor.
-	String queryAudio = "SELECT Distinct a.recording_id, a.sensor_id, a.date_created, a.length, a.description FROM sensors sen, audio_recordings a WHERE (a.sensor_id in (SELECT sensor_id FROM subscriptions WHERE person_id = "+pid+")";
-	String queryImage = "SELECT Distinct i.image_id, i.sensor_id, i.date_created, i.description FROM sensors sen, images i WHERE (i.sensor_id in (SELECT sensor_id FROM subscriptions WHERE person_id = "+pid+")";
-	String queryScalar = "SELECT Distinct s.id, s.sensor_id, s.date_created, s.value FROM sensors sen, scalar_data s WHERE (s.sensor_id in (SELECT sensor_id FROM subscriptions WHERE person_id = "+pid+")";
+	//Had to remove these brackets.
+	String queryAudio = "SELECT Distinct a.recording_id, a.sensor_id, a.date_created, a.length, a.description FROM sensors sen, audio_recordings a WHERE a.sensor_id in (SELECT sensor_id FROM subscriptions WHERE person_id = "+pid+")";
+	String queryImage = "SELECT Distinct i.image_id, i.sensor_id, i.date_created, i.description FROM sensors sen, images i WHERE i.sensor_id in (SELECT sensor_id FROM subscriptions WHERE person_id = "+pid+")";
+	String queryScalar = "SELECT Distinct s.id, s.sensor_id, s.date_created, s.value FROM sensors sen, scalar_data s WHERE s.sensor_id in (SELECT sensor_id FROM subscriptions WHERE person_id = "+pid+")";
 
 	//Check if the associated sensor is found as well. 
-	String querySensor = "(SELECT Distinct sen.sensor_id FROM sensors sen WHERE sen.sensor_ID IN (SELECT sensor_id FROM subscriptions WHERE person_id = "+pid+")";
+	//String querySensor = "(SELECT Distinct sen.sensor_id FROM sensors sen WHERE sen.sensor_ID IN (SELECT sensor_id FROM subscriptions WHERE person_id = "+pid+")";
 
  
 
@@ -81,7 +82,7 @@
 	   queryImage = queryImage + " AND sen.sensor_id = i.sensor_id AND sen.sensor_type = '"+ sensorType+"'";
 	   queryScalar = queryScalar + " AND sen.sensor_id = s.sensor_id AND sen.sensor_type = '"+ sensorType+"'";
 
-	   querySensor = querySensor + " AND sen.sensor_type = '"+sensorType+"'";
+	   //querySensor = querySensor + " AND sen.sensor_type = '"+sensorType+"'";
 
 	}
 	if (location != null && !location.isEmpty()) {
@@ -91,7 +92,7 @@
 	   queryImage = queryImage + " AND sen.sensor_id = i.sensor_id AND sen.location = '"+ location+"'";
 	   queryScalar = queryScalar + " AND sen.sensor_id = s.sensor_id AND sen.location = '"+ location+"'";
 
-	   querySensor = querySensor + " And sen.location = '"+ location+"'";
+	   //querySensor = querySensor + " And sen.location = '"+ location+"'";
 
 	}
     
@@ -100,10 +101,10 @@
 	    //keywords = "AND a.description LIKE '%"+keywords+"%'";
  	   //queryAudio = queryAudio + " AND a.description LIKE '%"+keywords+"%'";
  	   //queryImage = queryImage + " AND i.description LIKE '%"+keywords+"%'";
-	   queryAudio = queryAudio + " AND a.description = '"+keywords+"'";
- 	   queryImage = queryImage + " AND i.description = '"+keywords+"'";
-
-	   querySensor = querySensor + " AND sen.description = '"+keywords+"'";
+	   queryAudio = queryAudio + " AND sen.sensor_id = a.sensor_id AND (a.description = '"+keywords+"' OR sen.description = '"+ keywords+"')";
+ 	   queryImage = queryImage + " AND sen.sensor_id = i.sensor_id AND (i.description = '"+keywords+"' OR sen.description = '"+ keywords+"')";
+ 	   queryScalar = queryScalar + " AND sen.sensor_id = s.sensor_id AND sen.description = '"+ keywords+"'";
+	   //querySensor = querySensor + " AND sen.description = '"+keywords+"'";
 
 
 
@@ -111,9 +112,9 @@
 	if (dateBefore != null && !dateBefore.isEmpty()) {
 		%>contains data recorded before <%= dateBefore%>', <%
 		//dateBefore = "AND a.date_created <= TO_DATE("+dateBefore+",'mm/dd/yyyy')";
-	   queryAudio = queryAudio + " AND a.date_created <= TO_DATE('"+dateBefore+"','dd/mm/yyyy')";
-	   queryImage = queryImage + " AND i.date_created <= TO_DATE('"+dateBefore+"','dd/mm/yyyy')";
-	   queryScalar = queryScalar + " AND s.date_created <= TO_DATE('"+dateBefore+"','dd/mm/yyyy')";
+	   queryAudio = queryAudio + " AND a.date_created <= TO_DATE('"+dateBefore+"','dd/mm/yyyy HH24:MI:SS')";
+	   queryImage = queryImage + " AND i.date_created <= TO_DATE('"+dateBefore+"','dd/mm/yyyy HH24:MI:SS')";
+	   queryScalar = queryScalar + " AND s.date_created <= TO_DATE('"+dateBefore+"','dd/mm/yyyy HH24:MI:SS')";
 
 	   //querySensor = querySensor + " AND sen.date_created <= TO_DATE('"+dateBefore+"','dd/mm/yyyy')";
 
@@ -122,9 +123,9 @@
 	if (dateAfter != null && !dateAfter.isEmpty()) {
 		%>contains data recorded after <%= dateAfter%>', <%
 		//dateAfter = "AND a.date_created >= TO_DATE("+dateAfter+",'mm/dd/yyyy')";
-	   queryAudio = queryAudio + " AND a.date_created >= TO_DATE('"+dateAfter+"','dd/mm/yyyy')";
-	   queryImage = queryImage + " AND i.date_created >= TO_DATE('"+dateAfter+"','dd/mm/yyyy')";
-	   queryScalar = queryScalar + " AND s.date_created >= TO_DATE('"+dateAfter+"','dd/mm/yyyy')";
+	   queryAudio = queryAudio + " AND a.date_created >= TO_DATE('"+dateAfter+"','dd/mm/yyyy HH24:MI:SS')";
+	   queryImage = queryImage + " AND i.date_created >= TO_DATE('"+dateAfter+"','dd/mm/yyyy HH24:MI:SS')";
+	   queryScalar = queryScalar + " AND s.date_created >= TO_DATE('"+dateAfter+"','dd/mm/yyyy HH24:MI:SS')";
 
 	   //querySensor = querySensor + " AND sen.date_created >= TO_DATE('"+dateAfter+"','dd/mm/yyyy')";
 
@@ -144,9 +145,11 @@
 
 
 	//Now, check to see if even if the individual data doesn't match the search, does its sensor?
+/*
 	queryAudio = queryAudio + ") OR (a.sensor_id IN " +querySensor+"))";
 	queryImage = queryImage + ") OR (i.sensor_id IN " +querySensor+"))";
 	queryScalar = queryScalar + ") OR (s.sensor_id IN " +querySensor+"))";
+*/
 
 	
       String mUrl = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
