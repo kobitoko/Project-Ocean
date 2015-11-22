@@ -10,7 +10,7 @@ insert into users values ('Crake', '883442F8094BF7BB387BC98199D68053', 's','7777
 insert into salts values ('Crake','220B5EBE80237C18B55320FB2F376B08');
 
 insert into users values ('Harmony', '8F4A3E83A47165DF73B2E043AE7C849D', 's', '4251', to_date('2042-12-27', 'yyyy-mm-dd'));
-insert into salts values ('Crake','75F926BA841E3408AAF26DD289C6FCB6');
+insert into salts values ('Harmony','75F926BA841E3408AAF26DD289C6FCB6');
 
 insert into users values ('Dr.Nope', 'B52827B8D377F77D56477BC0F6664274', 's', '1213', to_date('2042-12-27', 'yyyy-mm-dd'));
 insert into salts values ('Dr.Nope','6BA0FDE0AA900D9955B3AC6C54267038');
