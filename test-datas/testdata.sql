@@ -86,7 +86,7 @@ insert into scalar_data values(2053, 21, to_date('2015-12-29', 'yyyy-mm-dd'), 53
 insert into scalar_data values(2054, 21, to_date('2015-12-30', 'yyyy-mm-dd'), 54);
 insert into scalar_data values(2055, 21, to_date('2015-12-31', 'yyyy-mm-dd'), 55);
 
-/*first week of january*/
+/*first week of january*/3,31/08/2011 22:34:57,30.7
 insert into scalar_data values(3016, 21, to_date('2016-01-01', 'yyyy-mm-dd'), 16);
 insert into scalar_data values(3017, 21, to_date('2016-01-02', 'yyyy-mm-dd'), 17);
 
