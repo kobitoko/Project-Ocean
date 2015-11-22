@@ -54,10 +54,10 @@ cookies = request.getCookies();
 
 	String queryAll = "select YEAR, AVERAGE, MINIMUM, MAXIMUM from OLAP_DATA where QUARTER IS NULL";
 	String queryYear = "select QUARTER, AVERAGE, MINIMUM, MAXIMUM from OLAP_DATA where YEAR = " + grabYR + " AND MONTH IS NULL AND WEEK IS NULL";
-	String queryQuarter = "select MONTH, AVERAGE, MINIMUM, MAXIMUM from OLAP_DATA where QUARTER = " + grabQU + " AND YEAR = " + grabYR + " AND WEEK IS NULL AND DAY IS NULL";
-	String queryMonth = "select WEEK, AVERAGE, MINIMUM, MAXIMUM from OLAP_DATA where QUARTER = " + grabQU + " AND YEAR = " + grabYR + " AND MONTH = " + grabMO +" AND (DAY IS NOT NULL OR WEEK IS NULL)";
-	String queryWeek = "select DAY, AVERAGE, MINIMUM, MAXIMUM from OLAP_DATA where QUARTER = " + grabQU + " AND YEAR = " + grabYR + " AND WEEK = " + grabWK;
-	String queryDay = "select DAY, AVERAGE, MINIMUM, MAXIMUM from OLAP_DATA where QUARTER = " + grabQU + " AND YEAR = " + grabYR + " AND DAY = " + grabDY;
+	String queryQuarter = "select MONTH, AVERAGE, MINIMUM, MAXIMUM from OLAP_DATA where QUARTER = " + grabQU + " AND YEAR = " + grabYR + " AND WEEK IS NULL";
+	String queryMonth = "select WEEK, AVERAGE, MINIMUM, MAXIMUM from OLAP_DATA where QUARTER = " + grabQU + " AND YEAR = " + grabYR + " AND MONTH = " + grabMO + "AND DAY IS NULL";
+	String queryWeek = "select DAY, AVERAGE, MINIMUM, MAXIMUM from OLAP_DATA where QUARTER = " + grabQU + " AND YEAR = " + grabYR + "  AND MONTH = " + grabMO + " AND WEEK = " + grabWK;
+	String queryDay = "select DAY, AVERAGE, MINIMUM, MAXIMUM from OLAP_DATA where QUARTER = " + grabQU + " AND YEAR = " + grabYR + " AND MONTH = " + grabMO + " AND WEEK = " + grabWK + " AND DAY = " + grabDY;
 
 	String outQuery = "";
 	if(grabYR != 0){
