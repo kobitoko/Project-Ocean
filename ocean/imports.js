@@ -78,6 +78,15 @@ else if(role == "d"){
 	document.getElementById("subscribe").style.display = 'none';
 	document.getElementById("usrman").style.display = 'none';
 	document.getElementById("senman").style.display = 'none';
+} else if(permission == 'loggedout'){
+	document.getElementById("search").style.display = 'none';
+	document.getElementById("analyze").style.display = 'none';
+	document.getElementById("subscribe").style.display = 'none';
+	document.getElementById("upload").style.display = 'none';
+	document.getElementById("usrman").style.display = 'none';
+	document.getElementById("senman").style.display = 'none';
+	document.getElementById("home").style.display = 'none';
+	document.getElementById("account").style.display = 'none';
 } else {
 	document.getElementById("search").style.display = 'none';
 	document.getElementById("analyze").style.display = 'none';

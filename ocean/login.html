@@ -1,11 +1,11 @@
 <html>
 <link rel="stylesheet" type="text/css" href="oceanstyler.css">
-
-<script>
-
-</script>
+<script src="imports.js"></script>
+<script>permission = 'loggedout';</script>
   <head></head>
    <body style="background:lightblue;">
+ <div id='header' style="height:50px;border-style:inset;"></div>
+ <div id='content'>
     <form action="login.jsp" method="post">
       <b>Please enter Username and Password:</b><br>
     <!-- using placeholder assumes HTML5 support. Just use emtpy value or nothing if we cant use html5.-->
@@ -13,5 +13,6 @@
       <input type="password" name="pass" placeholder="Password" required><br>
       <input type="submit" name="submit" value="Login">
     </form>
+</div>
   </body>
 </html>
