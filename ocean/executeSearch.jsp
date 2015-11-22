@@ -280,6 +280,7 @@
     	<th>DATA ID</th>
     	<th>SENSOR ID</th>
    	 <th>DESCRIPTION</th>
+   	 <th>THUMBNAIL</th>
 	 <th>DOWNLOAD</th>
 	<th>DATE CREATED</th>
 
@@ -292,17 +293,41 @@
 			Integer sid = new Integer(rsetI.getInt(2));
 			java.sql.Date date = rsetI.getDate(3);
 			String val = rsetI.getString(4);
-		out.println( tropen + open + did + close + open + sid + close  + open + val + close + open + close + open + date +  close + trclose);
-		
+			
+			Blob blob = null;
+			String thumbnailStr = "";
+			PreparedStatement ps = mCon.prepareStatement("select thumbnail from images where image_id=?");
+			ps.setInt(1, did);
+    		ResultSet rs = ps.executeQuery();
+    		
+			if(rs != null) {
+			    rs.next();
+			    blob = rs.getBlob(1);
+    	    	rs.close();
+    	    }
+			if(ps != null)
+    			ps.close();
+			
+			if(blob != null) {
+	    		// apparently the first byte is at position 1 according to the docs.
+    			byte[] imgByte = blob.getBytes((long) 1, (int) blob.length());
+			    thumbnailStr = new String(imgByte, "UTF-8");
+			}
+			
+            String thumbnailHTML = "<img src=\""+thumbnailStr+"\" ";
+			
+			// This is bad, you already "downloading" the images and storing it on the clients browser.
+			//perhaps later just check when press download check the first column for id and pass query to get the data.
+			//String entireImage = rsetI.getBlob(6);
+			
+		out.println( tropen + open + did + close + open + sid + close  + open + val + close + open + thumbnailHTML + close + open + "button" + close + open + date +  close + trclose);
+
 	}	 
             
-
- 
-	 
             /*Display all hits. */
         } catch(SQLException ex) {
             if (debug)
-              out.println("<BR>-debugLog:Received a SQLException: " + ex.getMessage() +"\n"+ queryImage + "\n" + queryAudio + "\n" +queryScalar );
+              out.println("<BR>-debugLog:Received a SQLException: " + ex.getMessage() +"<BR><BR>"+ queryImage + "<BR><BR>" + queryAudio + "<BR><BR>" +queryScalar );
             System.err.println("SQLException: " + ex.getMessage());
 	//Need to close connections if they exist here. But I don't know how to check if there is currently a connection.
         } 
@@ -310,8 +335,6 @@
 		stmnt.close();
         	mCon.close();
 	}
-          
-
 	     
    %>
  </table>
