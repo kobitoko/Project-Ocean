@@ -1,5 +1,5 @@
 function verifyTime(){
-	if(document.getElementById("stype").innerHTML == ""){
+	if(document.getElementById("stype").value.length == 1){
 		document.getElementById("dateSince").required = true;
 		document.getElementById("dateUntil").required = true;
 	} else {
