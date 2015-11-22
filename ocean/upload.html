@@ -7,6 +7,7 @@
 </head>
 <link rel="stylesheet" type="text/css" href="oceanstyler.css">
 <script src="imports.js"></script>
+<script src="upload.js"></script>
 <script>permission = 'curator';</script>
  <body style="background:lightblue;">
  <div id='header' style="height:50px;border-style:inset;"></div>
@@ -18,7 +19,7 @@
       -->
       </br>
       Image Record:</br>
-      <input type="file" id="jpgfileget" name="jpgfileget" accept="image/jpeg" onchange="openFile(this, event)">
+      <input type="file" id="jpgfileget" name="jpgfileget" accept="image/jpeg" onchange="openFile(this, event);;">
       <div id="jpgload">Choose a JPG file please. Or leave empty to skip Image Record.</div> 
       <!--for now a text, later make a dropdown menu for numnber..-->
       <table>
@@ -52,11 +53,13 @@
       and http://stackoverflow.com/questions/7627161/get-id-of-element-that-called-a-function
       -->
       <script>
+	
         var openFile = function(callingElement, event) {
           var input = event.target;
           var id = callingElement.id;
           
           if(id === "jpgfileget") {
+		
               var fileName = $("#jpgfileget").val();
               fileName = fileName.toLowerCase();
               if(fileName.substring(fileName.length-5, fileName.length) !== ".jpeg") {
@@ -64,8 +67,8 @@
                       alert("Invalid file, it needs to be a JPG/JPEG file.");
                       $("#jpgfileget").replaceWith($("#jpgfileget").clone(true));
                       return;
-                  }
-              }
+                  } else {verifyLockJPG();}
+              } else {verifyLockJPG();}
           } else if(id === "audiofileget") {
               var fileName = $("#audiofileget").val();
               fileName = fileName.toLowerCase();
@@ -73,15 +76,16 @@
                 alert("Invalid file, it needs to be a WAV file.");
                 $("#audiofileget").replaceWith($("#audiofileget").clone(true));
                 return;
-              }
+              } else {verifyLockWAV();}
           } else if(id === "csvfileget") {
+		
               var fileName = $("#csvfileget").val();
               fileName = fileName.toLowerCase();
               if(fileName.substring(fileName.length-4, fileName.length) !== ".csv") {
                 alert("Invalid file, it needs to be a CSV file.");
                 $("#csvfileget").replaceWith($("#csvfileget").clone(true));
                 return;
-              }
+              } 
           } 
           
           var printEventType = function(e) {
@@ -193,6 +197,7 @@
           } else {
             reader.readAsDataURL(input.files[0]);
           }
+
         };
           
       </script>    
