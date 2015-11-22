@@ -161,7 +161,7 @@ for(int i =1;i<5;i++){
 <select id="week" onchange='updateRollup()'>
 <option value="0" id="emptyWK">Ignore Week</option>
 <%
-for(int i =1;i<6;i++){
+for(int i =1;i<7;i++){
      String tID = "wk" + i;
      %><option id="<%= tID%>" value="<%= i%>">Week <%= i%></option><%
 }
@@ -170,13 +170,16 @@ for(int i =1;i<6;i++){
 
 <select id="day" onchange='updateRollup()'>
 <option value="0" id="emptyDY">Ignore Day</option>
-<%
-for(int i =1;i<8;i++){
-     String tID = "dy" + i;
-     %><option id="<%= tID%>" value="<%= i%>">Day <%= i%></option><%
-}
+<option id="dy1" value="1">Sunday    (1)</option>
+<option id="dy2" value="2">Monday    (2)</option>
+<option id="dy3" value="3">Tuesday   (3)</option>
+<option id="dy4" value="4">Wednesday (4)</option>
+<option id="dy5" value="5">Thursday  (5)</option>
+<option id="dy6" value="6">Friday    (6)</option>
+<option id="dy7" value="7">Saturday  (7)</option>
 
-%></select></td><td>
+
+</select></td><td>
 <script>
 
 
@@ -209,7 +212,7 @@ if(setQU != "qu0"){
 }
 if(setDY != "dy0"){
 	document.getElementById(setDY).selected = 'selected';
-	outString = "Day <%= grabDY%> of " + outString;
+	outString = dtoDate("<%= grabDY%>") + " of " + outString;
 	
 } else { 
 	document.getElementById("emptyDY").selected = 'selected';
@@ -255,9 +258,9 @@ cascadeLocks();
 	
 	while(rset.next()) {
 		Integer sset = new Integer(rset.getInt(1));
-		Integer avg = new Integer(rset.getInt(2));
-		Integer min = new Integer(rset.getInt(3));
-		Integer max= new Integer(rset.getInt(4));
+		float avg = rset.getFloat(2);
+		float min = rset.getFloat(3);
+		float max= rset.getFloat(4);
 	
 		String open = "<td>";
            	 String close = "</td>";

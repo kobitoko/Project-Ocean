@@ -104,14 +104,14 @@ if(rset.next()){
       <!-- using placeholder assumes HTML5 support. Just use emtpy value or nothing if we cant use html5.-->
       <table style="width:100%;border-style:inset";>
       <tr><td><p style="display:inline">Username: </p></td><td><input type="text" id="moduid" value ="<%= user%>" name="uid" maxlength="32" required placeholder="Username"><br></td></tr>
-     <tr><td> <p style="display:inline">First Name: </p></td><td><input type="text" value="<%= fname%>" name="fname" maxlength="32" required placeholder="First Name"><br></td></tr>
-      <tr><td><p style="display:inline">Family Name: </p></td><td><input type="text" value="<%= lname%>" name="lname" maxlength="32" required placeholder="Last Name"><br></td></tr>
-      <tr><td><p style="display:inline">Address: </p></td><td><input type="text" name="address" value="<%= add%>" maxlength="32" required placeholder="Address"><br></td></tr>
-      <tr><td><p style="display:inline">Email: </p></td><td><input type="text" name="email" maxlength="32" value="<%= email%>" required placeholder="Email"><br></td></tr>
-      <tr><td><p style="display:inline">Phone: </p></td><td><input type="text" name="phone" maxlength="32" value="<%= phone%>" required placeholder="Phone"><br></td></tr>
+     <tr><td> <p style="display:inline">First Name: </p></td><td><input type="text" value="<%= fname%>" name="fname" maxlength="24" required placeholder="First Name"><br></td></tr>
+      <tr><td><p style="display:inline">Family Name: </p></td><td><input type="text" value="<%= lname%>" name="lname" maxlength="24" required placeholder="Last Name"><br></td></tr>
+      <tr><td><p style="display:inline">Address: </p></td><td><input type="text" name="address" value="<%= add%>" maxlength="128" required placeholder="Address"><br></td></tr>
+      <tr><td><p style="display:inline">Email: </p></td><td><input type="text" name="email" maxlength="128" value="<%= email%>" required placeholder="Email"><br></td></tr>
+      <tr><td><p style="display:inline">Phone: </p></td><td><input type="text" name="phone" maxlength="10" value="<%= phone%>" required placeholder="Phone"><br></td></tr>
 	 <tr><td><p style="display:inline">Person ID: </p></td><td><input id="modpid" type="number" value="<%= pid%>" name="pid" min="0" maxlength="38" required placeholder="Person ID"><br></td></tr>
-      <tr><td><p style="display:inline">Password Reset: </p></td><td><input type="password" name="pass" min="0" placeholder="New Password"><br></td></tr>
-<tr><td><p style="display:inline">New Role: </p></td><td><input id="newrole" type="text" value="<%= role%>" name="newrole" min="0" maxlength="38" required placeholder="Person ID" disabled><br></td></tr>
+      <tr><td><p style="display:inline">Password: </p></td><td><input type="password" name="pass" min="0" maxlength="32" required placeholder="New Password"><br></td></tr>
+<tr><td><p style="display:inline">New Role: </p></td><td><input id="newrole" type="text" value="<%= role%>" name="newrole" min="0" maxlength="1" required placeholder="Person ID" disabled><br></td></tr>
       </table>
       User's role is:<br>
       

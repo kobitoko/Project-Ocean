@@ -105,10 +105,10 @@ Boolean debug = Boolean.TRUE;
     <form action="createSensor.jsp" id="sensform" method="post">
       <b>Create new sensor:</b><br>
       <!-- using placeholder assumes HTML5 support. Just use emtpy value or nothing if we cant use html5.-->
-      <input type="text" name="sid" maxlength="32" required placeholder="Sensor ID"><br>
-      <input type="text" name="local" maxlength="32" required placeholder="Location"><br>
+      <input type="text" name="sid" maxlength="38" required placeholder="Sensor ID"><br>
+      <input type="text" name="local" maxlength="64" required placeholder="Location"><br>
      	<input type="text" name="stype" maxlength="1" required placeholder="Type"><br>
-     	<input type="text" cols="32"  rows="6" name="sdesc" required placeholder="Description"></textarea><br>
+     	<input type="text" maxlength="128" name="sdesc" required placeholder="Description"></textarea><br>
       <input type="submit" name="submit" value="Create!">
     </form>
     </div>

@@ -85,12 +85,12 @@ if(rset.next()){
     <form action="mymodifyAccount.jsp" name="modform" method="post">
       <!-- using placeholder assumes HTML5 support. Just use emtpy value or nothing if we cant use html5.-->
       <table style="width:100%;border-style:inset";>
-     <tr><td> <p style="display:inline">First Name: </p></td><td><input type="text" id="fname" name="fname" maxlength="32" value=<%= fname%> required placeholder="First Name"><br></td></tr>
-      <tr><td><p style="display:inline">Family Name: </p></td><td><input type="text" name="lname" maxlength="32" value=<%= lname%> valrequired placeholder="Last Name"><br></td></tr>
-      <tr><td><p style="display:inline">Address: </p></td><td><input type="text" name="address" maxlength="32" value=<%= add%> required placeholder="Address"><br></td></tr>
-      <tr><td><p style="display:inline">Email: </p></td><td><input type="text" name="email" maxlength="32" value=<%= email%> required placeholder="Email"><br></td></tr>
-      <tr><td><p style="display:inline">Phone: </p></td><td><input type="text" name="phone" maxlength="32" value=<%= phone%> required placeholder="Phone"><br></td></tr>
-      <tr><td><p style="display:inline">Change Password: </p></td><td><input type="password" name="pass" min="0" placeholder="New Password"><br></td></tr>
+     <tr><td> <p style="display:inline">First Name: </p></td><td><input type="text" id="fname" name="fname" maxlength="24" value=<%= fname%> required placeholder="First Name"><br></td></tr>
+      <tr><td><p style="display:inline">Family Name: </p></td><td><input type="text" name="lname" maxlength="24" value=<%= lname%> valrequired placeholder="Last Name"><br></td></tr>
+      <tr><td><p style="display:inline">Address: </p></td><td><input type="text" name="address" maxlength="128" value=<%= add%> required placeholder="Address"><br></td></tr>
+      <tr><td><p style="display:inline">Email: </p></td><td><input type="text" name="email" maxlength="128" value=<%= email%> required placeholder="Email"><br></td></tr>
+      <tr><td><p style="display:inline">Phone: </p></td><td><input type="text" name="phone" maxlength="10" value=<%= phone%> required placeholder="Phone"><br></td></tr>
+      <tr><td><p style="display:inline">Change Password: </p></td><td><input type="password" name="pass" min="0" maxlength="32" required placeholder="New Password"><br></td></tr>
       </table>  
       <input type="submit" name="submit" value="Update">
     </form>

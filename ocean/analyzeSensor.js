@@ -85,5 +85,15 @@ function cascadeLocks(){
 	
 }
 
+function dtoDate(code){
+ 	if(code == 1){return "Sunday";}
+	if(code == 2){return "Monday";}
+	if(code == 3){return "Tuesday";}
+	if(code == 4){return "Wednesday";}
+	if(code == 5){return "Thursday";}
+	if(code == 6){return "Friday";}
+	if(code == 7){return "Saturday";}
+}
+
 
 

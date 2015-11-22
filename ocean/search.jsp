@@ -15,9 +15,9 @@
       <b>Enter search parameters:</b><br>
       <table style="width:50%;border-style:inset";>
 
-     <tr><td> <p style="display:inline">Sensor Type: </p></td><td><input type="text" size="32" name="stype" maxlength="32"  placeholder="Sensor Type"><br></td></tr>
-      <tr><td><p style="display:inline">Sensor Location: </p></td><td><input type="text" size="32" name="local" maxlength="32"  placeholder="Sensor Location"><br></td></tr>
-      <tr><td><p style="display:inline">Keywords (comma seperated): </p></td><td><input size="32" type="text" name="key" maxlength="1024"  placeholder="Keywords"><br></td></tr>
+     <tr><td> <p style="display:inline">Sensor Type: </p></td><td><input type="text" size="32" name="stype" maxlength="1"  placeholder="Sensor Type"><br></td></tr>
+      <tr><td><p style="display:inline">Sensor Location: </p></td><td><input type="text" size="32" name="local" maxlength="64"  placeholder="Sensor Location"><br></td></tr>
+      <tr><td><p style="display:inline">Keywords (comma seperated): </p></td><td><input size="32" type="text" name="key" maxlength="128"  placeholder="Keywords"><br></td></tr>
       <tr><td><p style="display:inline">Data Since: (mm/dd/yyyy)</p></td><td><input size="32" type="text" name="dateSince" maxlength="32"  required placeholder="Data Since"><br></td></tr>
       <tr><td><p style="display:inline">Data Up Until: (mm/dd/yyyy) </p></td><td><input size="32" type="text" name="dateUntil" maxlength="32" required placeholder="Date Up Until"><br></td></tr>
      
