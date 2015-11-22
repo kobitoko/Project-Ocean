@@ -7,23 +7,6 @@
     
       Boolean debug = Boolean.TRUE;
       
-      // Get this user with the old userID and old PID to find the user in the first place. 
-      String User = null;
-      Integer PID = null;
-      // Based on tutorials at http://www.tutorialspoint.com/
-      Cookie cookie = null;
-      Cookie[] cookies = null;
-      String comppid = "modpid";
-      String compname = "modname";
-      cookies = request.getCookies();
-      if( cookies != null ){
-        for (Integer i = 0; i < cookies.length; i++){
-          cookie = cookies[i];
-          if(cookie.getName().equals(comppid)){PID = Integer.parseInt(cookie.getValue());}
-          if(cookie.getName().equals(compname)){User = cookie.getValue();}
-         }
-      }
-      
       String imageBase64Input = request.getParameter("jpgfileput");
       String imageThumbBase64Input = request.getParameter("jpgthumbnailfileput");
       Integer imageSensorId = 0;
