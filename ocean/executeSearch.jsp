@@ -256,7 +256,10 @@
 			java.sql.Date date = rsetA.getDate(3);
 			Integer len = new Integer(rsetA.getInt(4));
 			String val = rsetA.getString(5);
-			out.println( tropen + open + did + close + open + sid + close + open + len + close + open + val + close + open + close + open + date +  close + trclose);
+			
+			String downloadButton = "<center><form action=\"download.jsp\" target=\"_blank\" method=\"post\">  <input type=\"hidden\" id=\"downloadid\" name=\"downloadid\" value=\""+did.toString()+"\">  <input type=\"hidden\" id=\"downloadtype\" name=\"downloadtype\" value=\"audio\">  <input type=\"submit\" name=\"submit\" value=\"Download\">  </form></center>";
+			
+			out.println( tropen + open + did + close + open + sid + close + open + len + close + open + val + close + open + downloadButton + close + open + date +  close + trclose);
 	
 	}
              ResultSet rsetI = stmnt.executeQuery(queryImage);
@@ -316,11 +319,10 @@
 			
             String thumbnailHTML = "<img src=\""+thumbnailStr+"\" ";
 			
-			// This is bad, you already "downloading" the images and storing it on the clients browser.
-			//perhaps later just check when press download check the first column for id and pass query to get the data.
-			//String entireImage = rsetI.getBlob(6);
+			// This is bad, you already "downloading" the images and storing it on the clients browser. Thus submit form the id of the file, and then you can just download it in download.jsp		
+			String downloadButton = "<center><form action=\"download.jsp\" target=\"_blank\" method=\"post\">  <input type=\"hidden\" id=\"downloadid\" name=\"downloadid\" value=\""+did.toString()+"\">  <input type=\"hidden\" id=\"downloadtype\" name=\"downloadtype\" value=\"image\">  <input type=\"submit\" name=\"submit\" value=\"Download\">  </form></center>";
 			
-		out.println( tropen + open + did + close + open + sid + close  + open + val + close + open + thumbnailHTML + close + open + "button" + close + open + date +  close + trclose);
+		out.println( tropen + open + did + close + open + sid + close  + open + val + close + open + thumbnailHTML + close + open + downloadButton + close + open + date +  close + trclose);
 
 	}	 
             
