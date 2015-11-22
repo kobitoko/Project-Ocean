@@ -18,6 +18,9 @@
       // potentially not safe if someone modifies the options in the list and passes a modified option to this jsp.
       String queryDelSensor ="select SENSOR_ID from SENSORS where SENSOR_ID = "+sid;
       String queryDelSubs ="select SENSOR_ID from SUBSCRIPTIONS where SENSOR_ID="+sid;
+      String queryDelScalar ="select SENSOR_ID from SCALAR_DATA where SENSOR_ID="+sid;
+ String queryDelAudio ="select SENSOR_ID from AUDIO_RECORDINGS where SENSOR_ID="+sid;
+String queryDelImage ="select SENSOR_ID from IMAGES where SENSOR_ID="+sid;
 
       
       String mUrl = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
@@ -49,7 +52,22 @@
 	 while(rsetpre.next()) {
 		rsetpre.absolute(1);
             rsetpre.deleteRow();
-} 
+	} 
+	rsetpre = stmnt.executeQuery(queryDelScalar);
+	 while(rsetpre.next()) {
+		rsetpre.absolute(1);
+            rsetpre.deleteRow();
+	} 
+	rsetpre = stmnt.executeQuery(queryDelAudio);
+	 while(rsetpre.next()) {
+		rsetpre.absolute(1);
+            rsetpre.deleteRow();
+	} 
+	rsetpre = stmnt.executeQuery(queryDelImage);
+	 while(rsetpre.next()) {
+		rsetpre.absolute(1);
+            rsetpre.deleteRow();
+	} 
            
             ResultSet rset = stmnt.executeQuery(queryDelSensor);
 	if(rset.next()) {
