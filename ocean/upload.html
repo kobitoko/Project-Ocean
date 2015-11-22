@@ -56,6 +56,34 @@
           var input = event.target;
           var id = callingElement.id;
           
+          if(id === "jpgfileget") {
+              var fileName = $("#jpgfileget").val();
+              fileName = fileName.toLowerCase();
+              if(fileName.substring(fileName.length-5, fileName.length) !== ".jpeg") {
+                if(fileName.substring(fileName.length-4, fileName.length) !== ".jpg") {
+                      alert("Invalid file, it needs to be a JPG/JPEG file.");
+                      $("#jpgfileget").replaceWith($("#jpgfileget").clone(true));
+                      return;
+                  }
+              }
+          } else if(id === "audiofileget") {
+              var fileName = $("#audiofileget").val();
+              fileName = fileName.toLowerCase();
+              if(fileName.substring(fileName.length-4, fileName.length) !== ".wav") {
+                alert("Invalid file, it needs to be a WAV file.");
+                $("#audiofileget").replaceWith($("#audiofileget").clone(true));
+                return;
+              }
+          } else if(id === "csvfileget") {
+              var fileName = $("#csvfileget").val();
+              fileName = fileName.toLowerCase();
+              if(fileName.substring(fileName.length-4, fileName.length) !== ".csv") {
+                alert("Invalid file, it needs to be a CSV file.");
+                $("#csvfileget").replaceWith($("#csvfileget").clone(true));
+                return;
+              }
+          } 
+          
           var printEventType = function(e) {
             var loaded =  e.loaded;
             var total =  e.total;
