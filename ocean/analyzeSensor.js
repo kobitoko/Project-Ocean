@@ -34,31 +34,55 @@ function updateRollup(){
 	}
 	if(document.getElementById("quarter").value == 0){
 		document.getElementById("emptyMO").selected = 'selected';
+	}
+	if((document.getElementById("month").value == 0)){
 		document.getElementById("emptyWK").selected = 'selected';
 	}
-	if((document.getElementById("month").value == 0) && (document.getElementById("week").value == 0)){
+	if(document.getElementById("week").value == 0){
 		document.getElementById("emptyDY").selected = 'selected';
 	}
-	if(document.getElementById("month").value != 0){
-		document.getElementById("emptyWK").selected = 'selected';
-	}
+	cascadeLocks();
 
 }
 
-function updateRollupWK(){
- 	if(document.getElementById("year").value == 0){
-		document.getElementById("emptyQU").selected = 'selected';
+function cascadeLocks(){
+	if(document.getElementById("quarter").value != 1){
+		document.getElementById("mo1").disabled = "disabled";
+		document.getElementById("mo2").disabled = "disabled";
+		document.getElementById("mo3").disabled = "disabled";
+	} else {
+		document.getElementById("mo1").disabled = "";
+		document.getElementById("mo2").disabled = "";
+		document.getElementById("mo3").disabled = "";
 	}
-	if(document.getElementById("quarter").value == 0){
-		document.getElementById("emptyMO").selected = 'selected';
-		document.getElementById("emptyWK").selected = 'selected';
+	if(document.getElementById("quarter").value != 2){
+		document.getElementById("mo4").disabled = "disabled";
+		document.getElementById("mo5").disabled = "disabled";
+		document.getElementById("mo6").disabled = "disabled";
+	} else {
+		document.getElementById("mo4").disabled = "";
+		document.getElementById("mo5").disabled = "";
+		document.getElementById("mo6").disabled = "";
 	}
-	if((document.getElementById("month").value == 0) && (document.getElementById("week").value == 0)){
-		document.getElementById("emptyDY").selected = 'selected';
+	if(document.getElementById("quarter").value != 3){
+		document.getElementById("mo7").disabled = "disabled";
+		document.getElementById("mo8").disabled = "disabled";
+		document.getElementById("mo9").disabled = "disabled";
+	} else {
+		document.getElementById("mo7").disabled = "";
+		document.getElementById("mo8").disabled = "";
+		document.getElementById("mo9").disabled = "";
 	}
-	if(document.getElementById("week").value != 0){
-		document.getElementById("emptyMO").selected = 'selected';
+	if(document.getElementById("quarter").value != 4){
+		document.getElementById("mo10").disabled = "disabled";
+		document.getElementById("mo11").disabled = "disabled";
+		document.getElementById("mo12").disabled = "disabled";
+	} else {
+		document.getElementById("mo10").disabled = "";
+		document.getElementById("mo11").disabled = "";
+		document.getElementById("mo12").disabled = "";
 	}
+	
 }
 
 

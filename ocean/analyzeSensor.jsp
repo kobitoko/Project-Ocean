@@ -48,14 +48,14 @@ cookies = request.getCookies();
 }
 }
 
-	String createOLAPview = "CREATE OR REPLACE VIEW OLAP_DATA AS SELECT s.sensor_id, EXTRACT (YEAR from s.date_created) AS Year, to_char(s.date_created, 'Q') AS Quarter, EXTRACT (MONTH FROM s.date_created) AS Month, to_char(s.date_created,'IW') AS Week, EXTRACT (DAY from s.date_created) AS Day, AVG(s.value) AS Average, MIN(s.value) AS Minimum, MAX(s.value) AS Maximum FROM scalar_data s WHERE s.sensor_id IN (SELECT sensor_id FROM subscriptions WHERE person_id =" + pid + ") AND s.sensor_id = '" + sid + "' GROUP BY s.sensor_id, ROLLUP(EXTRACT (YEAR from s.date_created), to_char(s.date_created, 'Q'), EXTRACT (MONTH FROM s.date_created), to_char(s.date_created,'IW') , EXTRACT (DAY from s.date_created))";
+	String createOLAPview = "CREATE OR REPLACE VIEW OLAP_DATA AS SELECT s.sensor_id, EXTRACT (YEAR from s.date_created) AS Year, to_char(s.date_created, 'Q') AS Quarter, EXTRACT (MONTH FROM s.date_created) AS Month, to_char(s.date_created,'W') AS Week, to_char(s.date_created, 'D') AS Day, AVG(s.value) AS Average, MIN(s.value) AS Minimum, MAX(s.value) AS Maximum FROM scalar_data s WHERE s.sensor_id IN (SELECT sensor_id FROM subscriptions WHERE person_id =" + pid + ") AND s.sensor_id = '" + sid + "' GROUP BY s.sensor_id, ROLLUP(EXTRACT (YEAR from s.date_created), to_char(s.date_created, 'Q'), EXTRACT (MONTH FROM s.date_created), to_char(s.date_created,'W') , to_char(s.date_created, 'D'))";
 
 	String queryYears = "Select distinct year from olap_data ORDER BY year";
 
 	String queryAll = "select YEAR, AVERAGE, MINIMUM, MAXIMUM from OLAP_DATA where QUARTER IS NULL";
 	String queryYear = "select QUARTER, AVERAGE, MINIMUM, MAXIMUM from OLAP_DATA where YEAR = " + grabYR + " AND MONTH IS NULL AND WEEK IS NULL";
 	String queryQuarter = "select MONTH, AVERAGE, MINIMUM, MAXIMUM from OLAP_DATA where QUARTER = " + grabQU + " AND YEAR = " + grabYR + " AND WEEK IS NULL AND DAY IS NULL";
-	String queryMonth = "select DAY, AVERAGE, MINIMUM, MAXIMUM from OLAP_DATA where QUARTER = " + grabQU + " AND YEAR = " + grabYR + " AND MONTH = " + grabMO +" AND (DAY IS NOT NULL OR WEEK IS NULL)";
+	String queryMonth = "select WEEK, AVERAGE, MINIMUM, MAXIMUM from OLAP_DATA where QUARTER = " + grabQU + " AND YEAR = " + grabYR + " AND MONTH = " + grabMO +" AND (DAY IS NOT NULL OR WEEK IS NULL)";
 	String queryWeek = "select DAY, AVERAGE, MINIMUM, MAXIMUM from OLAP_DATA where QUARTER = " + grabQU + " AND YEAR = " + grabYR + " AND WEEK = " + grabWK;
 	String queryDay = "select DAY, AVERAGE, MINIMUM, MAXIMUM from OLAP_DATA where QUARTER = " + grabQU + " AND YEAR = " + grabYR + " AND DAY = " + grabDY;
 
@@ -63,24 +63,20 @@ cookies = request.getCookies();
 	if(grabYR != 0){
 		if(grabQU != 0){
 			if(grabMO != 0){
-				if(grabDY != 0){
-					outQuery = queryDay;
-					sortPref = "Day " + Integer.toString(grabDY) + " of Month " + Integer.toString(grabMO) + " of " + Integer.toString(grabYR);
-					ssetPref = "Day ";
-				} else {
-					outQuery = queryMonth;
-					sortPref = "Month " + Integer.toString(grabMO) + " of " + Integer.toString(grabYR);
-					ssetPref = "Day ";
-				}
-			} else if(grabWK != 0){
-				if(grabDY != 0){
-					outQuery = queryDay;
-					sortPref = "Day " + Integer.toString(grabDY) + " of Month " + Integer.toString(grabMO) + " of " + Integer.toString(grabYR);
-					ssetPref = "Day ";
-				} else {
-					outQuery = queryWeek;
-					sortPref = "Week " + Integer.toString(grabWK) + " of " + Integer.toString(grabYR);
-					ssetPref = "Day ";
+				if(grabWK != 0){
+					if(grabDY != 0){
+						outQuery = queryDay;
+						sortPref = "Day " + Integer.toString(grabDY) + " of Month " + Integer.toString(grabMO) + " of " + Integer.toString(grabYR);
+						ssetPref = "Day ";
+					} else {
+						outQuery = queryWeek;
+						sortPref = "Week " + Integer.toString(grabWK) + " of " + Integer.toString(grabYR);
+						ssetPref = "Day ";
+					}
+				}  else {
+						outQuery = queryMonth;
+						sortPref = "Month " + Integer.toString(grabMO) + " of " + Integer.toString(grabYR);
+						ssetPref = "Week ";
 				}
 			} else {
 				outQuery = queryQuarter;
@@ -121,6 +117,8 @@ Boolean debug = Boolean.TRUE;
       
       // actually log in and perform statements
 try {
+	%><table>
+	<td><%
           mCon = DriverManager.getConnection(mUrl, mUser, mPass);
           stmnt = mCon.createStatement();
 	  stmnt.executeQuery(createOLAPview);
@@ -132,7 +130,7 @@ try {
 		String tID = "yr" + year;
               %><option id="<%= tID%>" value="<%= year%>"><%= year%></option><%
 }
-%></select><%
+%></select></td><td><%
   	 
 %>
 <select id="quarter" onchange='updateRollup()'>
@@ -143,7 +141,7 @@ for(int i =1;i<5;i++){
      %><option id="<%= tID%>" value="<%= i%>">Quarter <%= i%></option><%
 }
 
-%></select>
+%></select></td><td>
 <select id="month" onchange='updateRollup()'>
 <option value="0" id="emptyMO">Ignore Month</option>
 <option id="mo1" value="1">January</option>
@@ -158,27 +156,27 @@ for(int i =1;i<5;i++){
 <option id="mo10" value="10">October</option>
 <option id="mo11" value="11">November</option>
 <option id="mo12" value="12">December</option>
-</select>
+</select></td><td>
 
-<select id="week" onchange='updateRollupWK()'>
+<select id="week" onchange='updateRollup()'>
 <option value="0" id="emptyWK">Ignore Week</option>
 <%
-for(int i =1;i<54;i++){
+for(int i =1;i<6;i++){
      String tID = "wk" + i;
      %><option id="<%= tID%>" value="<%= i%>">Week <%= i%></option><%
 }
 
-%></select>
+%></select></td><td>
 
 <select id="day" onchange='updateRollup()'>
 <option value="0" id="emptyDY">Ignore Day</option>
 <%
-for(int i =1;i<32;i++){
+for(int i =1;i<8;i++){
      String tID = "dy" + i;
      %><option id="<%= tID%>" value="<%= i%>">Day <%= i%></option><%
 }
 
-%></select>
+%></select></td><td>
 <script>
 
 
@@ -189,28 +187,29 @@ var setWK = "wk<%= grabWK%>";
 var setDY = "dy<%= grabDY%>";
 var genString = "Viewing Sensor Data for Sensor <%=sid %>, Showing records for: ";
 var outString = "";
+
+if(setWK != "wk0"){
+	document.getElementById(setWK).selected = 'selected';
+	outString = outString + "Week <%= grabWK%> of ";
+} else { 
+	document.getElementById("emptyWK").selected = 'selected';
+}
+if(setMO != "mo0"){
+	document.getElementById(setMO).selected = 'selected';
+	outString = outString + "Month <%= grabMO%> of ";
+} else { 
+	document.getElementById("emptyMO").selected = 'selected';
+}
 if(setQU != "qu0"){
 	document.getElementById(setQU).selected = 'selected';
-	outString =  "Quarter <%= grabQU%> of ";
+	outString =  outString + "Quarter <%= grabQU%> of ";
 	
 } else { 
 	document.getElementById("emptyQU").selected = 'selected';
 }
-if(setMO != "mo0"){
-	document.getElementById(setMO).selected = 'selected';
-	outString = "Month <%= grabMO%> of ";
-} else { 
-	document.getElementById("emptyMO").selected = 'selected';
-}
-if(setWK != "wk0"){
-	document.getElementById(setWK).selected = 'selected';
-	outString = "Week <%= grabWK%> of ";
-} else { 
-	document.getElementById("emptyWK").selected = 'selected';
-}
 if(setDY != "dy0"){
 	document.getElementById(setDY).selected = 'selected';
-	outString = "Day <%= grabDY%> in " + outString;
+	outString = "Day <%= grabDY%> of " + outString;
 	
 } else { 
 	document.getElementById("emptyDY").selected = 'selected';
@@ -226,12 +225,15 @@ if(setYR != "yr0"){
 	outString =  "all of history";
 }
 document.getElementById("caption").innerHTML = genString + outString;
-
+cascadeLocks();
 
 
 
 </script>
-<button onClick="updateOLAPcookies()" style="background-color:green;color:white;display:inline;">Update Analysis</button>
+
+<button onClick="updateOLAPcookies()" style="background-color:green;color:white;display:inline;">Update Analysis</button></td>
+
+</table>
       <table style="border-style:inset";>
 
 
