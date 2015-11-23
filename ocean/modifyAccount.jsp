@@ -4,7 +4,7 @@
   <head></head>
   <body>
     <%
-    
+      // Boolean to whether or not display/print the SQL errors in the resulting html file.
       Boolean debug = Boolean.TRUE;
       
       //MD5 + Salting
@@ -16,6 +16,7 @@
       // because MD5 is within 32 varchar limit.
       s.setAlgorithm("MD5");
 
+      // Apply the hash function this many times.
       s.setIterations(999);
 
       // For the delicious salt: by default an instance of RandomSaltGenerator will be used.
@@ -30,22 +31,23 @@
       // Get this user with the old userID and old PID to find the user in the first place. 
       String oldUser = null;
       Integer oldPID = null;
-//Based on tutorials at http://www.tutorialspoint.com/
-Cookie cookie = null;
-Cookie[] cookies = null;
-String comppid = "modpid";
-String compname = "modname";
-cookies = request.getCookies();
-   if( cookies != null ){
-	 for (Integer i = 0; i < cookies.length; i++){
-         	cookie = cookies[i];
-		
-		if(cookie.getName().equals(comppid)){oldPID = Integer.parseInt(cookie.getValue());}
-		if(cookie.getName().equals(compname)){oldUser = cookie.getValue();}
-}
-}
+      // Retrieve the old user and old pid from the cookie.
+        //Based on tutorials at http://www.tutorialspoint.com/
+        Cookie cookie = null;
+        Cookie[] cookies = null;
+        String comppid = "modpid";
+        String compname = "modname";
+        cookies = request.getCookies();
+           if( cookies != null ){
+             for (Integer i = 0; i < cookies.length; i++){
+                 	cookie = cookies[i];
+	
+	            if(cookie.getName().equals(comppid)){oldPID = Integer.parseInt(cookie.getValue());}
+	            if(cookie.getName().equals(compname)){oldUser = cookie.getValue();}
+            }
+          }
 
-      
+      // Retrieving all the data from the parameters passed via POST from previous page.
       String uid = request.getParameter("uid");
       String role = request.getParameter("newrole");
       String fname = request.getParameter("fname");
@@ -57,10 +59,11 @@ cookies = request.getCookies();
       Integer personId = Integer.parseInt(request.getParameter("pid"));
       String newPass = request.getParameter("pass");
       
-      // initialize with default password "admin"
+      // initialize with default hashed password and the salt of "admin"
       String hashed = "4CF49155816C245A106D80D64123BAE9";
       String salt = "A48E8B18189B4FB6691A56E1575D2280";
       
+      // Only create a new hashed password and its salt if the new password field was not empty.
       if(!newPass.isEmpty()) {
         String digested = s.digest(newPass);
         // substring's index begin is inclusive, and index end is exclusive.
@@ -68,9 +71,11 @@ cookies = request.getCookies();
         salt = digested.substring(0,32);
       }
       
+      // Connecting to Ualberta's oracle server.
       String mUrl = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
       String mDriverName = "oracle.jdbc.driver.OracleDriver";
       
+      // The oracle account to use.
       String mUser = "satyabra";
       String mPass = "adasfa42";
       
@@ -85,6 +90,7 @@ cookies = request.getCookies();
             out.println("<BR>-debugLog: Received a ClassNotFoundException: " + e.getMessage());
       }
       
+      // Variable to store connection and prepared statements and result set table.
       Connection mCon = null;
       Boolean oldAutoCommitVal = Boolean.TRUE;
       
@@ -102,7 +108,7 @@ cookies = request.getCookies();
         oldAutoCommitVal = mCon.getAutoCommit();
         mCon.setAutoCommit(Boolean.FALSE);
         
-        // if this returns a table with 1 row, that new username is invalid!
+        // if this returns a table with 1 row, that new username is invalid, as it aleady exist.
         checkUserIdExists = mCon.prepareStatement("select USER_NAME from USERS where USER_NAME=? AND USER_NAME<>?");
         checkUserIdExists.setString(1, uid);
         checkUserIdExists.setString(2, oldUser);
@@ -116,7 +122,7 @@ cookies = request.getCookies();
           // New username is unique and ok to be used.
           
           // Password hash and salt will be set to original if no new password.
-          if(newPass.isEmpty()) {              
+          if(newPass.isEmpty()) {
               // get old password, salt, and email
               updatePassword = mCon.prepareStatement("select U.PASSWORD, S.SALT, P.email from USERS U, SALTS S, PERSONS P where U.USER_NAME=S.USER_NAME and P.PERSON_ID=U.PERSON_ID and U.USER_NAME=?");
               updatePassword.setString(1, oldUser);
@@ -216,8 +222,9 @@ cookies = request.getCookies();
       } finally {
         // In case of exceptions etc. this will always run, and shut down connection of SQL properly.
         
+        // set the connection back to the previous value of the autocommit, which is probably Boolean.TRUE.
         mCon.setAutoCommit(oldAutoCommitVal);
-        
+        // close the result set table, the statements, the prepared statements, and the connection.
         if(insertPersons != null) {
           insertPersons.close();
         }
