@@ -1,15 +1,13 @@
 // JavaScript Document
 
-
+//On document load, grab the role
 window.onload = function(){
-	role = getRole();
-	
-	updateNav(role);
-	
+	role = getRole();	
+	updateNav(role);	
 }
 
-
-
+//Based on tutorials at http://www.tutorialspoint.com/
+//Grabs the role from cookies
 function getRole(){
 	var cooks = document.cookie.split(';');
 	
@@ -24,6 +22,8 @@ function getRole(){
 	}
 }
 
+//Based on tutorials at http://www.tutorialspoint.com/
+//Grabs the user from cookies
 function getUser(){
 	var cooks = document.cookie.split(';');
 	for(i=0;i<cooks.length;i++){
@@ -33,6 +33,8 @@ function getUser(){
 	}
 }
 
+//Based on tutorials at http://www.tutorialspoint.com/
+//Grabs the PID from cookies
 function getPID(){
 	var cooks = document.cookie.split(';');
 	for(i=0;i<cooks.length;i++){
@@ -42,10 +44,13 @@ function getPID(){
 	}
 }
 
+//builds the navigation
 function updateNav(r){
 	role = r;
+	//generates the top menu bar
 	document.getElementById("header").innerHTML = '<button id="home" class="home";>HOME</button><button id="logout" class="logout">LOGOUT</button><button name="account" id="account" class="logout">MY INFO</button><button id="help" class="logout";>HELP</button><button id="senman" class="sysadmin">SENSOR MANAGEMENT</button><button id="usrman" class="sysadmin">USER MANAGEMENT</button><button id="upload" class="curator">UPLOAD DATA</button><button id="search" class="navi">SEARCH SENSORS</button><button id="subscribe" class="navi">SENSOR SUBSCRIPTIONS</button><button id="analyze" class="navi">ANALYZE DATA</button>';
 
+//assigned the links for each when clicked
 document.getElementById("home").onclick = function(){window.location.href="landing.html";}
 document.getElementById("logout").onclick = function(){logout();}
 document.getElementById("senman").onclick = function(){window.location.href="sensormanage.jsp";}
@@ -57,6 +62,7 @@ document.getElementById("analyze").onclick = function(){window.location.href="an
 document.getElementById("account").onclick = function(){window.location.href="mymanage.jsp";}
 document.getElementById("help").onclick = function(){window.location.href="help.html";}
 
+//logging out removes all cookies
 function logout(){
 	document.cookie = "name=;";
 	document.cookie = "role=;";
@@ -74,7 +80,7 @@ function logout(){
 }
 
 
-
+//hides navigation items tied to specific permissions
 if(role == "a"){
 	document.getElementById("search").style.display = 'none';
 	document.getElementById("analyze").style.display = 'none';
@@ -92,6 +98,7 @@ else if(role == "d"){
 	document.getElementById("subscribe").style.display = 'none';
 	document.getElementById("usrman").style.display = 'none';
 	document.getElementById("senman").style.display = 'none';
+//displays for the login page and help page
 } else if(permission == 'loggedout'){
 	document.getElementById("search").style.display = 'none';
 	document.getElementById("analyze").style.display = 'none';
@@ -102,6 +109,7 @@ else if(role == "d"){
 	document.getElementById("home").style.display = 'none';
 	document.getElementById("account").style.display = 'none';
 } else {
+//view when not logged in
 	document.getElementById("search").style.display = 'none';
 	document.getElementById("analyze").style.display = 'none';
 	document.getElementById("subscribe").style.display = 'none';
@@ -115,12 +123,13 @@ else if(role == "d"){
 checkPermissions(role);
 }
 
+//update nav when permissions change
 function changeRole(newRole){
 	updateNav(newRole);
 } 
 
 
-
+//checks permissions and wipes content if the user does not meet the permission
 function checkPermissions(r){
 	if(((permission == 'scientist') && (r != "s")) || ((permission == 'admin') && (r != "a")) || ((permission == 'curator') && (r != "d"))){
 		document.getElementById("content").innerHTML = "<br>You do not have permission to access this page. If you believe this is a mistake, please contact your System Administrator";	

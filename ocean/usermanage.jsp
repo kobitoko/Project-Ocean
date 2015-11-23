@@ -48,7 +48,7 @@
 		String getMaxPID = "select MAX(PERSON_ID) from USERS";
 		mCon = DriverManager.getConnection(mUrl, mUser, mPass);
           	stmnt = mCon.createStatement();
-          
+          //calcualtes the max PID and uses this as the default value when creating new users
          	 ResultSet rset2 = stmnt.executeQuery(getMaxPID);
 		while(rset2.next()) {
 		  maxpid = new Integer(rset2.getInt(1)) + 1;
@@ -114,6 +114,7 @@
             String grole = rset.getString(2);
             Integer pid = new Integer(rset.getInt(3));
      
+	//expands role name
             if(grole == null){grole="";};
             if(grole.equals("a")) {
               grole = "Administrator";
@@ -127,7 +128,7 @@
             String close = "</td>";
 	    String tropen = "<tr>";
 	    String trclose = "</tr>";	
-			
+			//defines button structure
 			String buttonmod = "<input type='radio' id='userToMod' name='userToMod' value='" + usr + ";;" + pid.toString() + ";;" + grole +  "' checked>";
 			
 		

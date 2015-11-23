@@ -33,6 +33,8 @@
     </tr>
     <tr>
     <%
+
+//Grabs the pid from cookies
 Integer pid = null;
 //Based on tutorials at http://www.tutorialspoint.com/
 Cookie cookie = null;
@@ -46,7 +48,11 @@ cookies = request.getCookies();
 		if(cookie.getName().equals(comppid)){pid = Integer.parseInt(cookie.getValue());}
 }
 }
+
+	
 	Boolean debug = Boolean.TRUE;
+
+//queries
       String queryMySensors	= "select S.SENSOR_ID, S.LOCATION, S.SENSOR_TYPE, S.DESCRIPTION from SENSORS S, SUBSCRIPTIONS T where S.SENSOR_ID=T.SENSOR_ID and T.PERSON_ID="+pid;
       String querySensors	= "select distinct S.SENSOR_ID, S.LOCATION, S.SENSOR_TYPE, S.DESCRIPTION from SENSORS S, SUBSCRIPTIONS T where S.SENSOR_ID not in (select S.SENSOR_ID from SENSORS S, SUBSCRIPTIONS T where S.SENSOR_ID=T.SENSOR_ID and T.PERSON_ID="+pid+")";
       
@@ -78,6 +84,7 @@ try {
           
           ResultSet rset = stmnt.executeQuery(queryMySensors);
           
+	//iterate through the results
           while(rset.next()) {
             Integer sID = new Integer(rset.getInt(1));
             String local = rset.getString(2);
@@ -92,7 +99,7 @@ try {
 	    String trclose = "</tr>";	
 			
 			
-		
+		//output as table
 	    String buttonrm = "<input type='radio' name='subToAnal' value='" + sID + "' checked>";
 			
             out.println( tropen + open + sID + close + open + local + close + open + type + close + open + desc +  close + open + buttonrm + close + trclose);

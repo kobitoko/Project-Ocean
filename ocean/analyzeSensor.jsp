@@ -48,17 +48,15 @@ cookies = request.getCookies();
 }
 }
 
-	String createOLAPview = "CREATE OR REPLACE VIEW OLAP_DATA AS SELECT s.sensor_id, EXTRACT (YEAR from s.date_created) AS Year, to_char(s.date_created, 'Q') AS Quarter, EXTRACT (MONTH FROM s.date_created) AS Month, to_char(s.date_created,'W') AS Week, to_char(s.date_created, 'D') AS Day, AVG(s.value) AS Average, MIN(s.value) AS Minimum, MAX(s.value) AS Maximum FROM scalar_data s WHERE s.sensor_id IN (SELECT sensor_id FROM subscriptions WHERE person_id =" + pid + ") AND s.sensor_id = '" + sid + "' GROUP BY s.sensor_id, ROLLUP(EXTRACT (YEAR from s.date_created), to_char(s.date_created, 'Q'), EXTRACT (MONTH FROM s.date_created), to_char(s.date_created,'W') , to_char(s.date_created, 'D'))";
+	String createOLAPview = "CREATE OR REPLACE VIEW OLAP_DATA AS SELECT s.sensor_id, EXTRACT (YEAR from s.date_created) AS Year, to_char(s.date_created, 'Q') AS Quarter, EXTRACT (MONTH FROM s.date_created) AS Month, (CEIL((to_char(s.date_created, 'DD') - to_char(s.date_created, 'D'))/7)+1) AS Week, to_char(s.date_created, 'D') AS Day, AVG(s.value) AS Average, MIN(s.value) AS Minimum, MAX(s.value) AS Maximum FROM scalar_data s WHERE s.sensor_id IN (SELECT sensor_id FROM subscriptions WHERE person_id = '" + pid + "') AND s.sensor_id = '" + sid + "' GROUP BY s.sensor_id, ROLLUP(EXTRACT (YEAR from s.date_created), to_char(s.date_created, 'Q'), EXTRACT (MONTH FROM s.date_created), (CEIL((to_char(s.date_created, 'DD') - to_char(s.date_created, 'D'))/7)+1),to_char(s.date_created, 'D'))";
 
 	String queryYears = "Select distinct year from olap_data where YEAR IS NOT NULL ORDER BY year ";
-
 	String queryAll = "select YEAR, AVERAGE, MINIMUM, MAXIMUM from OLAP_DATA where QUARTER IS NULL ";
 	String queryYear = "select QUARTER, AVERAGE, MINIMUM, MAXIMUM from OLAP_DATA where YEAR = " + grabYR + " AND MONTH IS NULL AND WEEK IS NULL";
 	String queryQuarter = "select MONTH, AVERAGE, MINIMUM, MAXIMUM from OLAP_DATA where QUARTER = " + grabQU + " AND YEAR = " + grabYR + " AND WEEK IS NULL";
 	String queryMonth = "select WEEK, AVERAGE, MINIMUM, MAXIMUM from OLAP_DATA where QUARTER = " + grabQU + " AND YEAR = " + grabYR + " AND MONTH = " + grabMO + "AND DAY IS NULL";
 	String queryWeek = "select DAY, AVERAGE, MINIMUM, MAXIMUM from OLAP_DATA where QUARTER = " + grabQU + " AND YEAR = " + grabYR + "  AND MONTH = " + grabMO + " AND WEEK = " + grabWK;
 	String queryDay = "select DAY, AVERAGE, MINIMUM, MAXIMUM from OLAP_DATA where QUARTER = " + grabQU + " AND YEAR = " + grabYR + " AND MONTH = " + grabMO + " AND WEEK = " + grabWK + " AND DAY = " + grabDY;
-
 	String outQuery = "";
 	if(grabYR != 0){
 		if(grabQU != 0){
@@ -140,7 +138,6 @@ for(int i =1;i<5;i++){
 	String tID = "qu" + i;
      %><option id="<%= tID%>" value="<%= i%>">Quarter <%= i%></option><%
 }
-
 %></select></td><td>
 <select id="month" onchange='updateRollup()'>
 <option value="0" id="emptyMO">Ignore Month</option>
@@ -165,7 +162,6 @@ for(int i =1;i<7;i++){
      String tID = "wk" + i;
      %><option id="<%= tID%>" value="<%= i%>">Week <%= i%></option><%
 }
-
 %></select></td><td>
 
 <select id="day" onchange='updateRollup()'>
@@ -181,8 +177,6 @@ for(int i =1;i<7;i++){
 
 </select></td><td>
 <script>
-
-
 var setYR = "yr<%= grabYR%>";
 var setQU = "qu<%= grabQU%>";
 var setMO = "mo<%= grabMO%>";
@@ -190,7 +184,6 @@ var setWK = "wk<%= grabWK%>";
 var setDY = "dy<%= grabDY%>";
 var genString = "Viewing Sensor Data for Sensor <%=sid %>, Showing records for: ";
 var outString = "";
-
 if(setWK != "wk0"){
 	document.getElementById(setWK).selected = 'selected';
 	outString = outString + "Week <%= grabWK%> of ";
@@ -217,9 +210,6 @@ if(setDY != "dy0"){
 } else { 
 	document.getElementById("emptyDY").selected = 'selected';
 }
-
-
-
 if(setYR != "yr0"){
 	document.getElementById(setYR).selected = 'selected';
 	outString = outString + "<%= grabYR%>";
@@ -229,9 +219,6 @@ if(setYR != "yr0"){
 }
 document.getElementById("caption").innerHTML = genString + outString;
 cascadeLocks();
-
-
-
 </script>
 
 <button onClick="updateOLAPcookies()" style="background-color:green;color:white;display:inline;">Update Analysis</button></td>
@@ -268,10 +255,7 @@ cascadeLocks();
 	   	 String trclose = "</tr>";	
 		out.println( tropen + open + sortPref + close + open + ssetPref + sset + close + open + avg + close + open + min +  close + open + max + close + trclose);
 			
-
-
 }
-
  	  stmnt.close();
           mCon.close();
           

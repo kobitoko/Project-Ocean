@@ -15,7 +15,7 @@
  <%
 Boolean debug = Boolean.TRUE;
 
-
+//gra cookies
 Integer pid = null;
 //Based on tutorials at http://www.tutorialspoint.com/
 Cookie cookie = null;
@@ -47,6 +47,7 @@ cookies = request.getCookies();
       User's role is:<br>
       
       <script>
+	//populate field from drop down
 	function changeRole(){
 		document.getElementById("role").value = document.getElementById("orole").value;
 	}

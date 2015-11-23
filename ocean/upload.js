@@ -1,3 +1,4 @@
+//This function makes the data fields in the Images table required when it detects that a jpg is being uploaded
 function verifyLockJPG(){
 
 		document.getElementById("jpgsensorid").required = true;
@@ -6,6 +7,8 @@ function verifyLockJPG(){
 		document.getElementById("jpgdescription").required = true;
 	
 }
+
+//This function makes the data fields in the Audio_recordings table required when it detects that a wav is being uploaded
 function verifyLockWAV(){
 
 		document.getElementById("wavsensorid").required = true;
