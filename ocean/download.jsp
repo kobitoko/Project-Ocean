@@ -62,7 +62,7 @@
         // String storing the html elements that will be printed later.
         String dataUrl = "";
         String closeButton = "<button onClick=\"closing()\">Close.</button>  <script> function closing() {window.self.close();}</script>";
-        String somethingWrong = "<B>Sorry something went wrong, could not retrieve the file. </B>" + closeButton;
+        String somethingWrong = "<B>Sorry something went wrong, could not retrieve the file. </B><br>" + closeButton;
         
         // Checks whether the download is an image or audio and creates a prepared statement accordingly.
         if(downloadType.compareTo("image") == 0) {
@@ -95,16 +95,16 @@
         	//forcing download taken from http://stackoverflow.com/questions/11353425/force-a-browser-to-save-file-as-after-clicking-link
             if(downloadType.compareTo("image") == 0) {
               // This blob contained an image and it's dataUrl string will be set into the html code accordingly.
-              String imageDl = "<br><b><a id=\"dwnld\" href=\""+dataUrl+"\" download=\"sensor_image_id"+downloadId.toString()+".jpeg\" onClick=\"setTimeout(closing, 3000)\" >Click here to download</a> the image.</b><br>This tab will automatically close 3 seconds after clicking the download link.<br>";
+              String imageDl = "<br><b><a id=\"dwnld\" href=\""+dataUrl+"\" download=\"sensor_image_id"+downloadId.toString()+".jpeg\" >Click here to download</a> the image.</b><br>";
               out.println(imageDl);
-              out.println(closeButton + "<br>");
+              out.println("<br>" + closeButton + "<br>");
               // Displaying the Image in the browser as a nice side thing 
               // (however this will cause this html to be about twice as big as of just the original image file, which is kind of bad for bandwidth).
     		  out.println("<img src='"+dataUrl+"'>");
     		  
     		} else if(downloadType.compareTo("audio") == 0) {
               // This blob contained an audio data and it's dataUrl string will be set into the html code accordingly.
-    		  String audioDl = "<b><br><a id=\"dwnld\" href=\""+dataUrl+"\" download=\"sensor_audio_id"+downloadId.toString()+".wav\" onClick=\"setTimeout(closing, 3000)\">Click here to download</a> the audio file.</b><br>This tab will automatically close 3 seconds after clicking the download link.";
+    		  String audioDl = "<b><br><a id=\"dwnld\" href=\""+dataUrl+"\" download=\"sensor_audio_id"+downloadId.toString()+".wav\" >Click here to download</a> the audio file.</b><br>";
     		  out.println(audioDl);
     		  out.println("<br>" + closeButton + "<br>");
     		}
