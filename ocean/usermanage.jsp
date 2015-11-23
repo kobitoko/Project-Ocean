@@ -10,9 +10,15 @@
  <div id='header' style="height:50px;border-style:inset;"></div>
   <div id='content'>
  <div>
+<p>
+- To add a new Person record and User record, use the form on the left<br>
+- To add a new User record to an existing Person record, check the radio button in that row under "Add Associated User",and press the "Add Associated User" button.<br>
+- To remove a user, check the radio button in that row under "Remove User",and press the "Remove User" button.<br>
+- To modify an existing user, check the radio button in that row under "Modify User",and press the "Modify User" button.
+</p>
  <div class="inline" style="border-style:inset;width:20%;;">
     <form action="createAccount.jsp" method="post"name="addform" id="addform">
-      <b>Create new user:</b><br>
+      <b>Create New User & Person:</b><br>
        <!-- using placeholder assumes HTML5 support. Just use emtpy value or nothing if we cant use html5.-->
       <table style="width:100%;border-style:inset";>
       <tr><td ><p style="display:inline">Username: </p></td><td><input type="text" id="uid" name="uid" maxlength="32" required placeholder="Username"><br></td></tr>
