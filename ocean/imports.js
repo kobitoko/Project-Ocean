@@ -108,6 +108,7 @@ else if(role == "d"){
 	document.getElementById("senman").style.display = 'none';
 	document.getElementById("home").style.display = 'none';
 	document.getElementById("account").style.display = 'none';
+	document.getElementById("logout").innerHTML = "LOG IN";
 } else {
 //view when not logged in
 	document.getElementById("search").style.display = 'none';
@@ -118,6 +119,7 @@ else if(role == "d"){
 	document.getElementById("senman").style.display = 'none';
 	document.getElementById("home").style.display = 'none';
 	document.getElementById("account").style.display = 'none';
+	document.getElementById("logout").innerHTML = "LOG IN";
 	document.getElementById("content").innerHTML = "<br>You are not logged in. Please <a href=login.html>Login</a>";
 }
 checkPermissions(role);
