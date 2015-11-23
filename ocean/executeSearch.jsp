@@ -86,6 +86,16 @@
 
 
 	}
+	//Checks to make sure that the data's creation date is after the specification.
+	if (dateAfter != null && !dateAfter.isEmpty()) {
+		%>contains data recorded after <%= dateAfter%>', <%
+		//dateAfter = "AND a.date_created >= TO_DATE("+dateAfter+",'mm/dd/yyyy')";
+	   queryAudio = queryAudio + " AND a.date_created >= TO_DATE('"+dateAfter+"','dd/mm/yyyy HH24:MI:SS')";
+	   queryImage = queryImage + " AND i.date_created >= TO_DATE('"+dateAfter+"','dd/mm/yyyy HH24:MI:SS')";
+	   queryScalar = queryScalar + " AND s.date_created >= TO_DATE('"+dateAfter+"','dd/mm/yyyy HH24:MI:SS')";
+
+	   //querySensor = querySensor + " AND sen.date_created >= TO_DATE('"+dateAfter+"','dd/mm/yyyy')";
+	} 
 	//Checks to make sure that the data's creation date is before the specification
 	if (dateBefore != null && !dateBefore.isEmpty()) {
 		%>contains data recorded before <%= dateBefore%>', <%
@@ -97,16 +107,7 @@
 	   //querySensor = querySensor + " AND sen.date_created <= TO_DATE('"+dateBefore+"','dd/mm/yyyy')";
 
 	} 
-	//Checks to make sure that the data's creation date is after the specification.
-	if (dateAfter != null && !dateAfter.isEmpty()) {
-		%>contains data recorded after <%= dateAfter%>', <%
-		//dateAfter = "AND a.date_created >= TO_DATE("+dateAfter+",'mm/dd/yyyy')";
-	   queryAudio = queryAudio + " AND a.date_created >= TO_DATE('"+dateAfter+"','dd/mm/yyyy HH24:MI:SS')";
-	   queryImage = queryImage + " AND i.date_created >= TO_DATE('"+dateAfter+"','dd/mm/yyyy HH24:MI:SS')";
-	   queryScalar = queryScalar + " AND s.date_created >= TO_DATE('"+dateAfter+"','dd/mm/yyyy HH24:MI:SS')";
-
-	   //querySensor = querySensor + " AND sen.date_created >= TO_DATE('"+dateAfter+"','dd/mm/yyyy')";
-	} 
+	
 	%><br><%	
 
 	//This is the version that would allow multiple keywords. According to forum, exact string match is fine.

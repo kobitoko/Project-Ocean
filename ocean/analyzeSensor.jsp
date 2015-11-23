@@ -252,9 +252,12 @@ cascadeLocks();
 		String open = "<td>";
            	 String close = "</td>";
 	    	 String tropen = "<tr>";
-	   	 String trclose = "</tr>";	
-		out.println( tropen + open + sortPref + close + open + ssetPref + sset + close + open + avg + close + open + min +  close + open + max + close + trclose);
-			
+	   	 String trclose = "</tr>";
+		if(sset == 0){
+			out.println( tropen + open + sortPref + close + open + "Total" + close + open + avg + close + open + min +  close + open + max + close + trclose);
+		} else {	
+			out.println( tropen + open + sortPref + close + open + ssetPref + sset + close + open + avg + close + open + min +  close + open + max + close + trclose);
+		}
 }
  	  stmnt.close();
           mCon.close();
