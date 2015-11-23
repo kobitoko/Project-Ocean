@@ -11,7 +11,7 @@
   <body>
     <%
       // Boolean to whether or not display/print the SQL errors in the resulting html file.
-      Boolean debug = Boolean.TRUE;
+      Boolean debug = Boolean.FALSE;
       
       // The digester to create the hash from the input.
       StandardStringDigester s;
@@ -133,7 +133,7 @@
             // new user inserted actually exists.
             out.println("The new user " + user + " was succesfully created. You will be redirected in 3 seconds");
             String redirectCode = "<script language=\"javascript\" type=\"text/javascript\">window.setTimeout(\'window.location=\"usermanage.jsp\"; \',3000);</script>";
-              out.println(redirectCode);
+            out.println(redirectCode);
           } else {
             // new user does not exist.
             out.println("Something went wrong...<br>Failed to create the new user " + user + "." );
@@ -142,7 +142,10 @@
       } catch(SQLException ex) {
           if (debug)
             out.println("<BR>-debugLog:Received a SQLException: " + ex.getMessage());
-          System.err.println("SQLException: " + ex.getMessage());
+          System.err.println("createAccount.jsp SQLException: " + ex.getMessage());
+          out.println("Something went wrong...<br>Failed to create the new user " + user + ".<br>You will be redirected in 3 seconds." );
+          String redirectCode = "<script language=\"javascript\" type=\"text/javascript\">window.setTimeout(\'window.location=\"usermanage.jsp\"; \',3000);</script>";
+          out.println(redirectCode);
       } finally {
         // close the statements, the prepared statements, and the connection.
         if(stmnt != null) {
