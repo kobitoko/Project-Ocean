@@ -120,11 +120,11 @@
 
 	//Dead code. Kept just in case my current assumptions are wrong, and I have to quickly revert.
 	//Now, check to see if even if the individual data doesn't match the search, does its sensor?
-/*
-	queryAudio = queryAudio + ") OR (a.sensor_id IN " +querySensor+"))";
-	queryImage = queryImage + ") OR (i.sensor_id IN " +querySensor+"))";
-	queryScalar = queryScalar + ") OR (s.sensor_id IN " +querySensor+"))";
-*/
+
+	queryAudio = queryAudio + " order by a.recording_id";
+	queryImage = queryImage + " order by i.image_id";
+	queryScalar = queryScalar + " order by s.id";
+
 
 	
       	String mUrl = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
