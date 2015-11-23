@@ -10,7 +10,7 @@
   <div id='content'>
  <div>
 <div class="inline" style="border-style:inset;width:23%;">
-    <b>Modify user:</b><br>
+    <b>Add User record to existing Person record:</b><br>
     <p id="grabPerson"></p>
  <%
 Boolean debug = Boolean.TRUE;
