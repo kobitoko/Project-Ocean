@@ -7,7 +7,7 @@
       // Boolean to whether or not display/print the SQL errors in the resulting html file.
       Boolean debug = Boolean.TRUE;
       
-      //MD5 + Salting
+      // The digester to create the hash from the input.
       StandardStringDigester s;
         
       // Initialize the digestor
@@ -90,7 +90,7 @@
             out.println("<BR>-debugLog: Received a ClassNotFoundException: " + e.getMessage());
       }
       
-      // Variable to store connection and prepared statements and result set table.
+      // Variable to store connection and prepared statements.
       Connection mCon = null;
       Boolean oldAutoCommitVal = Boolean.TRUE;
       
@@ -103,8 +103,11 @@
       PreparedStatement updateSalt = null;
       
       // actually log in and perform statements
-      try{              
+      try{          
+        // create the connection
         mCon = DriverManager.getConnection(mUrl, mUser, mPass);
+        
+        // disable autocommit.
         oldAutoCommitVal = mCon.getAutoCommit();
         mCon.setAutoCommit(Boolean.FALSE);
         
@@ -207,7 +210,7 @@
           // Save all changes.
           mCon.commit();
           
-          // Show success of modification, returns to landing because admin and normal user share this jsp.
+          // Show success of modification, returns to usermanage.jsp.
           out.println("Information for " + uid + " were succesfully changed. You will be redirected in 3 seconds");
           String redirectCode = "<script language=\"javascript\" type=\"text/javascript\">window.setTimeout(\'window.location=\"usermanage.jsp\"; \',3000);</script>";
           out.println(redirectCode);
