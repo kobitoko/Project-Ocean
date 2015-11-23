@@ -155,8 +155,8 @@
 	     ResultSetMetaData rsetMetaDataS = rsetS.getMetaData();
 	     int Count = rsetMetaDataS.getColumnCount();
 
+//Each statement must be done one at a time, first is scalar data.
 %>
-	     //Each statement must be done one at a time, first is scalar data.
 <p><u>SCALAR RESULTS</u></p>
 <table style="border-style:inset";>
 
@@ -182,6 +182,10 @@
            	 String close = "</td>";
 	    	 String tropen = "<tr>";
 	   	 String trclose = "</tr>";
+         
+    SimpleDateFormat sdf = null;
+    sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    
     while (rsetS.next()) {
 
 	//Displays the data
@@ -198,7 +202,6 @@
             dateTime = new java.util.Date(ts.getTime());
         if(dateTime != null) {
             // taken from http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             StringBuffer sb = new StringBuffer();
             sdf.format(dateTime, sb,new FieldPosition(0));
             dateTimeStr = sb.toString();
@@ -220,9 +223,10 @@
 	     ResultSetMetaData rsetMetaDataA = rsetA.getMetaData();
 	     Count = rsetMetaDataA.getColumnCount();
 	     String value;
-	
+         
+//Display Audio data.	
 %>
-//Display Audio data.
+
 <br>
 <p><u>AUDIO RESULTS</u></p>
 <table style="border-style:inset";>
@@ -263,8 +267,9 @@
 	     ResultSetMetaData rsetMetaDataI = rsetI.getMetaData();
 	     Count = rsetMetaDataI.getColumnCount();
 
-%>
 //Display image data
+%>
+
 </table>
 <br>
 <p><u>IMAGES RESULTS</u></p>

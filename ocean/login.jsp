@@ -52,9 +52,9 @@
       String mPass = "adasfa42";
       
       // Variable to store connection and prepared statements
-      Connection mCon;
-      PreparedStatement pstmt;
-	  PreparedStatement pstmt2;
+      Connection mCon = null;
+      PreparedStatement pstmt = null;
+      PreparedStatement pstmt2 = null;
       
       // instantiate the driver.
       try {
