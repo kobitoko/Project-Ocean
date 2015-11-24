@@ -10,13 +10,13 @@
 <link rel="stylesheet" type="text/css" href="oceanstyler.css">
 <script src="imports.js"></script>
 <script src="analyzeSensor.js"></script>
-<script>permission = 'universal';</script>
+<script>permission = 'loggedout';</script>
  <body style="background:lightblue;">
  <div id='header' style="height:50px;border-style:inset;"></div>
  <div id='content'>
     <%
       // Boolean to whether or not display/print the SQL errors in the resulting html file.
-      Boolean debug = Boolean.TRUE;
+      Boolean debug = Boolean.FALSE;
       
       // The digester to create the hash from the input.
       StandardStringDigester s;

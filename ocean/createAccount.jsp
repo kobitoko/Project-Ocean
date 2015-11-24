@@ -11,7 +11,7 @@
   <body>
     <%
       // Boolean to whether or not display/print the SQL errors in the resulting html file.
-      Boolean debug = Boolean.TRUE;
+      Boolean debug = Boolean.FALSE;
       
       // The digester to create the hash from the input.
       StandardStringDigester s;

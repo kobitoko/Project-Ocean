@@ -90,7 +90,7 @@ cookies = request.getCookies();
 		outQuery = queryAll;
 		sortPref = "All Data";
 	}
-Boolean debug = Boolean.TRUE;
+Boolean debug = Boolean.FALSE;
      
       String mUrl = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
       String mDriverName = "oracle.jdbc.driver.OracleDriver";

@@ -27,7 +27,7 @@
       <tr><td><p style="display:inline">Address: </p></td><td><input type="text" name="address" maxlength="128" required placeholder="Address"><br></td></tr>
       <tr><td><p style="display:inline">Email: </p></td><td><input type="text" name="email" maxlength="128" required placeholder="Email"><br></td></tr>
       <%
-      Boolean debug = Boolean.TRUE;
+      Boolean debug = Boolean.FALSE;
       
       
       String mUrl = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
