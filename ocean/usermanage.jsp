@@ -51,7 +51,7 @@
             out.println("<BR>-debugLog: Received a ClassNotFoundException: " + e.getMessage());
       }
 	try{
-		String getMaxPID = "select MAX(PERSON_ID) from USERS";
+		String getMaxPID = "select MAX(PERSON_ID) from PERSONS";
 		mCon = DriverManager.getConnection(mUrl, mUser, mPass);
           	stmnt = mCon.createStatement();
           //calcualtes the max PID and uses this as the default value when creating new users
