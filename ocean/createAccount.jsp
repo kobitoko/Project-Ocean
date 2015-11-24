@@ -93,18 +93,10 @@
           // create the statement
           stmnt = mCon.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
           
-	  String selectUniquePID = "select PERSON_ID from PERSONS where PERSON_ID=" + pid;
-	  String selectUniqueEMAIL = "select EMAIL from PERSONS where EMAIL=" + email;
-          ResultSet rset = stmnt.executeQuery(selectUniquePID);
-	  while(rset.next()){
-		out.println("PERSON ID already taken...<br>" );
-	  }
-          rset = stmnt.executeQuery(selectUniqueEMAIL);
-	  while(rset.next()){
-		out.println("Email already registered...<br>" );
-	  }
+	  
+	  
           // execute query of getting the result set table in order to create a new row of person.
-          rset = stmnt.executeQuery(queryPeople);
+          ResultSet rset = stmnt.executeQuery(queryPeople);
           rset.moveToInsertRow();
           rset.updateInt(1,pid);
           rset.updateString(2,fname);
