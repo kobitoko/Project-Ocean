@@ -62,7 +62,7 @@
         // String storing the html elements that will be printed later.
         String dataUrl = "";
         String closeButton = "<button onClick=\"closing()\">Close.</button>  <script> function closing() {window.self.close();}</script>";
-        String somethingWrong = "<B>Sorry something went wrong, could not retrieve the file. </B><br>" + closeButton;
+        String somethingWrong = "<B>Sorry something went wrong, could not retrieve the file. This is likely because there is no image or audio stored.</B><br>" + closeButton;
         
         // Checks whether the download is an image or audio and creates a prepared statement accordingly.
         if(downloadType.compareTo("image") == 0) {

@@ -51,7 +51,7 @@
             out.println("<BR>-debugLog: Received a ClassNotFoundException: " + e.getMessage());
       }
 	try{
-		String getMaxPID = "select MAX(PERSON_ID) from USERS";
+		String getMaxPID = "select MAX(PERSON_ID) from PERSONS";
 		mCon = DriverManager.getConnection(mUrl, mUser, mPass);
           	stmnt = mCon.createStatement();
           //calcualtes the max PID and uses this as the default value when creating new users
@@ -97,7 +97,7 @@
 <col width="75px">
 
     <th>Username</th>
-    <th>User ID</th>
+    <th>PERSON ID</th>
     <th>Role</th>
     <th ><button onClick="modifyUser()"style="background-color:green;color:white;display:inline;"  value="Modify Checked User">Modify User</button></th>
 <th><button onClick="assocUser()"style="background-color:yellow;color:black;display:inline;"  value="Add Associated User">Add Associated User</button></th>
