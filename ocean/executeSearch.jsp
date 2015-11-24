@@ -192,7 +192,18 @@
 	//Displays the data
         Integer did = new Integer(rsetS.getInt(1));
         Integer sid = new Integer(rsetS.getInt(2));
-        java.sql.Date date = rsetS.getDate(3);
+	//Get the datetime and remove milliseconds.
+	Timestamp tsOHGOD = rsetS.getTimestamp(3);
+        java.util.Date dateTimeOHGOD = null;
+        String date = "";
+        if(tsOHGOD != null)
+            	dateTimeOHGOD = new java.util.Date(tsOHGOD.getTime());
+        if(dateTimeOHGOD != null) {
+        // taken from http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
+            	StringBuffer sb = new StringBuffer();
+          	sdf.format(dateTimeOHGOD, sb,new FieldPosition(0));
+          	date = sb.toString();
+        }
         String val = rsetS.getString(4);
         out.println( tropen + open + did + close + open + sid + close + open + val + close + open + date +  close + trclose);
         
@@ -254,7 +265,19 @@
 		
 			Integer did = new Integer(rsetA.getInt(1));
 			Integer sid = new Integer(rsetA.getInt(2));
-			java.sql.Date date = rsetA.getDate(3);
+			//Get the datetime and remove milliseconds.
+			Timestamp ts = rsetA.getTimestamp(3);
+        		java.util.Date dateTime = null;
+        		String date = "";
+        		if(ts != null)
+            			dateTime = new java.util.Date(ts.getTime());
+        		if(dateTime != null) {
+           		 // taken from http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
+            			StringBuffer sb = new StringBuffer();
+          			sdf.format(dateTime, sb,new FieldPosition(0));
+          			date = sb.toString();
+        }
+
 			Integer len = new Integer(rsetA.getInt(4));
 			String val = rsetA.getString(5);
 			
@@ -298,7 +321,18 @@
 		
 			Integer did = new Integer(rsetI.getInt(1));
 			Integer sid = new Integer(rsetI.getInt(2));
-			java.sql.Date date = rsetI.getDate(3);
+			//Get the datetime and remove milliseconds.
+			Timestamp ts = rsetI.getTimestamp(3);
+        		java.util.Date dateTime = null;
+        		String date = "";
+        		if(ts != null)
+            			dateTime = new java.util.Date(ts.getTime());
+        		if(dateTime != null) {
+           		 // taken from http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
+            			StringBuffer sb = new StringBuffer();
+          			sdf.format(dateTime, sb,new FieldPosition(0));
+          			date = sb.toString();
+        }
 			String val = rsetI.getString(4);
 			
 			Blob blob = null;
