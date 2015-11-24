@@ -115,7 +115,7 @@ Boolean debug = Boolean.TRUE;
       <!-- using placeholder assumes HTML5 support. Just use emtpy value or nothing if we cant use html5.-->
       <input type="number" name="sid" maxlength="38" value="<%= maxsid%>" required placeholder="Sensor ID"><br>
       <input type="text" name="local" maxlength="64" required placeholder="Location"><br>
-     	<input type="text" name="stype" maxlength="1" required placeholder="Type"><br>
+     	<input type="text" name="stype" maxlength="1" pattern="[asi]" required placeholder="Type"><br>
      	<input type="text" maxlength="128" name="sdesc" required placeholder="Description"></textarea><br>
       <input type="submit" name="submit" value="Create!">
     </form>
