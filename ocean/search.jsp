@@ -25,8 +25,8 @@ input[type=number]{
      <tr><td> <p style="display:inline">Sensor Type: </p></td><td><input type="text" onblur="verifyTime()" id="stype" size="32" name="stype" maxlength="1"  placeholder="Sensor Type"><br></td></tr>
       <tr><td><p style="display:inline">Sensor Location: </p></td><td><input type="text" size="32" name="local" maxlength="64"  placeholder="Sensor Location"><br></td></tr>
       <tr><td><p style="display:inline">Keywords (exact string): </p></td><td><input size="32" type="text" name="key" maxlength="128"  placeholder="Keywords"><br></td></tr>
-      <tr><td><p style="display:inline">Data Since: (dd/mm/yyyy hh:mm:ss)</p></td><td><input id="dateSince" name="dateSince" type="text" pattern="[0-9]{2}[/][0-9]{2}[/][0-9]{4}[ ][0-9]{2}:[0-9]{2}:[0-9]{2}"><br></td></tr>
-      <tr><td><p style="display:inline">Data Up Until: (dd/mm/yyyy hh:mm:ss) </p></td><td><input id="dateUntil" name="dateUntil" type="text" pattern="[0-9]{2}[/][0-9]{2}[/][0-9]{4}[ ][0-9]{2}:[0-9]{2}:[0-9]{2}"><br></td></tr>
+      <tr><td><p style="display:inline">Data Since: (dd/mm/yyyy hh:mm:ss)</p></td><td><input id="dateSince" name="dateSince" type="text" pattern="((3[01]|[12][0-9]|[1-9])[/](1[02]|0[13578])|(3[0]|[12][0-9]|[1-9])[/](1[1]|0[469])|(2[0-8]|1[0-9]|[1-9])[/](0[2]))[/][0-9]{4}[ ](2[0-4]|1[0-9]|[1-9]):[0-5][0-9]:[0-5][0-9]"><br></td></tr>
+      <tr><td><p style="display:inline">Data Up Until: (dd/mm/yyyy hh:mm:ss) </p></td><td><input id="dateUntil" name="dateUntil" type="text" pattern="((3[01]|[12][0-9]|[1-9])[/](1[02]|0[13578])|(3[0]|[12][0-9]|[1-9])[/](1[1]|0[469])|(2[0-8]|1[0-9]|[1-9])[/](0[2]))[/][0-9]{4}[ ](2[0-4]|1[0-9]|[1-9]):[0-5][0-9]:[0-5][0-9]"><br></td></tr>
      
       </table>
       <input type="submit" name="submit" value="Search!">
@@ -35,4 +35,8 @@ input[type=number]{
 </div>
 </body>
 </html>
+
+((3[01]|[12][0-9]|[1-9])[/](1[02]|0[13578])|(3[0]|[12][0-9]|[1-9])[/](1[1]|0[469])|(2[8]|1[0-9]|[1-9])[/](0[2]))
+	 
+
 

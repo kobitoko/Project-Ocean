@@ -11,7 +11,7 @@
   <body>
     <%
       // Boolean to whether or not display/print the SQL errors in the resulting html file.
-      Boolean debug = Boolean.FALSE;
+      Boolean debug = Boolean.TRUE;
       
       // The digester to create the hash from the input.
       StandardStringDigester s;
@@ -24,11 +24,14 @@
       
       // Apply the hash function this many times.
       s.setIterations(999);
+
       // For the delicious salt: by default an instance of RandomSaltGenerator will be used.
       // Raw random salt gets prepended in jasypt, each byte is 2 string chars in hex. 
       s.setSaltSizeBytes(16);
+
       // default is base64, but want hex.
       s.setStringOutputType("hexadecimal");
+
       s.initialize();
       
       // Retrieving all the data from the parameters passed via POST from previous page.
@@ -46,6 +49,7 @@
       // taken from BalusC's answer http://stackoverflow.com/questions/5393824/passing-date-from-an-html-form-to-a-servlet-to-an-sql-database
       java.util.Date date = new java.util.Date();
       java.sql.Date date_reg = new java.sql.Date(date.getTime());
+
       // Create a new hashed password and its salt from the given plain text password.
       String digested = s.digest(pw);
       // substring's index begin is inclusive, and index end is exclusive.
@@ -89,8 +93,18 @@
           // create the statement
           stmnt = mCon.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
           
+	  String selectUniquePID = "select PERSON_ID from PERSONS where PERSON_ID=" + pid;
+	  String selectUniqueEMAIL = "select EMAIL from PERSONS where EMAIL=" + email;
+          ResultSet rset = stmnt.executeQuery(selectUniquePID);
+	  while(rset.next()){
+		out.println("PERSON ID already taken...<br>" );
+	  }
+          rset = stmnt.executeQuery(selectUniqueEMAIL);
+	  while(rset.next()){
+		out.println("Email already registered...<br>" );
+	  }
           // execute query of getting the result set table in order to create a new row of person.
-          ResultSet rset = stmnt.executeQuery(queryPeople);
+          rset = stmnt.executeQuery(queryPeople);
           rset.moveToInsertRow();
           rset.updateInt(1,pid);
           rset.updateString(2,fname);
@@ -109,6 +123,7 @@
           rset.updateString(3,role);
           rset.updateDate(4,date_reg);
           rset.updateInt(5,pid);
+
           rset.insertRow();
           
           // execute query of getting the result set table in order to create a new row user's salt.
@@ -133,11 +148,12 @@
             // new user does not exist.
             out.println("Something went wrong...<br>Failed to create the new user " + user + "." );
           }
+
       } catch(SQLException ex) {
           if (debug)
             out.println("<BR>-debugLog:Received a SQLException: " + ex.getMessage());
           System.err.println("createAccount.jsp SQLException: " + ex.getMessage());
-          out.println("Something went wrong... Make sure your username and email is unique<br>Failed to create the new user " + user + ".<br>You will be redirected in 3 seconds." );
+          out.println("Something went wrong...<br>Failed to create the new user " + user + ".<br>You will be redirected in 3 seconds." );
           String redirectCode = "<script language=\"javascript\" type=\"text/javascript\">window.setTimeout(\'window.location=\"usermanage.jsp\"; \',3000);</script>";
           out.println(redirectCode);
       } finally {
