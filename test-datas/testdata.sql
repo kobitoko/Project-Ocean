@@ -42,13 +42,13 @@ insert into subscriptions values (02, 1213);
 insert into subscriptions values (12, 1213);
 
 
-insert into audio_recordings values (1221, 12, to_date('2052-11-1 11:12:35','YYYY-MM-DD HH24:MI:SS'), 15, 'A loud, unidentified sound originating from the trench.', NULL);
-insert into audio_recordings values (1217, 12, to_date('2052-10-19 22:12:35','YYYY-MM-DD HH24:MI:SS') , 20, 'Nothing of note.', NULL);
+--insert into audio_recordings values (1221, 12, to_date('2052-11-1 11:12:35','YYYY-MM-DD HH24:MI:SS'), 15, 'A loud, unidentified sound originating from the trench.', NULL);
+--insert into audio_recordings values (1217, 12, to_date('2052-10-19 22:12:35','YYYY-MM-DD HH24:MI:SS') , 20, 'Nothing of note.', NULL);
 
-insert into images values (0142, 01, to_date('2052-11-1 11:12:35','YYYY-MM-DD HH24:MI:SS'), 'A blurry image of some sort of massive creature exiting the trench.',NULL,NULL);
+--insert into images values (0142, 01, to_date('2052-11-1 11:12:35','YYYY-MM-DD HH24:MI:SS'), 'A blurry image of some sort of massive creature exiting the trench.',NULL,NULL);
 
-insert into images values (0251, 02, to_date('2052-7-11 22:12:35', 'YYYY-MM-DD HH24:MI:SS'), 'A small object hitting the water above the trench.',Null,Null);
-insert into scalar_data values(2121, 21, to_date('2052-11-01 22:12:35','YYYY-MM-DD HH24:MI:SS'), 42);
+--insert into images values (0251, 02, to_date('2052-7-11 22:12:35', 'YYYY-MM-DD HH24:MI:SS'), 'A small object hitting the water above the trench.',Null,Null);
+--insert into scalar_data values(2121, 21, to_date('2052-11-01 22:12:35','YYYY-MM-DD HH24:MI:SS'), 42);
 
 insert into scalar_data values(2207, 22, to_date('2051-11-01 00:12:15','YYYY-MM-DD HH24:MI:SS'), 02);
 insert into scalar_data values(2209, 22, to_date('2051-11-02 01:15:15','YYYY-MM-DD HH24:MI:SS'), 04);
