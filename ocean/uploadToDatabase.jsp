@@ -195,8 +195,10 @@
       } catch(SQLException ex) {
         
           if (debug)
-            out.println("<BR>-debugLog:Received a SQLException: " + ex.getMessage());
+            //out.println("<BR>-debugLog:Received a SQLException: " + ex.getMessage());
+	    out.println("Something went wrong. Please check your data and make sure that your sensor exists and all data is in the required format, and try again. If you can still not find the problem, please contact your system administrator.");
           System.err.println("SQLException: " + ex.getMessage());
+
           // something went wrong thus roll back.
           if(mCon != null)
             mCon.rollback();
