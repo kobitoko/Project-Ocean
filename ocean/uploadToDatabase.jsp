@@ -1,8 +1,16 @@
 <!--input-->
 <%@ page import="java.util.*, java.sql.*, java.io.*, java.text.* "%>
-<html>
-  <head></head>
-  <body style="background:lightblue;">
+<head>
+<meta charset="utf-8">
+<title>Ocean Observation System</title>
+</head>
+<link rel="stylesheet" type="text/css" href="oceanstyler.css">
+<script src="imports.js"></script>
+<script src="search.js"></script>
+<script>permission = 'curator';</script>
+ <body style="background:lightblue;">
+ <div id='header' style="height:50px;border-style:inset;"></div>
+ <div id='content'>
     <%
       // Boolean to whether or not display/print the SQL errors in the resulting html file.
       Boolean debug = Boolean.TRUE;
@@ -214,6 +222,7 @@
         
       }
     %>
-  
+  </div>
+</div>
   </body>
 </html>
