@@ -101,6 +101,8 @@
       PreparedStatement updateSaltsUid = null;
       PreparedStatement updatePassword = null;
       PreparedStatement updateSalt = null;
+      Statement stmtUpPids = null;
+      ResultSet rsetUpPids = null;
       
       // actually log in and perform statements
       try{          
@@ -178,6 +180,17 @@
             insertPersons.setString(4, phone);
             insertPersons.setInt(5,personId);
             insertPersons.executeUpdate();
+            
+              // update all the user accounts with the old PersonID!
+              String strUpdatePids = "Select person_id from users where person_id=\'" + oldPID + "\'";
+              stmtUpPids = mCon.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+              rsetUpPids = stmtUpPids.executeQuery(strUpdatePids);
+
+              // Iterate through all the pids and update them.
+              while(rsetUpPids.next()) {
+                rsetUpPids.updateInt(1, personId);
+                rsetUpPids.updateRow();
+              }
             
             // update the userId only if changed, but other than userId still updates that users data.
             if(oldUser.equals(uid)) {
@@ -270,6 +283,12 @@
         }
         if(checkUserIdExists != null) {
           checkUserIdExists.close();
+        }
+        if(stmtUpPids != null) {
+          stmtUpPids.close();
+        }
+        if(rsetUpPids != null) {
+          rsetUpPids.close();
         }
         if(mCon != null) {
           mCon.close();
