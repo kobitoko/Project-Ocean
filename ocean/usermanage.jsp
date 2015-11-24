@@ -97,7 +97,7 @@
 <col width="75px">
 
     <th>Username</th>
-    <th>User ID</th>
+    <th>PERSON ID</th>
     <th>Role</th>
     <th ><button onClick="modifyUser()"style="background-color:green;color:white;display:inline;"  value="Modify Checked User">Modify User</button></th>
 <th><button onClick="assocUser()"style="background-color:yellow;color:black;display:inline;"  value="Add Associated User">Add Associated User</button></th>

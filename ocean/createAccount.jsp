@@ -24,14 +24,11 @@
       
       // Apply the hash function this many times.
       s.setIterations(999);
-
       // For the delicious salt: by default an instance of RandomSaltGenerator will be used.
       // Raw random salt gets prepended in jasypt, each byte is 2 string chars in hex. 
       s.setSaltSizeBytes(16);
-
       // default is base64, but want hex.
       s.setStringOutputType("hexadecimal");
-
       s.initialize();
       
       // Retrieving all the data from the parameters passed via POST from previous page.
@@ -49,7 +46,6 @@
       // taken from BalusC's answer http://stackoverflow.com/questions/5393824/passing-date-from-an-html-form-to-a-servlet-to-an-sql-database
       java.util.Date date = new java.util.Date();
       java.sql.Date date_reg = new java.sql.Date(date.getTime());
-
       // Create a new hashed password and its salt from the given plain text password.
       String digested = s.digest(pw);
       // substring's index begin is inclusive, and index end is exclusive.
@@ -113,7 +109,6 @@
           rset.updateString(3,role);
           rset.updateDate(4,date_reg);
           rset.updateInt(5,pid);
-
           rset.insertRow();
           
           // execute query of getting the result set table in order to create a new row user's salt.
@@ -138,7 +133,6 @@
             // new user does not exist.
             out.println("Something went wrong...<br>Failed to create the new user " + user + "." );
           }
-
       } catch(SQLException ex) {
           if (debug)
             out.println("<BR>-debugLog:Received a SQLException: " + ex.getMessage());
@@ -163,3 +157,4 @@
 </div>
   </body>
 </html>
+
