@@ -28,8 +28,8 @@
       String mDriverName = "oracle.jdbc.driver.OracleDriver";
       
       // The oracle account to use.
-      String mUser = "satyabra";
-      String mPass = "adasfa42";
+      String mUser = "TRY HARDER";
+      String mPass = "TRY HARDER";
       
       // Variable to store result set table, connection, and statements.
       ResultSet rset = null;

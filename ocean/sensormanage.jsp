@@ -32,8 +32,8 @@ Boolean debug = Boolean.TRUE;
       String mUrl = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
       String mDriverName = "oracle.jdbc.driver.OracleDriver";
       
-      String mUser = "satyabra";
-      String mPass = "adasfa42";
+      String mUser = "TRY HARDER";
+      String mPass = "TRY HARDER";
       Integer maxsid = 0;
       Connection mCon;
       Statement stmnt;

@@ -76,8 +76,8 @@
       String mDriverName = "oracle.jdbc.driver.OracleDriver";
       
       // The oracle account to use.
-      String mUser = "satyabra";
-      String mPass = "adasfa42";
+      String mUser = "TRY HARDER";
+      String mPass = "TRY HARDER";
       
       // instantiate the driver.
       try {
