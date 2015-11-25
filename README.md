@@ -1,6 +1,5 @@
-# project391
-Project: Ocean Observation System
+# Project Ocean
 
-Put the "ocean" folder in your tomcat\webapps folder.
+Put the "ocean" and "WEB-INF" folder inside a folder which is located in the tomcat\webapps folder.
 
-setup.sql to set up the initial tables and extraSetup.sql for our custom tables.
+To set up run ./Makefile.sh
